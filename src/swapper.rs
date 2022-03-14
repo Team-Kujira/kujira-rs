@@ -33,5 +33,5 @@ pub enum SwapperReceiveMsg {
 #[serde(rename_all = "snake_case")]
 pub struct SwapRateResponse {
     /// The exchange rate that the Swapper can achieve for the amount in [SwapperQueryMsg::SwapRate::ask_amount]
-    pub ask_amount: Decimal256,
+    pub exchange_rate: Decimal256,
 }
