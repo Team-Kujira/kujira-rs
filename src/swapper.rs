@@ -1,7 +1,7 @@
 //! Standardized interface to support custom Swappers in [orca](crate::orca)
 
-use cosmwasm_std::{Addr, Decimal256, Uint256};
-use cw20::{Cw20ReceiveMsg, Denom};
+use cosmwasm_std::{Decimal256, Uint256};
+use cw20::Cw20ReceiveMsg;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 

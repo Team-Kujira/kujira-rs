@@ -96,9 +96,8 @@
 //! - Mainnet: Code ID `3540`
 //! - Testnet: Code ID `52647`
 
-use crate::swapper::{SwapperExecuteMsg, SwapperQueryMsg};
 use cosmwasm_std::{Addr, Decimal256, Uint128, Uint256};
-use cw20::{Cw20ExecuteMsg, Cw20ReceiveMsg, Denom};
+use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
