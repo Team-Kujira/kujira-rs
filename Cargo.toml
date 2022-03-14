@@ -7,7 +7,6 @@ description = "Interfaces and utilities for Kujira cosmwasm contracts"
 license = "Apache-2.0"
 homepage = "https://kujira.app"
 repository = "https://github.com/Team-Kujira/kujira-rs"
-readme = false
 
 [features]
 backtraces = ["cosmwasm-std/backtraces"]
