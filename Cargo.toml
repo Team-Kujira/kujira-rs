@@ -1,0 +1,21 @@
+[package]
+name = "kujira"
+version = "0.1.0"
+authors = ["Kujira Labs"]
+edition = "2018"
+description = "Interfaces and utilities for Kujira cosmwasm contracts"
+license = "Apache-2.0"
+homepage = "https://kujira.app"
+repository = "https://github.com/Team-Kujira/kujira-rs"
+readme = false
+
+[features]
+backtraces = ["cosmwasm-std/backtraces"]
+
+[dependencies]
+cw20 = "0.8.0"
+cosmwasm-std = { version = "0.16.2" }
+schemars = "0.8.3"
+serde = { version = "1.0.127", default-features = false, features = ["derive"] }
+terra-cosmwasm = "2.2.0"
+
