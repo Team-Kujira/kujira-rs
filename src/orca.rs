@@ -66,7 +66,7 @@
 //!
 //! 1. Add the package to Cargo.toml
 //!
-//! `kujira = "0.1.0"`
+//! `kujira = "0.2.1"`
 //!
 //! 2. Extend your contract config to store the address of your new liquidation queue
 //! ```rust
@@ -93,8 +93,8 @@
 //! ```
 //!
 //! ### Terra
-//! - Mainnet: Code ID `3540`
-//! - Testnet: Code ID `52647`
+//! - Mainnet: Code ID `3541`
+//! - Testnet: Code ID `52750`
 
 use cosmwasm_std::{Addr, Decimal256, Uint128, Uint256};
 use cw20::{Cw20ReceiveMsg, Denom};
