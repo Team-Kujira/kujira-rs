@@ -12,9 +12,9 @@ repository = "https://github.com/Team-Kujira/kujira-rs"
 backtraces = ["cosmwasm-std/backtraces"]
 
 [dependencies]
-cw20 = "0.8.0"
-cosmwasm-std = { version = "0.16.2" }
+cw20 = "0.8.1"
+cosmwasm-std = { version = "0.16.7" }
 schemars = "0.8.3"
 serde = { version = "1.0.127", default-features = false, features = ["derive"] }
 terra-cosmwasm = "2.2.0"
-
+terraswap = "2.4.0"

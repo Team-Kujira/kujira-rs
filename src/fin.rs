@@ -1,0 +1,206 @@
+//! [Kujira's](https://fin.kujira.app/) 100% on-chain, order-book style decentralised exchange
+//! for all CosmWASM compatible Blockchains.
+
+use crate::precision::Precision;
+use cosmwasm_std::{Addr, Decimal, Timestamp, Uint128};
+use cw20::{Cw20ReceiveMsg, Denom};
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
+use terraswap::asset::Asset;
+
+/// Create a new liquidation queue.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct InstantiateMsg {
+    /// Contract owner. Allowed to update parameters
+    pub owner: Addr,
+
+    /// The denoms of the pair. The second denom is the quote denom:__rust_force_expr!
+    /// Price of pools[0].denom in terms of pools[1].denom
+    /// eg if Denoms == [Kuji, UST] then this pool quotes the UST price of Kuji
+    pub denoms: [Denom; 2],
+
+    /// In order to prevent basically a DoS attack with hundreds of pools being created at
+    /// insignificant price points, we require a limit to the precision of the pricing
+    pub price_precision: Precision,
+}
+
+/// Callable interfaces
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    /// Hook to handle (Cw20ExecuteMsg::Send)
+    Receive(Cw20ReceiveMsg),
+
+    /// Admin-only. Enables trading.
+    Launch {},
+
+    /// Update queue configuration
+    UpdateConfig {
+        /// Change the owner
+        owner: Option<Addr>,
+
+        /// Update the decimal precision
+        price_precision: Option<Precision>,
+    },
+
+    /// Called by an end-user to place a order
+    SubmitOrder {
+        /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
+        price: Decimal,
+    },
+
+    /// Executes a market trade based on current order book.
+    /// Matches Terraswap, Astroport etc interfaces to be compatible with
+    /// existing UIs
+    Swap {
+        /// Field provided for backward compatibility but ignored. Only a single
+        /// asset may be provided for a swap
+        offer_asset: Option<Asset>,
+        belief_price: Option<Decimal>,
+        max_spread: Option<Decimal>,
+        to: Option<Addr>,
+    },
+
+    /// Retract the order and withdraw funds
+    RetractOrder {
+        /// The order idx to be retracted
+        order_idx: Uint128,
+
+        /// The amount of order to retract. IF omitted, the whole order is retracted
+        amount: Option<Uint128>,
+    },
+
+    /// Fully retract orders and withdraw funds
+    RetractOrders {
+        /// The order idxs to be retracted
+        order_idxs: Vec<Uint128>,
+    },
+
+    /// Claim filled orders
+    WithdrawOrders {
+        /// If provided, only the selected orders will be withdrawn.
+        /// If omitted, the first 30 orders for the sending address
+        /// will be withdrawn       
+        order_idxs: Option<Vec<Uint128>>,
+    },
+}
+
+/// Support for CW20 send messages.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum Cw20HookMsg {
+    /// Called by an end-user to place a order
+    SubmitOrder {
+        /// See [ExecuteMsg::SubmitOrder::price]
+        price: Decimal,
+    },
+    /// Executes a market trade based on current order book.
+    /// Matches Terraswap, Astroport etc interfaces to be compatible with
+    /// existing UIs
+    Swap {
+        belief_price: Option<Decimal>,
+        max_spread: Option<Decimal>,
+        to: Option<Addr>,
+    },
+}
+
+/// Standard interface to query contract state
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum QueryMsg {
+    /// Current config. Returns [ConfigResponse]
+    Config {},
+
+    /// Simulate an market swap based on the current order book. Returns [terraswap::pair::SimulationResponse]
+    Simulation { offer_asset: Asset },
+
+    /// Query a specific order by idx. Returns [OrderResponse]
+    Order { order_idx: Uint128 },
+
+    /// Paginate user orders. Upper limit of 30 per page. Returns [OrdersResponse]
+    OrdersByUser {
+        address: Addr,
+        start_after: Option<Uint128>,
+        limit: Option<u8>,
+    },
+
+    /// Query a specific price. Returns [PriceResponse]
+    Price { price: Decimal },
+
+    /// Returns the order totals of the current order book, paged out from the spread. Returns [BookResponse]
+    Book {
+        limit: Option<u8>,
+        offset: Option<u8>,
+    },
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct ConfigResponse {
+    /// See [InstantiateMsg::owner]
+    pub owner: Addr,
+
+    /// See [InstantiateMsg::denoms]
+    pub denoms: [Denom; 2],
+
+    /// See [InstantiateMsg::price_precision]
+    pub price_precision: Precision,
+
+    /// When a book is bootstrapping, it can accept orders but trades are not yet executed
+    pub is_bootstrapping: bool,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct OrderResponse {
+    /// A unnique ID for the order
+    pub idx: Uint128,
+
+    /// The address used to place the order
+    pub owner: Addr,
+
+    /// THe quote price of this order
+    pub quote_price: Decimal,
+
+    /// The denom offered
+    pub offer_denom: Denom,
+
+    /// The remaining order amount
+    pub offer_amount: Uint128,
+
+    /// Amount of filled order awaiting withdrawal
+    pub filled_amount: Uint128,
+
+    /// Timestamp of original creation
+    pub created_at: Timestamp,
+
+    /// Offer amount at time of creation
+    pub original_offer_amount: Uint128,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct OrdersResponse {
+    pub orders: Vec<OrderResponse>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct PoolResponse {
+    /// THe quote price of this pool
+    pub quote_price: Decimal,
+
+    /// The offer denom for this pool
+    pub offer_denom: Denom,
+
+    /// Total amount of all offers in this pool
+    pub total_offer_amount: Uint128,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct PriceResponse {
+    /// The two offer pools for this price. The [PoolResponse::offer_denom] will match the order supplied in [InstantiateMsg::denoms]
+    pub pools: [PoolResponse; 2],
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct BookResponse {
+    pub base: Vec<PoolResponse>,
+    pub quote: Vec<PoolResponse>,
+}
