@@ -1,12 +1,12 @@
 //! [Kujira's](https://fin.kujira.app/) 100% on-chain, order-book style decentralised exchange
 //! for all CosmWASM compatible Blockchains.
 
+use crate::asset::Asset;
 use crate::precision::Precision;
-use cosmwasm_std::{Addr, Decimal, Timestamp, Uint128};
+use cosmwasm_std::{Addr, Coin, Decimal, Timestamp, Uint128};
 use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use terraswap::asset::Asset;
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
@@ -54,7 +54,7 @@ pub enum ExecuteMsg {
     Swap {
         /// Field provided for backward compatibility but ignored. Only a single
         /// asset may be provided for a swap
-        offer_asset: Option<Asset>,
+        offer_asset: Option<Coin>,
         belief_price: Option<Decimal>,
         max_spread: Option<Decimal>,
         to: Option<Addr>,
@@ -202,4 +202,11 @@ pub struct PriceResponse {
 pub struct BookResponse {
     pub base: Vec<PoolResponse>,
     pub quote: Vec<PoolResponse>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct SimulationResponse {
+    pub return_amount: Uint128,
+    pub spread_amount: Uint128,
+    pub commission_amount: Uint128,
 }

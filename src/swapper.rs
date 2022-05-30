@@ -1,6 +1,6 @@
 //! Standardized interface to support custom Swappers in [orca](crate::orca)
 
-use cosmwasm_std::{Decimal256, Uint256};
+use cosmwasm_std::{Decimal, Uint128};
 use cw20::Cw20ReceiveMsg;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 pub enum SwapperQueryMsg {
     SwapRate {
         /// The amount of the returned asset required for this swap.
-        ask_amount: Uint256,
+        ask_amount: Uint128,
     },
 }
 
@@ -18,7 +18,7 @@ pub enum SwapperQueryMsg {
 #[serde(rename_all = "snake_case")]
 pub enum SwapperExecuteMsg {
     Receive(Cw20ReceiveMsg),
-    /// Execute a Native swap
+
     Swap {},
 }
 
@@ -33,5 +33,5 @@ pub enum SwapperReceiveMsg {
 #[serde(rename_all = "snake_case")]
 pub struct SwapRateResponse {
     /// The exchange rate that the Swapper can achieve for the amount in [SwapperQueryMsg::SwapRate::ask_amount]
-    pub exchange_rate: Decimal256,
+    pub exchange_rate: Decimal,
 }

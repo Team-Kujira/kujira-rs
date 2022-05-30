@@ -96,7 +96,7 @@
 //! - Mainnet: Code ID `3541`
 //! - Testnet: Code ID `52750`
 
-use cosmwasm_std::{Addr, Decimal256, Uint128, Uint256};
+use cosmwasm_std::{Addr, Decimal, Uint128};
 use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -108,7 +108,7 @@ pub struct InstantiateMsg {
     pub owner: Addr,
 
     /// Market the holds collateral to be liquidated. Only the market can
-    /// call [ExecuteMsg::ExecuteLiquidation] and [Cw20HookMsg::ExecuteLiquidation]
+    /// call [ExecuteMsg::ExecuteLiquidation]
     pub market: Addr,
 
     /// The denomination of the bids. This is fixed at deployment, however with custom
@@ -119,18 +119,18 @@ pub struct InstantiateMsg {
     pub collateral_denom: Denom,
 
     /// The threshold under which bids are automatically activated when placed
-    pub bid_threshold: Uint256,
+    pub bid_threshold: Uint128,
     /// The total number of pools in this queue
     pub max_slot: u8,
     /// The incremental discount offered per-pool
-    pub premium_rate_per_slot: Decimal256,
+    pub premium_rate_per_slot: Decimal,
     /// The amount of time in seconds that a bid must wait until it can be activated
     pub waiting_period: u64,
 
     /// The amount of the repay amount that is sent to [fee_address](InstantiateMsg::fee_address) when executing a liquidation
-    pub liquidation_fee: Decimal256,
+    pub liquidation_fee: Decimal,
     /// The amount of the collateral that is sent to [fee_address](InstantiateMsg::fee_address) when a bid is claimed
-    pub withdrawal_fee: Decimal256,
+    pub withdrawal_fee: Decimal,
     /// The fee destination address
     pub fee_address: Addr,
 }
@@ -153,16 +153,16 @@ pub enum ExecuteMsg {
         /// Change the amount of time to wait before a bid can be activated
         waiting_period: Option<u64>,
         /// Change the minimum total bid amount for a bid to require manual activation
-        bid_threshold: Option<Uint256>,
+        bid_threshold: Option<Uint128>,
         /// Change the discount received per pool
-        premium_rate_per_slot: Option<Decimal256>,
+        premium_rate_per_slot: Option<Decimal>,
         /// Close/open specific pools
         closed_slots: Option<Vec<u8>>,
 
         /// Update fee taken at liquidation
-        liquidation_fee: Option<Decimal256>,
+        liquidation_fee: Option<Decimal>,
         /// Update fee taken at withdrawal
-        withdrawal_fee: Option<Decimal256>,
+        withdrawal_fee: Option<Decimal>,
         /// Update fee destination
         fee_address: Option<Addr>,
     },
@@ -179,7 +179,7 @@ pub enum ExecuteMsg {
         /// The bid idx to be retracted
         bid_idx: Uint128,
         /// The amount of bid to retract. IF omitted, the whole bid is retracted
-        amount: Option<Uint256>,
+        amount: Option<Uint128>,
     },
 
     /// Activate bids to be used for liquidation
@@ -213,7 +213,7 @@ pub enum ExecuteMsg {
 
         /// The market must provide an exchange rate between the repay
         /// denom and the collateral denom in the form `repay / collateral`
-        exchange_rate: Decimal256,
+        exchange_rate: Decimal,
     },
     /// Register a custom swapper to support different [repay](ExecuteMsg::ExecuteLiquidation::repay_denom)
     /// and [bid](InstantiateMsg::bid_denom) denoms
@@ -237,7 +237,7 @@ pub enum Cw20HookMsg {
     ExecuteLiquidation {
         repay_address: Option<Addr>,
         repay_denom: Denom,
-        exchange_rate: Decimal256,
+        exchange_rate: Decimal,
     },
 
     /// Functionally identical to [ExecuteMsg::ExecuteLiquidation]. Used when [bid_denom](InstantiateMsg::bid_denom) is a CW20 token
@@ -256,9 +256,9 @@ pub enum QueryMsg {
 
     /// Simulate a liquidation based on the current pool balances. Returns [SimulationResponse]
     Simulate {
-        collateral_amount: Uint256,
+        collateral_amount: Uint128,
         repay_denom: Denom,
-        exchange_rate: Decimal256,
+        exchange_rate: Decimal,
     },
 
     /// Query a specific bid by idx. Returns [BidResponse]
@@ -298,11 +298,11 @@ pub struct ConfigResponse {
     /// See [InstantiateMsg::collateral_denom]
     pub collateral_denom: Denom,
     /// See [InstantiateMsg::bid_threshold]
-    pub bid_threshold: Uint256,
+    pub bid_threshold: Uint128,
     /// See [InstantiateMsg::max_slot]
     pub max_slot: u8,
     /// See [InstantiateMsg::premium_rate_per_slot]
-    pub premium_rate_per_slot: Decimal256,
+    pub premium_rate_per_slot: Decimal,
     /// See [ExecuteMsg::UpdateConfig::closed_slots]
     pub closed_slots: Vec<u8>,
 
@@ -310,9 +310,9 @@ pub struct ConfigResponse {
     pub waiting_period: u64,
 
     /// See [InstantiateMsg::liquidation_fee]
-    pub liquidation_fee: Decimal256,
+    pub liquidation_fee: Decimal,
     /// See [InstantiateMsg::withdrawal_fee]
-    pub withdrawal_fee: Decimal256,
+    pub withdrawal_fee: Decimal,
     /// See [InstantiateMsg::fee_address]
     pub fee_address: Addr,
 }
@@ -322,10 +322,10 @@ pub struct SimulationResponse {
     /// A confirmation of the amount of collateral consumed in this liquidation.
     /// The simulation will fail if there are insufficient bids to execute the
     /// liquidation
-    pub collateral_amount: Uint256,
+    pub collateral_amount: Uint128,
 
     /// The simulated amount repaid to the market
-    pub repay_amount: Uint256,
+    pub repay_amount: Uint128,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -340,9 +340,9 @@ pub struct BidResponse {
     pub bidder: Addr,
 
     /// The remaining bid amount
-    pub amount: Uint256,
+    pub amount: Uint128,
     /// Allocated and unclaimed liquidated collateral
-    pub pending_liquidated_collateral: Uint256,
+    pub pending_liquidated_collateral: Uint128,
     /// The epoch timestamp at which the bid can be activated.
     /// IF None, it's already active
     pub wait_end: Option<u64>,
@@ -351,8 +351,8 @@ pub struct BidResponse {
     /// on behalf of the bidder
     pub delegate: Option<Addr>,
 
-    pub product_snapshot: Decimal256,
-    pub sum_snapshot: Decimal256,
+    pub product_snapshot: Decimal,
+    pub sum_snapshot: Decimal,
     pub epoch_snapshot: Uint128,
     pub scale_snapshot: Uint128,
 }
@@ -365,14 +365,14 @@ pub struct BidsResponse {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct BidPoolResponse {
     /// Total amount of all active bids in this pool
-    pub total_bid_amount: Uint256,
+    pub total_bid_amount: Uint128,
     /// The discount applied to bids in this pool
-    pub premium_rate: Decimal256,
+    pub premium_rate: Decimal,
 
     /// Whether or not this pool has been closed with [ExecuteMsg::UpdateConfig::closed_slots]
     pub is_closed: bool,
-    pub sum_snapshot: Decimal256,
-    pub product_snapshot: Decimal256,
+    pub sum_snapshot: Decimal,
+    pub product_snapshot: Decimal,
     pub current_epoch: Uint128,
     pub current_scale: Uint128,
 }
