@@ -18,6 +18,12 @@ pub struct InstantiateMsg {
     /// eg if Denoms == [Kuji, UST] then this pool quotes the UST price of Kuji
     pub denoms: [Denom; 2],
 
+    /// The difference in the decimals counts of the quote base base denom
+    /// ie base.decimals - quote.decimals
+    /// This is used when validating the quote price of an order against the
+    /// price_precision setting
+    pub decimal_delta: Option<i8>,
+
     /// In order to prevent basically a DoS attack with hundreds of pools being created at
     /// insignificant price points, we require a limit to the precision of the pricing
     pub price_precision: Precision,
@@ -143,6 +149,9 @@ pub struct ConfigResponse {
 
     /// See [InstantiateMsg::price_precision]
     pub price_precision: Precision,
+
+    /// See [InstantiateMsg::decimal_delta]
+    pub decimal_delta: i8,
 
     /// When a book is bootstrapping, it can accept orders but trades are not yet executed
     pub is_bootstrapping: bool,
