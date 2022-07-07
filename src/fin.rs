@@ -3,7 +3,7 @@
 
 use crate::asset::Asset;
 use crate::precision::Precision;
-use cosmwasm_std::{Addr, Coin, Decimal, Timestamp, Uint128};
+use cosmwasm_std::{Addr, Coin, Decimal256, Timestamp, Uint128};
 use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -51,7 +51,7 @@ pub enum ExecuteMsg {
     /// Called by an end-user to place a order
     SubmitOrder {
         /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
-        price: Decimal,
+        price: Decimal256,
     },
 
     /// Executes a market trade based on current order book.
@@ -61,8 +61,8 @@ pub enum ExecuteMsg {
         /// Field provided for backward compatibility but ignored. Only a single
         /// asset may be provided for a swap
         offer_asset: Option<Coin>,
-        belief_price: Option<Decimal>,
-        max_spread: Option<Decimal>,
+        belief_price: Option<Decimal256>,
+        max_spread: Option<Decimal256>,
         to: Option<Addr>,
     },
 
@@ -97,14 +97,14 @@ pub enum Cw20HookMsg {
     /// Called by an end-user to place a order
     SubmitOrder {
         /// See [ExecuteMsg::SubmitOrder::price]
-        price: Decimal,
+        price: Decimal256,
     },
     /// Executes a market trade based on current order book.
     /// Matches Terraswap, Astroport etc interfaces to be compatible with
     /// existing UIs
     Swap {
-        belief_price: Option<Decimal>,
-        max_spread: Option<Decimal>,
+        belief_price: Option<Decimal256>,
+        max_spread: Option<Decimal256>,
         to: Option<Addr>,
     },
 }
@@ -130,7 +130,7 @@ pub enum QueryMsg {
     },
 
     /// Query a specific price. Returns [PriceResponse]
-    Price { price: Decimal },
+    Price { price: Decimal256 },
 
     /// Returns the order totals of the current order book, paged out from the spread. Returns [BookResponse]
     Book {
@@ -166,7 +166,7 @@ pub struct OrderResponse {
     pub owner: Addr,
 
     /// THe quote price of this order
-    pub quote_price: Decimal,
+    pub quote_price: Decimal256,
 
     /// The denom offered
     pub offer_denom: Denom,
@@ -192,7 +192,7 @@ pub struct OrdersResponse {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct PoolResponse {
     /// THe quote price of this pool
-    pub quote_price: Decimal,
+    pub quote_price: Decimal256,
 
     /// The offer denom for this pool
     pub offer_denom: Denom,
