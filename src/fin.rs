@@ -3,7 +3,7 @@
 
 use crate::asset::Asset;
 use crate::precision::Precision;
-use cosmwasm_std::{Addr, Coin, Decimal256, Timestamp, Uint128};
+use cosmwasm_std::{Addr, Coin, Decimal256, Timestamp, Uint128, Uint256};
 use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -72,7 +72,7 @@ pub enum ExecuteMsg {
         order_idx: Uint128,
 
         /// The amount of order to retract. IF omitted, the whole order is retracted
-        amount: Option<Uint128>,
+        amount: Option<Uint256>,
     },
 
     /// Fully retract orders and withdraw funds
@@ -172,16 +172,16 @@ pub struct OrderResponse {
     pub offer_denom: Denom,
 
     /// The remaining order amount
-    pub offer_amount: Uint128,
+    pub offer_amount: Uint256,
 
     /// Amount of filled order awaiting withdrawal
-    pub filled_amount: Uint128,
+    pub filled_amount: Uint256,
 
     /// Timestamp of original creation
     pub created_at: Timestamp,
 
     /// Offer amount at time of creation
-    pub original_offer_amount: Uint128,
+    pub original_offer_amount: Uint256,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -198,7 +198,7 @@ pub struct PoolResponse {
     pub offer_denom: Denom,
 
     /// Total amount of all offers in this pool
-    pub total_offer_amount: Uint128,
+    pub total_offer_amount: Uint256,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -215,7 +215,7 @@ pub struct BookResponse {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct SimulationResponse {
-    pub return_amount: Uint128,
-    pub spread_amount: Uint128,
-    pub commission_amount: Uint128,
+    pub return_amount: Uint256,
+    pub spread_amount: Uint256,
+    pub commission_amount: Uint256,
 }
