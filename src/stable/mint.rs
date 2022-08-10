@@ -1,3 +1,7 @@
+//! Interfaces for the Mint contract for Kujira's USK Stablecoin.
+//! Only a single instance of this contract will be deployed, acting
+//! simply as an authorized gateway for minting and burning of the stable denom, for all deployed Markets
+
 use cosmwasm_std::{to_binary, Addr, Coin, CosmosMsg, Uint128, WasmMsg};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -5,7 +9,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InstantiateMsg {
+    /// The address permitted to call [ExecuteMsg::Permit]
     pub owner: Addr,
+
+    /// The native denom that this contract is authorized to mint and burn
     pub denom: String,
 }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]

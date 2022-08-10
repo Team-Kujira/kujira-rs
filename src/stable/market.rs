@@ -1,3 +1,6 @@
+//! Interfaces for the Market contract for Kujira's USK Stablecoin. Each instantiation of this
+//! contract will manage debt positions for all users for a specific collateral type
+
 use cosmwasm_std::{Addr, Decimal, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -40,35 +43,61 @@ pub struct InstantiateMsg {
     pub liquidation_threshold: Uint128,
 
     /// The percentage of collateral that is liquidated when the amount of debt on
-    /// a position is above `liquidation_threshold`
+    /// a position is above [InstantiateMsg::liquidation_threshold]
     pub liquidation_ratio: Decimal,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    /// Deposit collateral to the position for an address
+    /// Deposit collateral to the position for an address. The amount of
+    /// the [InstantiateMsg::collateral_denom] sent with the transaction is the amount
+    /// deposited
     Deposit {},
-    /// Withdraw collateral from a position for an address
-    Withdraw {
-        amount: Uint128,
-    },
-    /// Mint stable
-    Mint {
-        amount: Uint128,
-    },
-    /// Burn stable
+
+    /// Withdraw collateral from a position for an address.
+    /// When collateral is withdrawn, the [PositionResponse::interest_amount] is
+    /// deducted from the total withdrawn at the current oracle rate,
+    /// and sent to the `fee_collector` account.
+    Withdraw { amount: Uint128 },
+
+    /// Mint stable.
+    /// When a borrower mints stable, the [InstantiateMsg::mint_fee] is deducted and sent
+    /// to the `fee_collector` account
+    Mint { amount: Uint128 },
+
+    /// Burn stable.
+    /// This repays the debt. The amount of [InstantiateMsg::stable_denom] sent with the transaction
+    /// is the amount burned
     Burn {},
 
-    // Liquidate the sender's position
+    /// Liquidate the sender's position.
+    ///
+    /// If the [Position::mint_amount] is less than the [InstantiateMsg::liquidation_threshold],
+    /// all of the collateral is sold, otherwise only a [InstantiateMsg::liquidation_raio] amount
+    /// of the collateral is sold.
+    ///
+    /// The [Position::interest_amount] is collected from the [Position::deposit_amount] at the
+    /// current Oracle rate
+    ///
+    /// The remaining collateral is sold via the [InstantiateMsg::orca_address]  at a discount
+    /// on the market rate, returning an amount of stable tokens
+    ///
+    /// The amount of stable burned & debt written off is equal to either the amount
+    /// returned from Orca, or the total mint_amount on the position, whichever is smaller.
+    ///
+    /// In the case of a complete liquidation (ie [Position::mint_amount] < [InstantiateMsg::liquidation_threshold]),
+    /// the stable returned will be greater than the [Position::mint_amount], due to over-collateralision.
+    /// In this instance, the remaining stable will be deposited to the borrower's address
+    ///
+    /// In the case of a partial liquidation, the amount returned will be less than the
+    /// mint_amount, and so only a portion of the debt will be written off.
     Liquidate {},
 
     /// Executes liquidations. If addresses is provided, it will attempt those,
     /// failing if any are still safe.
     /// If not provided, all unsafe positions will be liquidated
-    Liquidates {
-        addresses: Option<Vec<Addr>>,
-    },
+    Liquidates { addresses: Option<Vec<Addr>> },
 
     /// Updates the config of the contract
     UpdateConfig(ConfigUpdate),
@@ -126,13 +155,19 @@ pub struct PositionsResponse {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct PositionResponse {
+    /// The address managing this position
     pub owner: Addr,
+
+    /// The total amount of collateral denom deposited that can be borrowed against
     pub deposit_amount: Uint128,
+
+    /// The principal debt on this position, ie the total amount of stable minted
     pub mint_amount: Uint128,
+
+    /// The amount of interest accrued on the position, based on the current interest_rate,
+    /// since the previous withdrawal or liquidation (as these actions both collect interest payments)
     pub interest_amount: Uint128,
+
+    /// The price at which the LTV of this loan will exceed [InstantiateMsg::max_ratio], and must be liquidated.
     pub liquidation_price: Option<Decimal>,
 }
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum MigrateMsg {}
