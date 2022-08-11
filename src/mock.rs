@@ -1,7 +1,7 @@
 use anyhow::Result as AnyResult;
 use cosmwasm_std::{
     testing::{MockApi, MockStorage},
-    Addr, Coin, Empty, Response,
+    Addr, Coin, Empty,
 };
 
 use cw_multi_test::{
@@ -64,7 +64,15 @@ impl Module for KujiraModule {
     {
         match msg {
             KujiraMsg::Denom(d) => match d {
-                DenomMsg::Create { subdenom } => Ok(AppResponse {
+                DenomMsg::Create { .. } => Ok(AppResponse {
+                    events: vec![],
+                    data: None,
+                }),
+                DenomMsg::Mint { .. } => Ok(AppResponse {
+                    events: vec![],
+                    data: None,
+                }),
+                DenomMsg::Burn { .. } => Ok(AppResponse {
                     events: vec![],
                     data: None,
                 }),
@@ -75,11 +83,11 @@ impl Module for KujiraModule {
 
     fn sudo<ExecC, QueryC>(
         &self,
-        api: &dyn cosmwasm_std::Api,
-        storage: &mut dyn cosmwasm_std::Storage,
-        router: &dyn CosmosRouter<ExecC = ExecC, QueryC = QueryC>,
-        block: &cosmwasm_std::BlockInfo,
-        msg: Self::SudoT,
+        _api: &dyn cosmwasm_std::Api,
+        _storage: &mut dyn cosmwasm_std::Storage,
+        _router: &dyn CosmosRouter<ExecC = ExecC, QueryC = QueryC>,
+        _block: &cosmwasm_std::BlockInfo,
+        _msg: Self::SudoT,
     ) -> AnyResult<AppResponse>
     where
         ExecC: std::fmt::Debug
@@ -95,11 +103,11 @@ impl Module for KujiraModule {
 
     fn query(
         &self,
-        api: &dyn cosmwasm_std::Api,
-        storage: &dyn cosmwasm_std::Storage,
-        querier: &dyn cosmwasm_std::Querier,
-        block: &cosmwasm_std::BlockInfo,
-        request: Self::QueryT,
+        _api: &dyn cosmwasm_std::Api,
+        _storage: &dyn cosmwasm_std::Storage,
+        _querier: &dyn cosmwasm_std::Querier,
+        _block: &cosmwasm_std::BlockInfo,
+        _request: Self::QueryT,
     ) -> AnyResult<cosmwasm_std::Binary> {
         todo!()
     }
