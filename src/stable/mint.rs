@@ -6,6 +6,8 @@ use cosmwasm_std::{to_binary, Addr, Coin, CosmosMsg, Uint128, WasmMsg};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use crate::msg::KujiraMsg;
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InstantiateMsg {
@@ -35,7 +37,7 @@ pub struct ConfigResponse {
     pub permitted: Vec<Addr>,
 }
 
-pub fn burn_msg(admin: Addr, coin: Coin) -> CosmosMsg {
+pub fn burn_msg(admin: Addr, coin: Coin) -> CosmosMsg<KujiraMsg> {
     CosmosMsg::Wasm(WasmMsg::Execute {
         contract_addr: admin.to_string(),
         funds: vec![coin],
@@ -43,7 +45,7 @@ pub fn burn_msg(admin: Addr, coin: Coin) -> CosmosMsg {
     })
 }
 
-pub fn mint_msg(admin: Addr, amount: Uint128, recipient: Addr) -> CosmosMsg {
+pub fn mint_msg(admin: Addr, amount: Uint128, recipient: Addr) -> CosmosMsg<KujiraMsg> {
     CosmosMsg::Wasm(WasmMsg::Execute {
         contract_addr: admin.to_string(),
         funds: vec![],

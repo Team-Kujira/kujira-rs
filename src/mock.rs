@@ -1,7 +1,8 @@
 use anyhow::Result as AnyResult;
 use cosmwasm_std::{
+    coin,
     testing::{MockApi, MockStorage},
-    Addr, Coin, Empty,
+    to_binary, Addr, Coin, Decimal, Empty,
 };
 
 use cw_multi_test::{
@@ -11,7 +12,7 @@ use cw_multi_test::{
 
 use crate::{
     msg::{DenomMsg, KujiraMsg},
-    query::KujiraQuery,
+    query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse},
 };
 
 pub type CustomApp = App<
@@ -107,8 +108,19 @@ impl Module for KujiraModule {
         _storage: &dyn cosmwasm_std::Storage,
         _querier: &dyn cosmwasm_std::Querier,
         _block: &cosmwasm_std::BlockInfo,
-        _request: Self::QueryT,
+        request: Self::QueryT,
     ) -> AnyResult<cosmwasm_std::Binary> {
-        todo!()
+        match request {
+            KujiraQuery::Bank(b) => match b {
+                BankQuery::Supply { denom } => Ok(to_binary(&SupplyResponse {
+                    amount: coin(0u128, denom),
+                })?),
+            },
+            KujiraQuery::Oracle(o) => match o {
+                OracleQuery::ExchangeRate { .. } => Ok(to_binary(&ExchangeRateResponse {
+                    rate: Decimal::from_ratio(1425u128, 100u128),
+                })?),
+            },
+        }
     }
 }

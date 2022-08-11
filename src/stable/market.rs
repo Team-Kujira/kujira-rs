@@ -134,7 +134,8 @@ pub enum QueryMsg {
 #[serde(rename_all = "snake_case")]
 pub struct ConfigResponse {
     pub owner: Addr,
-    pub denom_admin: Addr,
+    pub stable_denom: String,
+    pub stable_denom_admin: Addr,
     pub collateral_denom: String,
     pub oracle_denom: String,
     pub max_ratio: Decimal,
