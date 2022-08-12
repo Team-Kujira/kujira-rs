@@ -1,4 +1,4 @@
-//! Interfaces for the Leverage contract for Kujira's USK Stablecoin. This contract
+//! Interfaces for the Margin contract for Kujira's USK Stablecoin. This contract
 //! works in a very similar way to Market, except positions are opened with a margin
 //! amount of stable, and collateral bought from  FIN, instead of depositing collateral directly
 //!
