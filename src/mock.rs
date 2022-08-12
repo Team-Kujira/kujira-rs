@@ -1,8 +1,8 @@
 use anyhow::Result as AnyResult;
 use cosmwasm_std::{
-    coin,
+    attr, coin,
     testing::{MockApi, MockStorage},
-    to_binary, Addr, Coin, Decimal, Empty,
+    to_binary, Addr, Coin, Decimal, Empty, Event,
 };
 
 use cw_multi_test::{
@@ -26,7 +26,9 @@ pub type CustomApp = App<
 >;
 
 pub fn mock_app(balances: Vec<(Addr, Vec<Coin>)>) -> CustomApp {
-    let custom = KujiraModule {};
+    let custom = KujiraModule {
+        oracle_price: Decimal::from_ratio(1425u128, 100u128),
+    };
     BasicAppBuilder::new_custom()
         .with_custom(custom)
         .build(|router, _, storage| {
@@ -36,7 +38,15 @@ pub fn mock_app(balances: Vec<(Addr, Vec<Coin>)>) -> CustomApp {
         })
 }
 
-pub struct KujiraModule {}
+pub struct KujiraModule {
+    pub oracle_price: Decimal,
+}
+
+impl KujiraModule {
+    pub fn set_oracle_price(&mut self, price: Decimal) {
+        self.oracle_price = price;
+    }
+}
 
 impl Module for KujiraModule {
     type ExecT = KujiraMsg;
@@ -69,12 +79,21 @@ impl Module for KujiraModule {
                     events: vec![],
                     data: None,
                 }),
-                DenomMsg::Mint { .. } => Ok(AppResponse {
-                    events: vec![],
+                DenomMsg::Mint {
+                    amount,
+                    denom,
+                    recipient,
+                } => Ok(AppResponse {
+                    events: vec![Event::new("mint").add_attributes(vec![
+                        attr("amount", amount),
+                        attr("denom", denom),
+                        attr("recipient", recipient),
+                    ])],
                     data: None,
                 }),
-                DenomMsg::Burn { .. } => Ok(AppResponse {
-                    events: vec![],
+                DenomMsg::Burn { denom, amount } => Ok(AppResponse {
+                    events: vec![Event::new("burn")
+                        .add_attributes(vec![attr("amount", amount), attr("denom", denom)])],
                     data: None,
                 }),
                 _ => todo!(),
@@ -118,7 +137,7 @@ impl Module for KujiraModule {
             },
             KujiraQuery::Oracle(o) => match o {
                 OracleQuery::ExchangeRate { .. } => Ok(to_binary(&ExchangeRateResponse {
-                    rate: Decimal::from_ratio(1425u128, 100u128),
+                    rate: self.oracle_price,
                 })?),
             },
         }
