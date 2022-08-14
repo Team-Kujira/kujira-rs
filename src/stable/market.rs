@@ -106,7 +106,11 @@ pub enum ExecuteMsg {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum SudoMsg {
-    Liquidates { addresses: Option<Vec<Addr>> },
+    /// [ExecuteMsg::Liquidate] and [ExecuteMsg::Liquidates] will not liquidate insolvent positions,
+    /// as this would crystallize losses in the system.
+    /// Instead, we provide a `sudo` entrypoint to the contract, which can be invoked via governance,
+    /// which will support processes to recover from systemic insolvency
+    Liquidates { addresses: Vec<Addr> },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
