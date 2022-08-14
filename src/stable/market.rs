@@ -105,6 +105,12 @@ pub enum ExecuteMsg {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+pub enum SudoMsg {
+    Liquidates { addresses: Option<Vec<Addr>> },
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub struct ConfigUpdate {
     pub owner: Option<Addr>,
     pub oracle_denom: Option<String>,
