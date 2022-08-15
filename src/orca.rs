@@ -261,6 +261,14 @@ pub enum QueryMsg {
         exchange_rate: Decimal,
     },
 
+    /// Calculates the amount of collateral needed to return a required repay_amount,
+    /// based on the current pool balances. Returns [SimulationResponse]
+    SimulateReverse {
+        repay_amount: Uint128,
+        repay_denom: Denom,
+        exchange_rate: Decimal,
+    },
+
     /// Query a specific bid by idx. Returns [BidResponse]
     Bid { bid_idx: Uint128 },
 
