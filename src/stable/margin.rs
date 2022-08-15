@@ -3,7 +3,7 @@
 //! amount of stable, and collateral bought from  FIN, instead of depositing collateral directly
 //!
 //! These can be paired with Orca markets with much smaller potential premiums, allowing greater leverage
-use cosmwasm_std::{Addr, Uint128};
+use cosmwasm_std::{Addr, Decimal256, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -26,11 +26,16 @@ pub enum ExecuteMsg {
     /// with the transaction
     /// This requires the sender to provide _at least_ `1 - rate::stable::market::InstantiateMsg::max_ratio`
     /// of the total debt amount, in order for the position to open below its liquidation threshold
-    Open { amount: Uint128 },
+    Open {
+        mint_amount: Uint128,
+        swap_amount: Uint128,
+        belief_price: Option<Decimal256>,
+        max_spread: Option<Decimal256>,
+    },
 
     /// Deposit [InstantiateMsg::stable_denom] to maintain the LTV of the loan,
-    /// This will market buy collateral to pay down the interest_amount, and
-    /// then burn the remainder, paying down the loan principal
+    /// This will call the `burn` function on the underlying position to reduce
+    /// the liquidation price
     Fund {},
 
     /// Liquidate and close the sender's position.
