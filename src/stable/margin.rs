@@ -41,7 +41,7 @@ pub enum ExecuteMsg {
     /// price??).
     /// Pay off the debt on the position
     /// Return remaining funds to the trader    Liquidate {},
-    Liquidate {},
+    Liquidate { amount: Option<Uint128> },
 
     /// Executes liquidations. If addresses is provided, it will attempt those,
     /// failing if any are still safe.

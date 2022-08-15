@@ -92,7 +92,7 @@ pub enum ExecuteMsg {
     ///
     /// In the case of a partial liquidation, the amount returned will be less than the
     /// mint_amount, and so only a portion of the debt will be written off.
-    Liquidate {},
+    Liquidate { amount: Option<Uint128> },
 
     /// Executes liquidations. If addresses is provided, it will attempt those,
     /// failing if any are still safe.
