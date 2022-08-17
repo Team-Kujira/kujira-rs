@@ -131,6 +131,7 @@ pub struct ConfigUpdate {
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     Config {},
+    Status {},
     Position {
         address: Addr,
     },
@@ -184,4 +185,10 @@ pub struct PositionResponse {
 
     /// The price at which the LTV of this loan will exceed [InstantiateMsg::max_ratio], and must be liquidated.
     pub liquidation_price: Option<Decimal>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct StatusResponse {
+    pub debt_amount: Uint128,
 }
