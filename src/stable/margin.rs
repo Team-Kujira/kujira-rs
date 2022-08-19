@@ -7,6 +7,8 @@ use cosmwasm_std::{Addr, Decimal256, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use super::market::Liquidates;
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InstantiateMsg {
@@ -52,10 +54,8 @@ pub enum ExecuteMsg {
     /// Return remaining funds to the trader    Liquidate {},
     Liquidate { amount: Option<Uint128> },
 
-    /// Executes liquidations. If addresses is provided, it will attempt those,
-    /// failing if any are still safe.
-    /// If not provided, all unsafe positions will be liquidated
-    Liquidates { addresses: Option<Vec<Addr>> },
+    /// Executes multiple liquidations.
+    Liquidates(Liquidates),
 
     /// Updates the config of the contract
     UpdateConfig(ConfigUpdate),
