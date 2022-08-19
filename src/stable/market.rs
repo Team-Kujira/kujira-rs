@@ -152,6 +152,7 @@ pub enum QueryMsg {
     },
     Liquidatable {
         limit: Option<u32>,
+        offset: Option<u32>,
     },
 }
 
