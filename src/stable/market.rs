@@ -94,13 +94,24 @@ pub enum ExecuteMsg {
     /// mint_amount, and so only a portion of the debt will be written off.
     Liquidate { amount: Option<Uint128> },
 
-    /// Executes liquidations. If addresses is provided, it will attempt those,
-    /// failing if any are still safe.
-    /// If not provided, all unsafe positions will be liquidated
-    Liquidates { addresses: Option<Vec<Addr>> },
+    /// Executes multiple liquidations.
+    Liquidates(Liquidates),
 
     /// Updates the config of the contract
     UpdateConfig(ConfigUpdate),
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum Liquidates {
+    /// This will search for liquidatable positions, according to the paging
+    /// parameters. And attempt to liquidate each one
+    Auto {
+        limit: Option<u32>,
+        offset: Option<u32>,
+    },
+    /// Explicitly set which addresses need liquidating
+    Manual { addresses: Vec<Addr> },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
