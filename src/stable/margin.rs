@@ -38,7 +38,7 @@ pub enum ExecuteMsg {
     /// Deposit [InstantiateMsg::stable_denom] to maintain the LTV of the loan,
     /// This will call the `burn` function on the underlying position to reduce
     /// the liquidation price
-    Burn {},
+    Burn { address: Option<Addr> },
 
     /// This allows a trader to extract profit from a trade, minting USK and
     /// increasing the LTV

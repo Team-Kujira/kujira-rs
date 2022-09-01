@@ -53,7 +53,8 @@ pub enum ExecuteMsg {
     /// Deposit collateral to the position for an address. The amount of
     /// the [InstantiateMsg::collateral_denom] sent with the transaction is the amount
     /// deposited
-    Deposit {},
+    /// Collateral can be deposited onto another user's position
+    Deposit { address: Option<Addr> },
 
     /// Withdraw collateral from a position for an address.
     /// When collateral is withdrawn, the [PositionResponse::interest_amount] is
@@ -69,7 +70,8 @@ pub enum ExecuteMsg {
     /// Burn stable.
     /// This repays the debt. The amount of [InstantiateMsg::stable_denom] sent with the transaction
     /// is the amount burned
-    Burn {},
+    /// USK can be burned on another user's position
+    Burn { address: Option<Addr> },
 
     /// Liquidate the sender's position.
     ///
@@ -112,16 +114,6 @@ pub enum Liquidates {
     },
     /// Explicitly set which addresses need liquidating
     Manual { addresses: Vec<Addr> },
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum SudoMsg {
-    /// [ExecuteMsg::Liquidate] and [ExecuteMsg::Liquidates] will not liquidate insolvent positions,
-    /// as this would crystallize losses in the system.
-    /// Instead, we provide a `sudo` entrypoint to the contract, which can be invoked via governance,
-    /// which will support processes to recover from systemic insolvency
-    Liquidates { addresses: Vec<Addr> },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
