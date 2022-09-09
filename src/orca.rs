@@ -172,14 +172,18 @@ pub enum ExecuteMsg {
     SetMerkleRoot { root: String },
 
     /// Removes bid verification
-    UnsetMerkleRoot { root: String },
+    UnsetMerkleRoot {},
 
     /// Called by an end-user to place a bid
     SubmitBid {
         /// The slot (and therefore discount) selected
         premium_slot: u8,
+
         /// An optional delegate, who can activate the bid on behalf of the user
         delegate: Option<Addr>,
+
+        /// Submit a merkle proof if there is a merkle root set
+        proof: Option<Proof>,
     },
     /// Retract the bid and withdraw funds
     RetractBid {
