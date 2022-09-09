@@ -331,13 +331,16 @@ dependencies = [
 
 [[package]]
 name = "kujira"
-version = "0.7.10"
+version = "0.7.11"
 dependencies = [
  "anyhow",
  "cosmwasm-std",
  "cw20",
+ "hex",
  "schemars",
  "serde",
+ "sha2",
+ "thiserror",
 ]
 
 [[package]]

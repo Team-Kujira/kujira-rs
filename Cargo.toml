@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "0.7.10"
+version = "0.7.11"
 authors = ["Kujira Labs"]
 edition = "2018"
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -17,3 +17,6 @@ cosmwasm-std = { version = "1.0.0" }
 schemars = "0.8.10"
 serde = { version = "1.0.137", default-features = false, features = ["derive"] }
 anyhow = "1"
+hex = "0.4"
+sha2 = { version = "0.9.9", default-features = false }
+thiserror = { version = "1.0.26" }

@@ -96,6 +96,7 @@
 //! - Mainnet: Code ID `3541`
 //! - Testnet: Code ID `52750`
 
+use crate::merkle::Proof;
 use cosmwasm_std::{Addr, Decimal, Uint128};
 use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
@@ -166,6 +167,12 @@ pub enum ExecuteMsg {
         /// Update fee destination
         fee_address: Option<Addr>,
     },
+
+    /// Allows a verification step for placing bids
+    SetMerkleRoot { root: String },
+
+    /// Removes bid verification
+    UnsetMerkleRoot { root: String },
 
     /// Called by an end-user to place a bid
     SubmitBid {
@@ -253,6 +260,9 @@ pub enum Cw20HookMsg {
 pub enum QueryMsg {
     /// Current config. Returns [ConfigResponse]
     Config {},
+
+    /// Checks the validity of an address against the merkle root
+    Verify { address: Addr, proof: Proof },
 
     /// Simulate a liquidation based on the current pool balances. Returns [SimulationResponse]
     Simulate {
