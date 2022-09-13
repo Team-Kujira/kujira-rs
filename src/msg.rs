@@ -24,7 +24,7 @@ impl From<KujiraMsg> for CosmosMsg<KujiraMsg> {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum AuthMsg {
-    CreateVestngAccount {
+    CreateVestingAccount {
         to_address: Addr,
         amount: Vec<Coin>,
         end_time: Option<Timestamp>,
