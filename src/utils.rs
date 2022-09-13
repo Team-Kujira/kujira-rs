@@ -1,10 +1,17 @@
 use cosmwasm_std::{Addr, Coin, StdError, StdResult, Uint128};
 
-pub fn amount(denom: &String, funds: Vec<Coin>) -> StdResult<Uint128> {
-    let coin = funds.iter().find(|d| &d.denom == denom);
+use crate::denom::Denom;
+
+pub fn amount(denom: &Denom, funds: Vec<Coin>) -> StdResult<Uint128> {
+    let coin = funds
+        .iter()
+        .find(|d| &Denom::from(d.denom.clone()) == denom);
     match coin {
-        None => Err(StdError::not_found(denom.clone())),
-        Some(Coin { amount, .. }) => match funds.iter().find(|d| &d.denom != denom) {
+        None => Err(StdError::not_found(denom.to_string())),
+        Some(Coin { amount, .. }) => match funds
+            .iter()
+            .find(|d| &Denom::from(d.denom.clone()) != denom)
+        {
             Some(x) => Err(StdError::invalid_utf8(x.denom.clone())),
             None => Ok(*amount),
         },

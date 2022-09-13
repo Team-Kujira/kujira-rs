@@ -1,7 +1,6 @@
 //! Standardized interface to support custom Swappers in [orca](crate::orca)
 
 use cosmwasm_std::{Decimal, Uint128};
-use cw20::Cw20ReceiveMsg;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -17,15 +16,6 @@ pub enum SwapperQueryMsg {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum SwapperExecuteMsg {
-    Receive(Cw20ReceiveMsg),
-
-    Swap {},
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum SwapperReceiveMsg {
-    /// Execute a CW20 Swap
     Swap {},
 }
 

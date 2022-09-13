@@ -1,10 +1,9 @@
 //! [Kujira's](https://fin.kujira.app/) 100% on-chain, order-book style decentralised exchange
 //! for all CosmWASM compatible Blockchains.
 
-use crate::asset::Asset;
 use crate::precision::Precision;
+use crate::{asset::Asset, denom::Denom};
 use cosmwasm_std::{Addr, Coin, Decimal256, Timestamp, Uint128, Uint256};
-use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -33,9 +32,6 @@ pub struct InstantiateMsg {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    /// Hook to handle (Cw20ExecuteMsg::Send)
-    Receive(Cw20ReceiveMsg),
-
     /// Admin-only. Enables trading.
     Launch {},
 
@@ -87,25 +83,6 @@ pub enum ExecuteMsg {
         /// If omitted, the first 30 orders for the sending address
         /// will be withdrawn       
         order_idxs: Option<Vec<Uint128>>,
-    },
-}
-
-/// Support for CW20 send messages.
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum Cw20HookMsg {
-    /// Called by an end-user to place a order
-    SubmitOrder {
-        /// See [ExecuteMsg::SubmitOrder::price]
-        price: Decimal256,
-    },
-    /// Executes a market trade based on current order book.
-    /// Matches Terraswap, Astroport etc interfaces to be compatible with
-    /// existing UIs
-    Swap {
-        belief_price: Option<Decimal256>,
-        max_spread: Option<Decimal256>,
-        to: Option<Addr>,
     },
 }
 

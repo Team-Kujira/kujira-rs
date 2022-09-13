@@ -96,9 +96,8 @@
 //! - Mainnet: Code ID `3541`
 //! - Testnet: Code ID `52750`
 
-use crate::merkle::Proof;
+use crate::{denom::Denom, merkle::Proof};
 use cosmwasm_std::{Addr, Decimal, Uint128};
-use cw20::{Cw20ReceiveMsg, Denom};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -141,9 +140,6 @@ pub struct InstantiateMsg {
 #[serde(rename_all = "snake_case")]
 #[allow(clippy::large_enum_variant)]
 pub enum ExecuteMsg {
-    /// Hook to handle (Cw20ExecuteMsg::Send)
-    Receive(Cw20ReceiveMsg),
-
     /// Update queue configuration
     UpdateConfig {
         /// Change the owner
@@ -238,24 +234,6 @@ pub enum ExecuteMsg {
 
     /// Remove a previously regsitered swapper
     RemoveSwapper { denom: Denom },
-}
-
-/// Support for CW20 send messages.
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum Cw20HookMsg {
-    /// Functionally identical to [ExecuteMsg::ExecuteLiquidation]. Used when [collateral_denom](InstantiateMsg::collateral_denom) is a CW20 token
-    ExecuteLiquidation {
-        repay_address: Option<Addr>,
-        repay_denom: Denom,
-        exchange_rate: Decimal,
-    },
-
-    /// Functionally identical to [ExecuteMsg::ExecuteLiquidation]. Used when [bid_denom](InstantiateMsg::bid_denom) is a CW20 token
-    SubmitBid {
-        premium_slot: u8,
-        delegate: Option<Addr>,
-    },
 }
 
 /// Standard interface to query contract state

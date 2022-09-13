@@ -6,7 +6,7 @@ use cosmwasm_std::{to_binary, Addr, Coin, CosmosMsg, Uint128, WasmMsg};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use crate::msg::KujiraMsg;
+use crate::{denom::Denom, msg::KujiraMsg};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -15,7 +15,7 @@ pub struct InstantiateMsg {
     pub owner: Addr,
 
     /// The native denom that this contract is authorized to mint and burn
-    pub denom: String,
+    pub denom: Denom,
 }
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -33,7 +33,7 @@ pub enum QueryMsg {
 #[serde(rename_all = "snake_case")]
 pub struct ConfigResponse {
     pub owner: Addr,
-    pub denom: String,
+    pub denom: Denom,
     pub permitted: Vec<Addr>,
 }
 

@@ -4,6 +4,8 @@ use cosmwasm_std::{Addr, Coin, CosmosMsg, CustomMsg, Timestamp, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use crate::denom::Denom;
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum KujiraMsg {
@@ -40,19 +42,19 @@ impl From<AuthMsg> for CosmosMsg<KujiraMsg> {
 #[serde(rename_all = "snake_case")]
 pub enum DenomMsg {
     Create {
-        subdenom: String,
+        subdenom: Denom,
     },
     ChangeAdmin {
-        denom: String,
+        denom: Denom,
         address: Addr,
     },
     Mint {
-        denom: String,
+        denom: Denom,
         amount: Uint128,
         recipient: Addr,
     },
     Burn {
-        denom: String,
+        denom: Denom,
         amount: Uint128,
     },
 }
