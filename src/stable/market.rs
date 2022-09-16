@@ -20,6 +20,11 @@ pub struct InstantiateMsg {
     /// The collateral denom supported by this contract for deposits
     pub collateral_denom: String,
 
+    /// The different in the decimals between the minted denom and the collateral denom.
+    /// Eg usat (Nomic micro-satoshi) has 6 decimals, making 1 BTC 14 decimals.
+    /// USK decimals = 6, collateral_decimal_delta = 8
+    pub collateral_denom_decimal_delta: i8,
+
     /// The name of the Oracle price feed used to calculate loan health
     pub oracle_denom: String,
 
