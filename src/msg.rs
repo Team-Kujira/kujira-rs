@@ -1,12 +1,15 @@
 //!    Bindings for message execution on Kujira Core
 
-use cosmwasm_std::{Addr, CosmosMsg, CustomMsg, Uint128};
+use cosmwasm_std::{Addr, Coin, CosmosMsg, CustomMsg, Timestamp, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+use crate::denom::Denom;
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum KujiraMsg {
+    Auth(AuthMsg),
     Denom(DenomMsg),
 }
 
@@ -20,21 +23,38 @@ impl From<KujiraMsg> for CosmosMsg<KujiraMsg> {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+pub enum AuthMsg {
+    CreateVestingAccount {
+        to_address: Addr,
+        amount: Vec<Coin>,
+        end_time: Option<Timestamp>,
+        delayed: Option<bool>,
+    },
+}
+
+impl From<AuthMsg> for CosmosMsg<KujiraMsg> {
+    fn from(msg: AuthMsg) -> Self {
+        KujiraMsg::Auth(msg).into()
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum DenomMsg {
     Create {
-        subdenom: String,
+        subdenom: Denom,
     },
     ChangeAdmin {
-        denom: String,
+        denom: Denom,
         address: Addr,
     },
     Mint {
-        denom: String,
+        denom: Denom,
         amount: Uint128,
         recipient: Addr,
     },
     Burn {
-        denom: String,
+        denom: Denom,
         amount: Uint128,
     },
 }

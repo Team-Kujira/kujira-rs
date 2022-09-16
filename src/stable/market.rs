@@ -5,6 +5,8 @@ use cosmwasm_std::{Addr, Decimal, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use crate::denom::Denom;
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InstantiateMsg {
@@ -12,13 +14,13 @@ pub struct InstantiateMsg {
     pub owner: Addr,
 
     /// The denom that is minted and burned
-    pub stable_denom: String,
+    pub stable_denom: Denom,
 
     /// The "Router" contract that burns and mints the stable on behalf of all markets
     pub stable_denom_admin: Addr,
 
     /// The collateral denom supported by this contract for deposits
-    pub collateral_denom: String,
+    pub collateral_denom: Denom,
 
     /// The different in the decimals between the minted denom and the collateral denom.
     /// Eg usat (Nomic micro-satoshi) has 6 decimals, making 1 BTC 14 decimals.
@@ -157,9 +159,9 @@ pub enum QueryMsg {
 #[serde(rename_all = "snake_case")]
 pub struct ConfigResponse {
     pub owner: Addr,
-    pub stable_denom: String,
+    pub stable_denom: Denom,
     pub stable_denom_admin: Addr,
-    pub collateral_denom: String,
+    pub collateral_denom: Denom,
     pub oracle_denom: String,
     pub max_ratio: Decimal,
     pub mint_fee: Decimal,

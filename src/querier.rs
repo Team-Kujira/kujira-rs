@@ -2,7 +2,10 @@
 
 use cosmwasm_std::{QuerierWrapper, QueryRequest, StdResult};
 
-use crate::query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse};
+use crate::{
+    denom::Denom,
+    query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse},
+};
 
 /// This is a helper wrapper to easily use our custom queries
 pub struct KujiraQuerier<'a> {
@@ -25,10 +28,8 @@ impl<'a> KujiraQuerier<'a> {
         self.querier.query(&request)
     }
 
-    pub fn query_supply_of<T: Into<String>>(&self, denom: T) -> StdResult<SupplyResponse> {
-        let query = KujiraQuery::Bank(BankQuery::Supply {
-            denom: denom.into(),
-        });
+    pub fn query_supply_of(&self, denom: Denom) -> StdResult<SupplyResponse> {
+        let query = KujiraQuery::Bank(BankQuery::Supply { denom });
         let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
         self.querier.query(&request)
     }

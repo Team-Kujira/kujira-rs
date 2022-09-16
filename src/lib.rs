@@ -1,6 +1,7 @@
 pub mod asset;
 pub mod denom;
 pub mod fin;
+pub mod merkle;
 pub mod msg;
 pub mod orca;
 pub mod precision;
