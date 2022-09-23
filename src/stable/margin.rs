@@ -43,6 +43,9 @@ pub enum ExecuteMsg {
         /// trade enough to pay off the debt, and just let the remaining
         /// collateral run
         amount: Option<Uint128>,
+
+        belief_price: Option<Decimal256>,
+        max_spread: Option<Decimal256>,
     },
 
     /// Deposit [InstantiateMsg::stable_denom] to maintain the LTV of the loan,
