@@ -35,6 +35,16 @@ pub enum ExecuteMsg {
         max_spread: Option<Decimal256>,
     },
 
+    /// Close a position
+    /// Colalteral swapped on FIN, and then the margin + profit is returned
+    Close {
+        /// If provided, this will close the specific amount of collateral
+        /// on the position, so that eg a trader can close out a winning
+        /// trade enough to pay off the debt, and just let the remaining
+        /// collateral run
+        amount: Option<Uint128>,
+    },
+
     /// Deposit [InstantiateMsg::stable_denom] to maintain the LTV of the loan,
     /// This will call the `burn` function on the underlying position to reduce
     /// the liquidation price
