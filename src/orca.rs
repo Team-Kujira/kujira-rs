@@ -107,10 +107,6 @@ pub struct InstantiateMsg {
     /// Contract owner. Allowed to call [ExecuteMsg::UpdateConfig] .
     pub owner: Addr,
 
-    /// Market the holds collateral to be liquidated. Only the market can
-    /// call [ExecuteMsg::ExecuteLiquidation]
-    pub market: Addr,
-
     /// The denomination of the bids. This is fixed at deployment, however with custom
     /// swappers, the market can be repaid in a different denomination to the bid
     pub bid_denom: Denom,
@@ -144,8 +140,6 @@ pub enum ExecuteMsg {
     UpdateConfig {
         /// Change the owner
         owner: Option<Addr>,
-        /// Change the market
-        market: Option<Addr>,
 
         /// Change the amount of time to wait before a bid can be activated
         waiting_period: Option<u64>,
@@ -163,6 +157,12 @@ pub enum ExecuteMsg {
         /// Update fee destination
         fee_address: Option<Addr>,
     },
+
+    /// Add a market which is allowed to use this queue for liquidations
+    AddMarket { address: Addr },
+
+    /// Remove permissions from a market
+    RemoveMarket { address: Addr },
 
     /// Allows a verification step for placing bids
     SetMerkleRoot { root: String },
@@ -291,8 +291,8 @@ pub enum QueryMsg {
 pub struct ConfigResponse {
     /// See [InstantiateMsg::owner]
     pub owner: Addr,
-    /// See [InstantiateMsg::market]
-    pub market: Addr,
+    /// See [ExecuteMsg::AddMarket]
+    pub markets: Vec<Addr>,
     /// See [InstantiateMsg::bid_denom]
     pub bid_denom: Denom,
     /// See [InstantiateMsg::collateral_denom]
