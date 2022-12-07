@@ -142,6 +142,7 @@ pub struct ConfigUpdate {
     pub liquidation_threshold: Option<Uint128>,
     pub liquidation_ratio: Option<Decimal>,
     pub orca_address: Option<Addr>,
+    pub collateral_limit: Option<Decimal>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -169,6 +170,7 @@ pub struct ConfigResponse {
     pub stable_denom: Denom,
     pub stable_denom_admin: Addr,
     pub collateral_denom: Denom,
+    pub collateral_limit: Decimal,
     pub oracle_denom: String,
     pub max_ratio: Decimal,
     pub mint_fee: Decimal,

@@ -307,7 +307,7 @@ dependencies = [
 
 [[package]]
 name = "kujira"
-version = "0.7.17"
+version = "0.7.18"
 dependencies = [
  "anyhow",
  "cosmwasm-std",
