@@ -1,9 +1,10 @@
 //! [Kujira's](https://fin.kujira.app/) 100% on-chain, order-book style decentralised exchange
 //! for all CosmWASM compatible Blockchains.
 
+use crate::asset::Asset;
 use crate::precision::Precision;
-use crate::{asset::Asset, denom::Denom};
 use cosmwasm_std::{Addr, Coin, Decimal256, Timestamp, Uint128, Uint256};
+use cw20::Denom;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 

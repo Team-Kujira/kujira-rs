@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "0.7.18"
+version = "0.7.19"
 authors = ["Kujira Labs"]
 edition = "2018"
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -19,3 +19,4 @@ anyhow = "1"
 hex = "0.4"
 sha2 = { version = "0.9.9", default-features = false }
 thiserror = { version = "1.0.26" }
+cw20 = "0.13.2"
