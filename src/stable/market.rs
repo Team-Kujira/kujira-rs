@@ -27,13 +27,6 @@ pub struct InstantiateMsg {
     /// USK decimals = 6, collateral_decimal_delta = 8
     pub collateral_denom_decimal_delta: i8,
 
-    /// The maximum amount of collateral that a position can have deposited, as a percentage
-    /// of the total collateral locked.
-    /// This is a soft constraint designed to keep positions smaller and more easily liquidated
-    /// by Orca, particularly when the system is young, and a single position could constitute
-    /// a significant percentage of the total locked.
-    pub collateral_limit: Decimal,
-
     /// The name of the Oracle price feed used to calculate loan health
     pub oracle_denom: String,
 
@@ -142,7 +135,6 @@ pub struct ConfigUpdate {
     pub liquidation_threshold: Option<Uint128>,
     pub liquidation_ratio: Option<Decimal>,
     pub orca_address: Option<Addr>,
-    pub collateral_limit: Option<Decimal>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -170,7 +162,6 @@ pub struct ConfigResponse {
     pub stable_denom: Denom,
     pub stable_denom_admin: Addr,
     pub collateral_denom: Denom,
-    pub collateral_limit: Decimal,
     pub oracle_denom: String,
     pub max_ratio: Decimal,
     pub mint_fee: Decimal,
