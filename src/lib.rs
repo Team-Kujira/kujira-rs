@@ -7,6 +7,7 @@ pub mod orca;
 pub mod precision;
 pub mod querier;
 pub mod query;
+pub mod schedule;
 pub mod stable;
 pub mod swapper;
 pub mod utils;

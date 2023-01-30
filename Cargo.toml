@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "0.7.20"
+version = "0.7.21"
 authors = ["Kujira Labs"]
 edition = "2018"
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -12,7 +12,7 @@ repository = "https://github.com/Team-Kujira/kujira-rs"
 backtraces = ["cosmwasm-std/backtraces"]
 
 [dependencies]
-cosmwasm-std = { version = "1.0.0" }
+cosmwasm-std = "1.1.3"
 schemars = "0.8.10"
 serde = { version = "1.0.137", default-features = false, features = ["derive"] }
 anyhow = "1"
