@@ -27,6 +27,16 @@ pub struct InstantiateMsg {
     /// In order to prevent basically a DoS attack with hundreds of pools being created at
     /// insignificant price points, we require a limit to the precision of the pricing
     pub price_precision: Precision,
+
+    /// The fee charged on swaps, and instantly filled limit orders
+    pub fee_taker: Decimal256,
+
+    /// The fee charged on withdrawals from filled limit orders
+    pub fee_maker: Decimal256,
+
+    /// If true, the fee_taker amount is deducted from the fee_maker fee during swaps, and
+    /// sent to the trader when their order is filled and withdrawn
+    pub fee_maker_negative: bool,
 }
 
 /// Callable interfaces
@@ -43,6 +53,12 @@ pub enum ExecuteMsg {
 
         /// Update the decimal precision
         price_precision: Option<Precision>,
+
+        fee_taker: Option<Decimal256>,
+
+        fee_maker: Option<Decimal256>,
+
+        fee_maker_negative: Option<bool>,
     },
 
     /// Called by an end-user to place a order
@@ -133,6 +149,15 @@ pub struct ConfigResponse {
 
     /// When a book is bootstrapping, it can accept orders but trades are not yet executed
     pub is_bootstrapping: bool,
+
+    /// See [InstantiateMsg::fee_taker]    
+    pub fee_taker: Decimal256,
+
+    /// See [InstantiateMsg::fee_maker]
+    pub fee_maker: Decimal256,
+
+    /// See [InstantiateMsg::fee_maker_negative]
+    pub fee_maker_negative: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
