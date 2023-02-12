@@ -261,6 +261,16 @@ pub enum QueryMsg {
         exchange_rate: Decimal,
     },
 
+    /// Given the current collateral and debt amounts, calculates the amount of collateral
+    /// that needs to be liquidated to bring the LTV to the target LTV. Returns [SimulationResponse]
+    SimulateWithTarget {
+        collateral_amount: Uint128,
+        debt_amount: Uint128,
+        target_ltv: Decimal,
+        repay_denom: Denom,
+        exchange_rate: Decimal,
+    },
+
     /// Query a specific bid by idx. Returns [BidResponse]
     Bid { bid_idx: Uint128 },
 
