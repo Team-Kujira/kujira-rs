@@ -26,7 +26,7 @@ pub enum ExecuteMsg {
     /// the collateral asset.
     /// That collateral is then posted on the Position as debt, less the funds sent
     /// with the transaction
-    /// This requires the sender to provide _at least_ `1 - rate::stable::market::InstantiateMsg::max_ratio`
+    /// This requires the sender to provide _at least_ `1 - rate::stable::market::InstantiateMsg::max_liquidation_ratio`
     /// of the total debt amount, in order for the position to open below its liquidation threshold
     Open {
         mint_amount: Uint128,

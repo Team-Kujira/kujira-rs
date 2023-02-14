@@ -46,7 +46,7 @@ impl Denom {
         q.query_balance(addr.clone(), self.0.to_string())
     }
 
-    pub fn as_bytes<'a>(&'a self) -> &'a [u8] {
+    pub fn as_bytes(&self) -> &[u8] {
         self.0.as_bytes()
     }
 }

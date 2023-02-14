@@ -31,7 +31,7 @@ pub struct InstantiateMsg {
     pub oracle_denom: String,
 
     /// The maximum LTV ratio that a loan can have before it needs liqudiating
-    pub max_ratio: Decimal,
+    pub max_liquidation_ratio: Decimal,
 
     /// The amount charged when stable is minted
     pub mint_fee: Decimal,
@@ -51,11 +51,12 @@ pub struct InstantiateMsg {
 
     /// The percentage of collateral that is liquidated when the amount of debt on
     /// a position is above [InstantiateMsg::liquidation_threshold]
-    pub liquidation_ratio: Decimal,
+    pub partial_liquidation_target: Decimal,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+#[allow(clippy::large_enum_variant)]
 pub enum ExecuteMsg {
     /// Deposit collateral to the position for an address. The amount of
     /// the [InstantiateMsg::collateral_denom] sent with the transaction is the amount
@@ -128,12 +129,12 @@ pub enum Liquidates {
 pub struct ConfigUpdate {
     pub owner: Option<Addr>,
     pub oracle_denom: Option<String>,
-    pub max_ratio: Option<Decimal>,
+    pub max_liquidation_ratio: Option<Decimal>,
     pub mint_fee: Option<Decimal>,
     pub interest_rate: Option<Decimal>,
     pub max_debt: Option<Uint128>,
     pub liquidation_threshold: Option<Uint128>,
-    pub liquidation_ratio: Option<Decimal>,
+    pub partial_liquidation_target: Option<Decimal>,
     pub orca_address: Option<Addr>,
 }
 
@@ -163,13 +164,13 @@ pub struct ConfigResponse {
     pub stable_denom_admin: Addr,
     pub collateral_denom: Denom,
     pub oracle_denom: String,
-    pub max_ratio: Decimal,
+    pub max_liquidation_ratio: Decimal,
     pub mint_fee: Decimal,
     pub interest_rate: Decimal,
     pub orca_address: Addr,
     pub max_debt: Uint128,
     pub liquidation_threshold: Uint128,
-    pub liquidation_ratio: Decimal,
+    pub partial_liquidation_target: Decimal,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -194,7 +195,7 @@ pub struct PositionResponse {
     /// since the previous withdrawal or liquidation (as these actions both collect interest payments)
     pub interest_amount: Uint128,
 
-    /// The price at which the LTV of this loan will exceed [InstantiateMsg::max_ratio], and must be liquidated.
+    /// The price at which the LTV of this loan will exceed [InstantiateMsg::max_liquidation_ratio], and must be liquidated.
     pub liquidation_price: Option<Decimal>,
 }
 

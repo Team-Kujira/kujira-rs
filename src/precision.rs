@@ -39,8 +39,8 @@ impl Precise for Decimal {
             }
             Precision::DecimalPlaces(dp) => {
                 let pow = Uint128::from(10u128).pow(18 - *dp as u32);
-                let x = Self::from_ratio(self.numerator(), Uint128::from(self.denominator()) * pow);
-                Self::from_ratio(Uint128::from(x.numerator()) * pow, x.denominator())
+                let x = Self::from_ratio(self.numerator(), self.denominator() * pow);
+                Self::from_ratio(x.numerator() * pow, x.denominator())
             }
         }
     }
@@ -59,8 +59,8 @@ impl Precise for Decimal256 {
             }
             Precision::DecimalPlaces(dp) => {
                 let pow = Uint256::from(10u128).pow(18 - *dp as u32);
-                let x = Self::from_ratio(self.numerator(), Uint256::from(self.denominator()) * pow);
-                Self::from_ratio(Uint256::from(x.numerator()) * pow, x.denominator())
+                let x = Self::from_ratio(self.numerator(), self.denominator() * pow);
+                Self::from_ratio(x.numerator() * pow, x.denominator())
             }
         }
     }
