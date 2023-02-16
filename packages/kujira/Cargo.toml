@@ -1,0 +1,22 @@
+[package]
+name = "kujira"
+version = "0.7.24"
+edition = "2021"
+authors = ["Kujira Labs"]
+description = "Interfaces and utilities for Kujira cosmwasm contracts"
+license = "Apache-2.0"
+homepage = "https://kujira.app"
+repository = "https://github.com/Team-Kujira/kujira-rs/tree/main/packages/kujira"
+
+[features]
+backtraces = ["cosmwasm-std/backtraces"]
+
+[dependencies]
+cosmwasm-std = { workspace = true }
+schemars = { workspace = true }
+serde = { workspace = true, default-features = false, features = ["derive"] }
+anyhow = { workspace = true }
+hex  = { workspace = true }
+sha2 = { workspace = true, default-features = false }
+thiserror = { workspace = true }
+cw20 = { workspace = true }
