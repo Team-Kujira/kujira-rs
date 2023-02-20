@@ -65,3 +65,9 @@ where
         Self(t.into())
     }
 }
+
+impl AsRef<str> for Denom {
+    fn as_ref(&self) -> &str {
+        self.0.as_ref()
+    }
+}

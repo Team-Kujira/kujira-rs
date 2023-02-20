@@ -34,6 +34,10 @@ impl<'a> KujiraQuerier<'a> {
         self.querier.query(&request)
     }
 
+    pub fn inner(&self) -> &QuerierWrapper<'a, KujiraQuery> {
+        self.querier
+    }
+
     // pub fn query_exchange_rates<T: Into<String>>(
     //     &self,
     //     offer: T,

@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }
+kujira = { path = "../kujira" }
