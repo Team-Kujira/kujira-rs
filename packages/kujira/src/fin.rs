@@ -3,7 +3,7 @@
 
 use crate::asset::Asset;
 use crate::precision::Precision;
-use cosmwasm_std::{Addr, Coin, Decimal256, Timestamp, Uint128, Uint256};
+use cosmwasm_std::{Addr, Binary, Coin, Decimal256, Timestamp, Uint128, Uint256};
 use cw20::Denom;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
