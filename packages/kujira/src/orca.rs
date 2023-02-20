@@ -97,7 +97,7 @@
 //! - Testnet: Code ID `52750`
 
 use crate::{denom::Denom, merkle::Proof};
-use cosmwasm_std::{Addr, Decimal, Uint128, Binary};
+use cosmwasm_std::{Addr, Binary, Decimal, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -224,6 +224,7 @@ pub enum ExecuteMsg {
 
         /// An optional callback that ORCA will execute with the funds from the liquidation.
         /// The callback is executed on the sender's address.
+        /// NB: This is currently pre-release, and not yet available on production contracts
         callback: Option<Binary>,
     },
     /// Register a custom swapper to support different [repay](ExecuteMsg::ExecuteLiquidation::repay_denom)

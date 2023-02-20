@@ -77,6 +77,11 @@ pub enum ExecuteMsg {
         belief_price: Option<Decimal256>,
         max_spread: Option<Decimal256>,
         to: Option<Addr>,
+
+        /// An optional callback that FIN will execute with the funds from the swap.
+        /// The callback is executed on the sender's address.
+        /// NB: This is currently pre-release, and not yet available on production contracts
+        callback: Option<Binary>,
     },
 
     /// Retract the order and withdraw funds
@@ -86,12 +91,22 @@ pub enum ExecuteMsg {
 
         /// The amount of order to retract. IF omitted, the whole order is retracted
         amount: Option<Uint256>,
+
+        /// An optional callback that FIN will execute with the funds from the retraction.
+        /// The callback is executed on the sender's address.
+        /// NB: This is currently pre-release, and not yet available on production contracts
+        callback: Option<Binary>,
     },
 
     /// Fully retract orders and withdraw funds
     RetractOrders {
         /// The order idxs to be retracted
         order_idxs: Vec<Uint128>,
+
+        /// An optional callback that FIN will execute with the funds from the retractions.
+        /// The callback is executed on the sender's address.
+        /// NB: This is currently pre-release, and not yet available on production contracts
+        callback: Option<Binary>,
     },
 
     /// Claim filled orders
@@ -100,6 +115,11 @@ pub enum ExecuteMsg {
         /// If omitted, the first 30 orders for the sending address
         /// will be withdrawn       
         order_idxs: Option<Vec<Uint128>>,
+
+        /// An optional callback that FIN will execute with the funds from the withdrawals.
+        /// The callback is executed on the sender's address.
+        /// NB: This is currently pre-release, and not yet available on production contracts
+        callback: Option<Binary>,
     },
 }
 
