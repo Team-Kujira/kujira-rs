@@ -6,7 +6,7 @@ authors = ["Kujira Labs"]
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
 license = "Apache-2.0"
 homepage = "https://kujira.app"
-repository = "https://github.com/Team-Kujira/kujira-rs/tree/main/packages/kujira"
+repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira"
 
 [features]
 backtraces = ["cosmwasm-std/backtraces"]
