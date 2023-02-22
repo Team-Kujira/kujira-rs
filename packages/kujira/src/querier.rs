@@ -4,6 +4,7 @@ use cosmwasm_std::{QuerierWrapper, QueryRequest, StdResult};
 
 use crate::{
     denom::Denom,
+    price::HumanPrice,
     query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse},
 };
 
@@ -17,15 +18,17 @@ impl<'a> KujiraQuerier<'a> {
         KujiraQuerier { querier }
     }
 
-    pub fn query_exchange_rate<T: Into<String>>(
-        &self,
-        denom: T,
-    ) -> StdResult<ExchangeRateResponse> {
+    /// Queries the oracle module for the exchange rate of the specified denom.
+    /// This returns a `HumanPrice`, which is a wrapper around `Decimal` that 
+    /// should be normalized before use in calculations.
+    pub fn query_exchange_rate<T: Into<String>>(&self, denom: T) -> StdResult<HumanPrice> {
         let query = KujiraQuery::Oracle(OracleQuery::ExchangeRate {
             denom: denom.into(),
         });
         let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
-        self.querier.query(&request)
+        let result: ExchangeRateResponse = self.querier.query(&request)?;
+
+        Ok(result.rate.into())
     }
 
     pub fn query_supply_of(&self, denom: Denom) -> StdResult<SupplyResponse> {

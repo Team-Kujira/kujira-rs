@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "0.7.25"
+version = "0.8.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
