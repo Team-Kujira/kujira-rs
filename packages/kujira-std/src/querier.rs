@@ -19,7 +19,7 @@ impl<'a> KujiraQuerier<'a> {
     }
 
     /// Queries the oracle module for the exchange rate of the specified denom.
-    /// This returns a `HumanPrice`, which is a wrapper around `Decimal` that 
+    /// This returns a `HumanPrice`, which is a wrapper around `Decimal` that
     /// should be normalized before use in calculations.
     pub fn query_exchange_rate<T: Into<String>>(&self, denom: T) -> StdResult<HumanPrice> {
         let query = KujiraQuery::Oracle(OracleQuery::ExchangeRate {

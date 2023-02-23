@@ -1,6 +1,6 @@
 use std::{
     cmp::Ordering,
-    ops::{Deref, DerefMut, Div, Mul},
+    ops::{Div, DivAssign, Mul, MulAssign},
 };
 
 use cosmwasm_std::{Decimal, Fraction, StdResult, Uint128};
@@ -79,23 +79,37 @@ impl NormalizedPrice {
     }
 }
 
-impl Deref for NormalizedPrice {
-    type Target = Decimal;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-impl DerefMut for NormalizedPrice {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-
 impl From<NormalizedPrice> for Decimal {
     fn from(price: NormalizedPrice) -> Self {
         price.0
+    }
+}
+
+impl Mul<NormalizedPrice> for NormalizedPrice {
+    type Output = NormalizedPrice;
+
+    fn mul(self, rhs: NormalizedPrice) -> Self::Output {
+        NormalizedPrice(self.0 * rhs.0)
+    }
+}
+
+impl MulAssign<NormalizedPrice> for NormalizedPrice {
+    fn mul_assign(&mut self, rhs: NormalizedPrice) {
+        self.0 *= rhs.0
+    }
+}
+
+impl Div<NormalizedPrice> for NormalizedPrice {
+    type Output = NormalizedPrice;
+
+    fn div(self, rhs: NormalizedPrice) -> Self::Output {
+        NormalizedPrice(self.0 / rhs.0)
+    }
+}
+
+impl DivAssign<NormalizedPrice> for NormalizedPrice {
+    fn div_assign(&mut self, rhs: NormalizedPrice) {
+        self.0 /= rhs.0
     }
 }
 
@@ -112,6 +126,12 @@ impl Mul<NormalizedPrice> for Uint128 {
 
     fn mul(self, rhs: NormalizedPrice) -> Self::Output {
         rhs.0 * self
+    }
+}
+
+impl MulAssign<NormalizedPrice> for Uint128 {
+    fn mul_assign(&mut self, rhs: NormalizedPrice) {
+        *self = *self * rhs.0
     }
 }
 
