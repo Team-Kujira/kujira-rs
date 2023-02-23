@@ -73,7 +73,7 @@ impl NormalizedPrice {
         }
     }
 
-    pub fn from_oracle(querier: KujiraQuerier, denom: &Denom, decimals: u8) -> StdResult<Self> {
+    pub fn from_oracle(querier: &KujiraQuerier, denom: &Denom, decimals: u8) -> StdResult<Self> {
         querier
             .query_exchange_rate(denom.to_string())
             .map(|price| price.normalize(decimals))
