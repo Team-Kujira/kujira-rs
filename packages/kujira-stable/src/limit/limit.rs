@@ -2,13 +2,10 @@
 //! users to open leveraged limit orders on FIN by minting USK and borrowing it against
 //! the filled value of the limit order
 //!
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal, Decimal256, Uint128};
 
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub struct InstantiateMsg {
     /// Standard Market intantiation paramters
     pub market: crate::stable::market::InstantiateMsg,
@@ -17,8 +14,7 @@ pub struct InstantiateMsg {
     pub fin_address: Addr,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 #[allow(clippy::large_enum_variant)]
 pub enum ExecuteMsg {
     /// Open a leveraged limit order. This will mint the mint_amount, and add it to the stable provided in the tx,
@@ -48,8 +44,7 @@ pub enum ExecuteMsg {
     UpdateConfig(ConfigUpdate),
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum QueryMsg {
     Config {},
     Status {},
@@ -63,28 +58,24 @@ pub enum QueryMsg {
     },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub struct ConfigUpdate {
     pub market: crate::stable::market::ConfigUpdate,
     pub fin_address: Option<Addr>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub struct ConfigResponse {
     pub market: crate::stable::market::ConfigResponse,
     pub fin_address: Addr,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub struct PositionsResponse {
     pub positions: Vec<PositionResponse>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub struct PositionResponse {
     pub idx: Uint128,
 

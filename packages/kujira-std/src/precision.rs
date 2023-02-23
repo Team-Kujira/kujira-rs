@@ -1,9 +1,7 @@
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Decimal, Decimal256, Fraction, Uint128, Uint256};
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum Precision {
     SignificantFigures(u8),
     DecimalPlaces(u8),

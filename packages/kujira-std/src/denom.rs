@@ -1,20 +1,13 @@
 //! Convenience functions for generically handling cw20::Denom
 use std::fmt::Display;
 
-use cosmwasm_std::Addr;
-use cosmwasm_std::BankMsg;
-use cosmwasm_std::Coin;
-use cosmwasm_std::CosmosMsg;
-use cosmwasm_std::QuerierWrapper;
-use cosmwasm_std::StdResult;
-use cosmwasm_std::{coin, coins};
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
+use cosmwasm_schema::cw_serde;
+use cosmwasm_std::{coin, coins, Addr, BankMsg, Coin, CosmosMsg, QuerierWrapper, StdResult};
 
 use crate::msg::KujiraMsg;
 use crate::query::KujiraQuery;
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[cw_serde]
 pub struct Denom(String);
 
 impl Denom {

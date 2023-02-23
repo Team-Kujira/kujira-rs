@@ -1,11 +1,9 @@
 use std::cmp::{max, min};
 
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Decimal, Fraction, Timestamp, Uint128};
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub struct Schedule {
     pub start: Timestamp,
     pub end: Timestamp,
@@ -13,8 +11,7 @@ pub struct Schedule {
     pub release: Release,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum Release {
     Fixed,
     Decay,

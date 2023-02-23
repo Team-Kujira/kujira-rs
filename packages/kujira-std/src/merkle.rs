@@ -1,11 +1,11 @@
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::StdError;
 use hex::FromHexError;
-use serde::{Deserialize, Serialize};
 use sha2::Digest;
 use std::convert::TryInto;
 use thiserror::Error;
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[cw_serde]
 pub struct Merkle {
     root: String,
 }

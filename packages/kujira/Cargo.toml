@@ -8,15 +8,9 @@ license = "Apache-2.0"
 homepage = "https://kujira.app"
 repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira"
 
-[features]
-backtraces = ["cosmwasm-std/backtraces"]
-
 [dependencies]
-cosmwasm-std = { workspace = true }
-schemars = { workspace = true }
-serde = { workspace = true, default-features = false, features = ["derive"] }
-anyhow = { workspace = true }
-hex = { workspace = true }
-sha2 = { workspace = true, default-features = false }
-thiserror = { workspace = true }
-cw20 = { workspace = true }
+kujira-std = { path = "../kujira-std" }
+kujira-ghost = { path = "../kujira-ghost" }
+kujira-fin = { path = "../kujira-fin" }
+kujira-stable = { path = "../kujira-stable" }
+kujira-orca = { path = "../kujira-orca" }

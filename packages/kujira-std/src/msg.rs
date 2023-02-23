@@ -1,13 +1,11 @@
 //!    Bindings for message execution on Kujira Core
 
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Coin, CosmosMsg, CustomMsg, Timestamp, Uint128};
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
 
 use crate::denom::Denom;
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum KujiraMsg {
     Auth(AuthMsg),
     Denom(DenomMsg),
@@ -21,8 +19,7 @@ impl From<KujiraMsg> for CosmosMsg<KujiraMsg> {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum AuthMsg {
     CreateVestingAccount {
         to_address: Addr,
@@ -38,8 +35,7 @@ impl From<AuthMsg> for CosmosMsg<KujiraMsg> {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum DenomMsg {
     Create {
         subdenom: Denom,

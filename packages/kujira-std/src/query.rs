@@ -1,13 +1,10 @@
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
-
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Coin, CustomQuery, Decimal};
 
 use crate::denom::Denom;
 
 /// KujiraQuery is an override of QueryRequest::Custom to access Terra-specific modules
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum KujiraQuery {
     Bank(BankQuery),
     Oracle(OracleQuery),
@@ -15,15 +12,13 @@ pub enum KujiraQuery {
 
 impl CustomQuery for KujiraQuery {}
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum BankQuery {
     Supply { denom: Denom },
 }
 
 /// This contains all queries that can be made to the oracle module
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[cw_serde]
 pub enum OracleQuery {
     // ExchangeRate will return the rate of this denom.
     ExchangeRate { denom: String },
@@ -32,12 +27,12 @@ pub enum OracleQuery {
 }
 
 /// ExchangeRateResponse is data format returned from OracleRequest::ExchangeRate query
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[cw_serde]
 pub struct ExchangeRateResponse {
     pub rate: Decimal,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[cw_serde]
 pub struct SupplyResponse {
     pub amount: Coin,
 }
