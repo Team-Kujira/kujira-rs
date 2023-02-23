@@ -3,6 +3,7 @@ use std::{
     ops::{Div, DivAssign, Mul, MulAssign},
 };
 
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Decimal, Fraction, StdResult, Uint128};
 
 use crate::{denom::Denom, querier::KujiraQuerier};
@@ -15,6 +16,8 @@ pub const REFERENCE_DECIMAL_PLACES: u8 = 6;
 /// # NOTE
 /// Denominations with different decimals will have `value = amount * price.normalize(decimals)`
 /// So do NOT use this value directly for calculations, but rather use the `NormalizedPrice`
+#[cw_serde]
+#[derive(Copy, Eq, PartialOrd, Ord)]
 pub struct HumanPrice(Decimal);
 
 impl HumanPrice {
@@ -42,6 +45,8 @@ impl From<HumanPrice> for Decimal {
 ///
 /// Standard denominations have 6 decimal places, so we use that as
 /// the reference point.
+#[cw_serde]
+#[derive(Copy, Eq, PartialOrd, Ord)]
 pub struct NormalizedPrice(Decimal);
 
 impl NormalizedPrice {
@@ -148,5 +153,39 @@ impl Div<NormalizedPrice> for Uint128 {
 
     fn div(self, rhs: NormalizedPrice) -> Self::Output {
         rhs.0.inv().map(|inv| inv * self)
+    }
+}
+#[cfg(test)]
+mod tests {
+    use cosmwasm_std::Decimal;
+
+    use super::{HumanPrice, NormalizedPrice};
+
+    #[test]
+    fn serialize_human_price() {
+        let price = HumanPrice(Decimal::percent(459));
+        let serialized = serde_json::to_string(&price).unwrap();
+        assert_eq!(serialized, r#""4.59""#);
+    }
+
+    #[test]
+    fn deserialize_human_price() {
+        let price = HumanPrice(Decimal::percent(459));
+        let deserialized: HumanPrice = serde_json::from_str(r#""4.59""#).unwrap();
+        assert_eq!(price, deserialized);
+    }
+
+    #[test]
+    fn serialize_normalized_price() {
+        let price = NormalizedPrice(Decimal::percent(459));
+        let serialized = serde_json::to_string(&price).unwrap();
+        assert_eq!(serialized, r#""4.59""#);
+    }
+
+    #[test]
+    fn deserialize_normalized_price() {
+        let price = NormalizedPrice(Decimal::percent(459));
+        let deserialized: NormalizedPrice = serde_json::from_str(r#""4.59""#).unwrap();
+        assert_eq!(price, deserialized);
     }
 }

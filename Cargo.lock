@@ -413,6 +413,7 @@ dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
  "hex",
+ "serde_json",
  "sha2 0.10.6",
  "thiserror",
 ]
