@@ -7,7 +7,7 @@ use cosmwasm_std::{Decimal, Fraction, StdResult, Uint128};
 
 use crate::{denom::Denom, querier::KujiraQuerier};
 
-pub const REFERENCE_DECIMAL_PLACES: i8 = 6;
+pub const REFERENCE_DECIMAL_PLACES: u8 = 6;
 
 /// `HumanPrice` is returned from the oracle querier and is a decimal value
 /// representing the exchange rate of the given denom, *without any normalization*.
@@ -18,7 +18,7 @@ pub const REFERENCE_DECIMAL_PLACES: i8 = 6;
 pub struct HumanPrice(Decimal);
 
 impl HumanPrice {
-    pub fn normalize(&self, decimals: i8) -> NormalizedPrice {
+    pub fn normalize(&self, decimals: u8) -> NormalizedPrice {
         NormalizedPrice::from_raw(self.0, decimals)
     }
 }
@@ -52,8 +52,9 @@ impl NormalizedPrice {
         Self(price)
     }
 
-    pub fn from_raw(price: Decimal, decimals: i8) -> Self {
-        let delta = REFERENCE_DECIMAL_PLACES - decimals;
+    pub fn from_raw(price: Decimal, decimals: u8) -> Self {
+        // delta is i16 because we subtract two u8s
+        let delta: i16 = i16::from(REFERENCE_DECIMAL_PLACES) - i16::from(decimals);
         match delta.cmp(&0) {
             Ordering::Equal => Self(price),
             Ordering::Greater => Self(Decimal::from_ratio(
@@ -67,7 +68,7 @@ impl NormalizedPrice {
         }
     }
 
-    pub fn from_oracle(querier: KujiraQuerier, denom: &Denom, decimals: i8) -> StdResult<Self> {
+    pub fn from_oracle(querier: KujiraQuerier, denom: &Denom, decimals: u8) -> StdResult<Self> {
         querier
             .query_exchange_rate(denom.to_string())
             .map(|price| price.normalize(decimals))
