@@ -1,6 +1,7 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal256, Timestamp, Uint128, Uint256};
-use kujira_std::{Asset, Denom, Precision};
+use kujira_std::{Asset, Precision};
+use cw20::Denom;
 
 /// Standard interface to query contract state
 #[cw_serde]
