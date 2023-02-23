@@ -9,3 +9,4 @@ edition = "2021"
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }
 kujira-std = { path = "../kujira-std" }
+kujira-fin = { path = "../kujira-fin" }

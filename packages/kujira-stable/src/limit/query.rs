@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Decimal, Decimal256, Uint128};
+use cosmwasm_std::{Addr, Decimal, Uint128};
 
 use crate::market;
 
