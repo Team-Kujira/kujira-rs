@@ -1,5 +1,5 @@
 use cosmwasm_std::{to_binary, Addr, Coin, CosmosMsg, Uint128, WasmMsg};
-use kujira_std::msg::KujiraMsg;
+use kujira_std::KujiraMsg;
 
 use super::execute::ExecuteMsg;
 
