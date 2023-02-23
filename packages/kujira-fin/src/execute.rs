@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Binary, Coin, Decimal256, Uint128, Uint256};
-use kujira_std::precision::Precision;
+use kujira_std::Precision;
 
 /// Callable interfaces
 #[cw_serde]

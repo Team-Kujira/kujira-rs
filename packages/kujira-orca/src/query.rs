@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal, Uint128};
-use kujira_std::{denom::Denom, merkle::Proof};
+use kujira_std::{Denom, Proof};
 
 /// Standard interface to query contract state
 #[cw_serde]

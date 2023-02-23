@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal256};
-use kujira_std::{denom::Denom, precision::Precision};
+use kujira_std::{Denom, Precision};
 
 #[cw_serde]
 pub struct InstantiateMsg {

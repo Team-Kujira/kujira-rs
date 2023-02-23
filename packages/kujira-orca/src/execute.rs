@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Binary, Decimal, Uint128};
-use kujira_std::{denom::Denom, merkle::Proof};
+use kujira_std::{Denom, Proof};
 
 /// Callable interfaces
 #[cw_serde]

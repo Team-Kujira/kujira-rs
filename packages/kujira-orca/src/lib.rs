@@ -69,14 +69,14 @@
 //! `kujira = "0.2.1"`
 //!
 //! 2. Extend your contract config to store the address of your new liquidation queue
-//! ```rust
+//! ```rust ignore
 //! pub struct Config {
 //!   liquidation_contract: Addr,
 //!   ..,
 //! }
 //! ```
 //! 3. Transfer funds to the liquidation queue at the point of liquidation
-//! ```rust
+//! ```rust ignore
 //! fn liquidate_collateral(deps: DepsMut, ..) -> StdResult<Response> {
 //!   // ..
 //!   let msg = CosmosMsg::Wasm(WasmMsg::Execute {

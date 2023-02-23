@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal, Uint128};
-use kujira_std::denom::Denom;
+use kujira_std::Denom;
 
 /// Create a new liquidation queue.
 #[cw_serde]
