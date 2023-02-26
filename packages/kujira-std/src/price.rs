@@ -1,6 +1,6 @@
 use std::{
     cmp::Ordering,
-    ops::{Div, DivAssign, Mul, MulAssign},
+    ops::{Deref, Div, DivAssign, Mul, MulAssign},
 };
 
 use cosmwasm_schema::cw_serde;
@@ -81,6 +81,14 @@ impl NormalizedPrice {
 
     pub fn inner(&self) -> Decimal {
         self.0
+    }
+}
+
+impl Deref for NormalizedPrice {
+    type Target = Decimal;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
 
