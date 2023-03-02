@@ -465,6 +465,7 @@ version = "0.8.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
+ "cw20",
  "hex",
  "serde_json",
  "sha2 0.10.6",

@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Binary, Coin, Decimal256, Uint128, Uint256};
-use kujira_std::Precision;
+use cosmwasm_std::{Addr, Coin, Decimal256, Uint128, Uint256};
+use kujira_std::{Callback, Precision};
 
 /// Callable interfaces
 #[cw_serde]
@@ -43,7 +43,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the swap.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Binary>,
+        callback: Option<Callback>,
     },
 
     /// Retract the order and withdraw funds
@@ -57,7 +57,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the retraction.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Binary>,
+        callback: Option<Callback>,
     },
 
     /// Fully retract orders and withdraw funds
@@ -68,7 +68,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the retractions.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Binary>,
+        callback: Option<Callback>,
     },
 
     /// Claim filled orders
@@ -81,6 +81,6 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the withdrawals.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Binary>,
+        callback: Option<Callback>,
     },
 }

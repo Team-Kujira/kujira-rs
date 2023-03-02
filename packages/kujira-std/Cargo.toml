@@ -11,6 +11,7 @@ cosmwasm-schema = { workspace = true }
 hex = { workspace = true }
 sha2 = { workspace = true }
 thiserror = { workspace = true }
+cw20 = { workspace = true }
 
 [dev-dependencies]
 serde_json = { workspace = true }
