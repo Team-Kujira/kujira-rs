@@ -7,6 +7,12 @@ pub enum Precision {
     DecimalPlaces(u8),
 }
 
+impl Default for Precision {
+    fn default() -> Self {
+        Self::DecimalPlaces(0)
+    }
+}
+
 impl Precision {
     pub fn validate<T>(&self, other: &T) -> Option<()>
     where
