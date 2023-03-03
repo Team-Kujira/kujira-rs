@@ -4,7 +4,6 @@ use std::fmt::Display;
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{coin, coins, Addr, BankMsg, Coin, CosmosMsg, QuerierWrapper, StdResult};
 
-use crate::msg::KujiraMsg;
 use crate::query::KujiraQuery;
 
 #[cw_serde]
@@ -25,7 +24,7 @@ impl Denom {
         coin(amount.clone().into(), self.0.clone())
     }
 
-    pub fn send<T>(&self, to: &Addr, amount: &T) -> CosmosMsg<KujiraMsg>
+    pub fn send<T, M>(&self, to: &Addr, amount: &T) -> CosmosMsg<M>
     where
         T: Into<u128> + Clone,
     {
@@ -41,6 +40,13 @@ impl Denom {
 
     pub fn as_bytes(&self) -> &[u8] {
         self.0.as_bytes()
+    }
+
+    pub fn from_cw20(value: cw20::Denom) -> Self {
+        match value {
+            cw20::Denom::Native(x) => Self::from(x),
+            cw20::Denom::Cw20(_) => panic!("CW20 Unsupported"),
+        }
     }
 }
 
