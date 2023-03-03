@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Decimal256, Timestamp, Uint128, Uint256};
+use cosmwasm_std::{Addr, Decimal256, Order, Timestamp, Uint128, Uint256};
 use cw20::Denom;
 use kujira_std::{Asset, Precision};
 
@@ -20,6 +20,7 @@ pub enum QueryMsg {
         address: Addr,
         start_after: Option<Uint128>,
         limit: Option<u8>,
+        order: Option<i32>,
     },
 
     /// Query a specific price. Returns [PriceResponse]
