@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Coin, Decimal256, Uint128, Uint256};
+use cosmwasm_std::{Addr, Binary, Coin, Decimal256, Uint128, Uint256};
 use kujira_std::{Callback, Precision};
 
 /// Callable interfaces
@@ -27,6 +27,7 @@ pub enum ExecuteMsg {
     SubmitOrder {
         /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
         price: Decimal256,
+        callback: Option<Callback>,
     },
 
     /// Executes a market trade based on current order book.
@@ -83,4 +84,10 @@ pub enum ExecuteMsg {
         /// NB: This is currently pre-release, and not yet available on production contracts
         callback: Option<Callback>,
     },
+}
+
+#[cw_serde]
+pub struct NewOrderCallback {
+    pub t: Binary,
+    pub idx: Uint128,
 }
