@@ -6,7 +6,7 @@ use std::{
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Decimal, Fraction, StdResult, Uint128};
 
-use crate::{denom::Denom, querier::KujiraQuerier};
+use crate::querier::KujiraQuerier;
 
 pub const REFERENCE_DECIMAL_PLACES: u8 = 6;
 
@@ -73,7 +73,11 @@ impl NormalizedPrice {
         }
     }
 
-    pub fn from_oracle<T: Into<String>>(querier: &KujiraQuerier, denom: T, decimals: u8) -> StdResult<Self> {
+    pub fn from_oracle<T: Into<String>>(
+        querier: &KujiraQuerier,
+        denom: T,
+        decimals: u8,
+    ) -> StdResult<Self> {
         querier
             .query_exchange_rate(denom)
             .map(|price| price.normalize(decimals))
