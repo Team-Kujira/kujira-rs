@@ -91,3 +91,8 @@ pub struct NewOrderCallback {
     pub t: Binary,
     pub idx: Uint128,
 }
+
+#[cw_serde]
+pub enum FINCallbackExecuteMsg {
+    OnSubmittedOrder(NewOrderCallback),
+}
