@@ -60,6 +60,10 @@ impl NormalizedPrice {
     pub fn from_raw(price: Decimal, decimals: u8) -> Self {
         // delta is i16 because we subtract two u8s
         let delta: i16 = i16::from(REFERENCE_DECIMAL_PLACES) - i16::from(decimals);
+        Self::from_delta(price, delta)
+    }
+
+    pub fn from_delta(price: Decimal, delta: i16) -> Self {
         match delta.cmp(&0) {
             Ordering::Equal => Self(price),
             Ordering::Greater => Self(Decimal::from_ratio(
