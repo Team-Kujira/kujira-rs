@@ -28,8 +28,4 @@ pub struct InstantiateMsg {
 
     /// The fee charged on withdrawals from filled limit orders
     pub fee_maker: Decimal256,
-
-    /// If true, the fee_taker amount is deducted from the fee_maker fee during swaps, and
-    /// sent to the trader when their order is filled and withdrawn
-    pub fee_maker_negative: bool,
 }

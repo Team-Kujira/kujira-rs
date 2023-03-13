@@ -20,7 +20,6 @@ pub enum QueryMsg {
         address: Addr,
         start_after: Option<Uint128>,
         limit: Option<u8>,
-        order: Option<i32>,
     },
 
     /// Query a specific price. Returns [PriceResponse]
@@ -55,9 +54,6 @@ pub struct ConfigResponse {
 
     /// See [InstantiateMsg::fee_maker]
     pub fee_maker: Decimal256,
-
-    /// See [InstantiateMsg::fee_maker_negative]
-    pub fee_maker_negative: bool,
 }
 
 #[cw_serde]
