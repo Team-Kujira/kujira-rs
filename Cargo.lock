@@ -416,6 +416,7 @@ version = "0.8.0"
 dependencies = [
  "kujira-fin",
  "kujira-ghost",
+ "kujira-minke",
  "kujira-orca",
  "kujira-stable",
  "kujira-std",
@@ -439,6 +440,10 @@ dependencies = [
  "cosmwasm-std",
  "kujira-std",
 ]
+
+[[package]]
+name = "kujira-minke"
+version = "0.1.0"
 
 [[package]]
 name = "kujira-orca"
