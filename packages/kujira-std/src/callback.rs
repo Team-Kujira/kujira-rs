@@ -48,13 +48,13 @@ impl CallbackMsg {
         Ok((data, callback))
     }
 
-    pub fn deserialize_data<D: DeserializeOwned>(self) -> StdResult<D> {
+    pub fn deserialize_data<D: DeserializeOwned>(&self) -> StdResult<D> {
         let data = from_binary(&self.data)?;
         Ok(data)
     }
 
-    pub fn deserialize_callback<CB: DeserializeOwned>(self) -> StdResult<CB> {
-        let callback = from_binary(&self.callback.into_binary())?;
+    pub fn deserialize_callback<CB: DeserializeOwned>(&self) -> StdResult<CB> {
+        let callback = from_binary(&self.callback.clone().into_binary())?;
         Ok(callback)
     }
 }
