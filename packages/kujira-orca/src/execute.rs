@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal, Uint128};
-use kujira_std::{Callback, Denom, Proof};
+use kujira_std::{CallbackData, Denom, Proof};
 
 /// Callable interfaces
 #[cw_serde]
@@ -95,7 +95,7 @@ pub enum ExecuteMsg {
         /// An optional callback that ORCA will execute with the funds from the liquidation.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Callback>,
+        callback: Option<CallbackData>,
     },
     /// Register a custom swapper to support different [repay](ExecuteMsg::ExecuteLiquidation::repay_denom)
     /// and [bid](InstantiateMsg::bid_denom) denoms

@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal256, Uint128};
-use kujira_fin::NewOrderCallback;
+use kujira_std::CallbackMsg;
 
 use crate::market;
 
@@ -37,11 +37,10 @@ pub enum ExecuteMsg {
 
     /// Callbacks, for internal use. Cannot (and should not) be called directly.
     Callback(CallbackMsg),
-    OnSubmittedOrder(NewOrderCallback),
 }
 
 #[cw_serde]
-pub enum CallbackMsg {
+pub enum CallbackType {
     /// Simply recalculates the amount of collateral on a position after withdrawing it from FIN.
     /// Used for both Close and Liquidate flows.
     WithdrawOrderCallback { position_idx: Uint128 },
