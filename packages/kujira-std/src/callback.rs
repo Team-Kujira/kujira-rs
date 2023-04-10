@@ -23,7 +23,7 @@ impl CallbackData {
         &self,
         cb_addr: &Addr,
         data: impl Serialize,
-        funds: &[Coin],
+        funds: impl Into<Vec<Coin>>,
     ) -> StdResult<CosmosMsg<T>> {
         let msg = CallbackMsg {
             data: to_binary(&data)?,
@@ -32,7 +32,7 @@ impl CallbackData {
         Ok(CosmosMsg::Wasm(WasmMsg::Execute {
             contract_addr: cb_addr.to_string(),
             msg: to_binary(&ReceiverExecuteMsg::Callback(msg))?,
-            funds: funds.to_owned(),
+            funds: funds.into(),
         }))
     }
 
