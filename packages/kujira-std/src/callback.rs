@@ -44,12 +44,16 @@ impl CallbackData {
 }
 
 impl CallbackMsg {
-    pub fn new<D: Serialize>(data: Option<&D>, callback: CallbackData) -> StdResult<Self> {
-        let data = match data {
-            Some(d) => to_binary(d)?,
-            None => to_binary(&Empty {})?,
-        };
+    pub fn new<D: Serialize>(data: D, callback: CallbackData) -> StdResult<Self> {
+        let data = to_binary(&data)?;
         Ok(Self { data, callback })
+    }
+
+    pub fn new_without_data(callback: CallbackData) -> Self {
+        Self {
+            data: to_binary(&Empty {}).unwrap(),
+            callback,
+        }
     }
 
     pub fn deserialize<D: DeserializeOwned, CB: DeserializeOwned>(self) -> StdResult<(D, CB)> {
