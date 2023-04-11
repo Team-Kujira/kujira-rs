@@ -58,3 +58,9 @@ impl CallbackMsg {
         Ok(callback)
     }
 }
+
+impl From<Binary> for CallbackData {
+    fn from(b: Binary) -> Self {
+        Self(b)
+    }
+}
