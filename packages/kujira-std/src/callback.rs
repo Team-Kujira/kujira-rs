@@ -2,7 +2,9 @@ use cosmwasm_schema::{
     cw_serde,
     serde::{de::DeserializeOwned, Serialize},
 };
-use cosmwasm_std::{from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, StdResult, WasmMsg};
+use cosmwasm_std::{
+    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdResult, WasmMsg,
+};
 
 #[cw_serde]
 pub struct CallbackMsg {
@@ -42,6 +44,14 @@ impl CallbackData {
 }
 
 impl CallbackMsg {
+    pub fn new<D: Serialize>(data: Option<&D>, callback: CallbackData) -> StdResult<Self> {
+        let data = match data {
+            Some(d) => to_binary(d)?,
+            None => to_binary(&Empty {})?,
+        };
+        Ok(Self { data, callback })
+    }
+
     pub fn deserialize<D: DeserializeOwned, CB: DeserializeOwned>(self) -> StdResult<(D, CB)> {
         let data = from_binary(&self.data)?;
         let callback = from_binary(&self.callback.into_binary())?;
