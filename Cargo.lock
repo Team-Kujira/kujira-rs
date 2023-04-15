@@ -418,7 +418,7 @@ dependencies = [
  "kujira-ghost",
  "kujira-orca",
  "kujira-stable",
- "kujira-std 0.8.0",
+ "kujira-std",
 ]
 
 [[package]]
@@ -428,7 +428,7 @@ dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
  "cw20",
- "kujira-std 0.8.0",
+ "kujira-std",
 ]
 
 [[package]]
@@ -438,7 +438,7 @@ dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
  "cw-utils",
- "kujira-std 0.8.0 (git+https://github.com/Team-Kujira/kujira-rs.git?branch=next)",
+ "kujira-std",
 ]
 
 [[package]]
@@ -447,7 +447,7 @@ version = "0.8.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
- "kujira-std 0.8.0",
+ "kujira-std",
 ]
 
 [[package]]
@@ -457,7 +457,7 @@ dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
  "kujira-fin",
- "kujira-std 0.8.0",
+ "kujira-std",
 ]
 
 [[package]]
@@ -469,19 +469,6 @@ dependencies = [
  "cw20",
  "hex",
  "serde_json",
- "sha2 0.10.6",
- "thiserror",
-]
-
-[[package]]
-name = "kujira-std"
-version = "0.8.0"
-source = "git+https://github.com/Team-Kujira/kujira-rs.git?branch=next#ca9cf5e4f027a814cd0a1d11e300978e3912afe5"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw20",
- "hex",
  "sha2 0.10.6",
  "thiserror",
 ]

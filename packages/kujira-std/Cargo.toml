@@ -2,6 +2,10 @@
 name = "kujira-std"
 version = "0.8.0"
 edition = "2021"
+authors = ["Kujira Labs"]
+description = "Standard Library and Utilities for Smart Contracts on Kujira"
+license = "Apache-2.0"
+repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-std"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -2,10 +2,14 @@
 name = "kujira-orca"
 version = "0.8.0"
 edition = "2021"
+authors = ["Kujira Labs"]
+description = "Interfaces for Kujira ORCA"
+license = "Apache-2.0"
+repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-orca"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }
-kujira-std = { path = "../kujira-std" }
+kujira-std = { path = "../kujira-std", version = "0.8.0" }
