@@ -14,4 +14,3 @@ kujira-ghost = { path = "../kujira-ghost" }
 kujira-fin = { path = "../kujira-fin" }
 kujira-stable = { path = "../kujira-stable" }
 kujira-orca = { path = "../kujira-orca" }
-kujira-minke = { path = "../kujira-minke" }
