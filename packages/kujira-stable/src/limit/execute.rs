@@ -1,5 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Decimal256, Uint128};
+use kujira_std::CallbackMsg;
 
 use crate::market;
 
@@ -27,10 +28,32 @@ pub enum ExecuteMsg {
     },
 
     /// Executes multiple liquidations.
-    Liquidates { indices: Vec<Uint128> },
+    Liquidates {
+        indices: Vec<Uint128>,
+    },
 
     /// Updates the config of the contract
     UpdateConfig(ConfigUpdate),
+
+    /// Callbacks, for internal use. Cannot (and should not) be called directly.
+    Callback(CallbackMsg),
+}
+
+#[cw_serde]
+pub enum CallbackType {
+    /// Simply recalculates the amount of collateral on a position after withdrawing it from FIN.
+    /// Used for both Close and Liquidate flows.
+    WithdrawOrderCallback { position_idx: Uint128 },
+    /// Callback after retracting an order on FIN, for when a position is in the middle of being closed.
+    ContinueCloseCallback {
+        position_idx: Uint128,
+        belief_price: Option<Decimal256>,
+        max_spread: Option<Decimal256>,
+    },
+    /// Final callback of the close process.
+    FinishCloseCallback { position_idx: Uint128 },
+    /// Callback after retracting an order on FIN, for when a position is in the middle of being liquidated.
+    FinishLiquidationCallback { position_idx: Uint128 },
 }
 
 #[cw_serde]

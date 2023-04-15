@@ -12,7 +12,7 @@ mod utils;
 
 pub use {
     asset::{Asset, AssetInfo},
-    callback::Callback,
+    callback::{CallbackData, CallbackMsg},
     denom::Denom,
     merkle::{Error as MerkleError, Merkle, Proof},
     msg::{AuthMsg, DenomMsg, KujiraMsg},

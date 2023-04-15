@@ -1,7 +1,7 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Binary, Coin, Decimal256, Uint128, Uint256};
+use cosmwasm_std::{Addr, Coin, Decimal256, Uint128, Uint256};
 use cw20::Denom;
-use kujira_std::{Callback, Precision};
+use kujira_std::{CallbackData, Precision};
 
 /// Callable interfaces
 #[cw_serde]
@@ -26,6 +26,7 @@ pub enum ExecuteMsg {
     SubmitOrder {
         /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
         price: Decimal256,
+        callback: Option<CallbackData>,
     },
 
     /// Executes a market trade based on current order book.
@@ -42,7 +43,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the swap.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Callback>,
+        callback: Option<CallbackData>,
     },
 
     /// Retract the order and withdraw funds
@@ -56,7 +57,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the retraction.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Callback>,
+        callback: Option<CallbackData>,
     },
 
     /// Fully retract orders and withdraw funds
@@ -67,7 +68,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the retractions.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Callback>,
+        callback: Option<CallbackData>,
     },
 
     /// Claim filled orders
@@ -80,7 +81,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the withdrawals.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
-        callback: Option<Callback>,
+        callback: Option<CallbackData>,
     },
 
     /// Clears dead state that was not tidied prior to 1.0.6
@@ -88,7 +89,6 @@ pub enum ExecuteMsg {
 }
 
 #[cw_serde]
-pub struct NewOrderCallback {
-    pub t: Binary,
+pub struct NewOrderData {
     pub idx: Uint128,
 }
