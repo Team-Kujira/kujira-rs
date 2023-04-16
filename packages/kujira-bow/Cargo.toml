@@ -1,0 +1,15 @@
+[package]
+name = "kujira-bow"
+version = "0.8.0"
+edition = "2021"
+authors = ["Kujira Labs"]
+description = "Interfaces for Kujira's BOW"
+license = "Apache-2.0"
+repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-bow"
+
+[dependencies]
+cosmwasm-schema = { workspace = true }
+cosmwasm-std = { workspace = true }
+thiserror = { version = "1.0.31" }
+kujira-std = { path = "../kujira-std", version = "0.8.0" }
+kujira-fin = { path = "../kujira-fin", version = "0.8.0" }

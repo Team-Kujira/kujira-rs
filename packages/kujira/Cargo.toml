@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -14,3 +14,4 @@ kujira-ghost = { version = "0.8.0", path = "../kujira-ghost" }
 kujira-fin = { version = "0.8.0", path = "../kujira-fin" }
 kujira-stable = { version = "0.8.0", path = "../kujira-stable" }
 kujira-orca = { version = "0.8.0", path = "../kujira-orca" }
+kujira-bow = { version = "0.8.0", path = "../kujira-bow" }
