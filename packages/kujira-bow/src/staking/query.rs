@@ -1,40 +1,6 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
 use cosmwasm_std::{Addr, Coin, Timestamp, Uint128};
-use kujira_std::Denom;
-
-use crate::schedule::{Release, Schedule};
-
-#[cw_serde]
-pub struct MigrateMsg {}
-
-#[cw_serde]
-pub struct InstantiateMsg {
-    /// The account permitted to update the config
-    pub owner: Addr,
-
-    /// The fee to provide an incentive
-    pub incentive_fee: Coin,
-
-    /// The minimum amount of a denom that must be provided
-    pub incentive_min: Uint128,
-}
-
-#[cw_serde]
-pub enum ExecuteMsg {
-    UpdateConfig {
-        owner: Option<Addr>,
-        incentive_fee: Option<Coin>,
-        incentive_min: Option<Uint128>,
-    },
-    /// Provide a token to stake
-    Stake { addr: Option<Addr> },
-    /// Claim all staking rewards for the sender
-    Claim { denom: Denom },
-    /// Withdraw an amount of a staked asset
-    Withdraw { amount: Coin },
-    /// Add a staking schedule to a staked asset
-    AddIncentive { denom: Denom, schedule: Schedule },
-}
+use kujira_std::{Denom, Release};
 
 #[cw_serde]
 #[derive(QueryResponses)]
