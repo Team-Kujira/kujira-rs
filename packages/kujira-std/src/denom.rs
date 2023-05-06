@@ -7,6 +7,7 @@ use cosmwasm_std::{coin, coins, Addr, BankMsg, Coin, CosmosMsg, QuerierWrapper, 
 use crate::query::KujiraQuery;
 
 #[cw_serde]
+#[derive(Hash)]
 pub struct Denom(String);
 
 impl Denom {
