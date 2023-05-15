@@ -1,6 +1,6 @@
 //!    Custom querier implementation for Kujira's chain core bindings
 
-use cosmwasm_std::{QuerierWrapper, QueryRequest, StdResult};
+use cosmwasm_std::{Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
 
 use crate::{
     denom::Denom,
@@ -51,4 +51,22 @@ impl<'a> KujiraQuerier<'a> {
     //     let res: ExchangeRatesResponse = self.querier.custom_query(&request.into())?;
     //     Ok(res.rates)
     // }
+}
+
+impl<'a> From<&'a QuerierWrapper<'a, KujiraQuery>> for KujiraQuerier<'a> {
+    fn from(querier: &'a QuerierWrapper<KujiraQuery>) -> Self {
+        KujiraQuerier::new(querier)
+    }
+}
+
+impl<'a> From<&'a Deps<'a, KujiraQuery>> for KujiraQuerier<'a> {
+    fn from(deps: &'a Deps<KujiraQuery>) -> Self {
+        KujiraQuerier::new(&deps.querier)
+    }
+}
+
+impl<'a> From<&'a DepsMut<'a, KujiraQuery>> for KujiraQuerier<'a> {
+    fn from(deps: &'a DepsMut<KujiraQuery>) -> Self {
+        KujiraQuerier::new(&deps.querier)
+    }
 }
