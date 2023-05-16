@@ -12,4 +12,4 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 [dependencies]
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }
-kujira-std = { path = "../kujira-std", version = "0.8.0" }
+kujira-std = { path = "../kujira-std", version = "0.8" }

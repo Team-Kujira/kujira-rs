@@ -11,5 +11,5 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 cosmwasm-schema = { workspace = true }
 cosmwasm-std = { workspace = true }
 thiserror = { version = "1.0.31" }
-kujira-std = { path = "../kujira-std", version = "0.8.0" }
-kujira-fin = { path = "../kujira-fin", version = "0.8.0" }
+kujira-std = { path = "../kujira-std", version = "0.8" }
+kujira-fin = { path = "../kujira-fin", version = "0.8" }
