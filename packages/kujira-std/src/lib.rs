@@ -12,7 +12,10 @@ mod utils;
 
 pub use {
     asset::{Asset, AssetInfo},
-    callback::{CallbackData, CallbackMsg},
+    callback::{
+        clear_expecting_callback, is_expecting_callback, set_expecting_callback, CallbackData,
+        CallbackMsg,
+    },
     denom::Denom,
     merkle::{Error as MerkleError, Merkle, Proof},
     msg::{AuthMsg, DenomMsg, KujiraMsg},

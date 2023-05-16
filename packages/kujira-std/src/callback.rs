@@ -3,7 +3,7 @@ use cosmwasm_schema::{
     serde::{de::DeserializeOwned, Serialize},
 };
 use cosmwasm_std::{
-    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdResult, WasmMsg,
+    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdResult, Storage, WasmMsg,
 };
 
 #[cw_serde]
@@ -77,4 +77,19 @@ impl From<Binary> for CallbackData {
     fn from(b: Binary) -> Self {
         Self(b)
     }
+}
+
+pub fn set_expecting_callback(storage: &mut dyn Storage) {
+    storage.set("_expecting_callback".as_bytes(), &[true.into()]);
+}
+
+pub fn clear_expecting_callback(storage: &mut dyn Storage) {
+    storage.remove("_expecting_callback".as_bytes());
+}
+
+pub fn is_expecting_callback(storage: &dyn Storage) -> bool {
+    !storage
+        .get("_expecting_callback".as_bytes())
+        .unwrap_or_default()
+        .is_empty()
 }
