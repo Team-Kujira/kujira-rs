@@ -125,6 +125,9 @@ impl<T> CbUtils<T> {
         response: Result<Response<T>, E>,
         check_message: M,
     ) -> StdResult<Result<Response<T>, E>> {
+        if response.is_err() {
+            return Ok(response);
+        }
         let check_message_added: Item<u64> = Item::new("__kujira_check_message");
         let added = check_message_added
             .may_load(storage)
