@@ -3,10 +3,12 @@ use cosmwasm_schema::{
     serde::{de::DeserializeOwned, Serialize},
 };
 use cosmwasm_std::{
-    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdError, StdResult, Storage,
-    Uint128, WasmMsg,
+    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, Env, Response, StdError,
+    StdResult, Storage, Uint128, WasmMsg,
 };
 use cw_storage_plus::Item;
+
+use crate::KujiraMsg;
 
 #[cw_serde]
 pub struct CallbackMsg {
@@ -81,35 +83,58 @@ impl From<Binary> for CallbackData {
     }
 }
 
-pub fn add_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
-    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
-    let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())? + Uint128::one();
-    semaphore.save(storage, &value)?;
-    Ok(value)
+pub struct CbUtils<T = KujiraMsg> {
+    _marker: std::marker::PhantomData<T>,
 }
 
-pub fn received_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
-    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
-    let mut value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
-    if value > Uint128::zero() {
-        value -= Uint128::one();
+impl<T> CbUtils<T> {
+    pub fn add_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
+        let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
+        let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())? + Uint128::one();
         semaphore.save(storage, &value)?;
-    } else {
-        return Err(StdError::generic_err(
-            "Received callback when not expecting one",
-        ));
+        Ok(value)
     }
-    Ok(value)
-}
 
-pub fn is_expecting_callback(storage: &dyn Storage) -> StdResult<bool> {
-    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
-    let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
-    Ok(!value.is_zero())
-}
+    pub fn received_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
+        let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
+        let mut value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
+        if value > Uint128::zero() {
+            value -= Uint128::one();
+            semaphore.save(storage, &value)?;
+        } else {
+            return Err(StdError::generic_err(
+                "Received callback when not expecting one",
+            ));
+        }
+        Ok(value)
+    }
 
-pub fn get_expecting_callbacks(storage: &dyn Storage) -> StdResult<Uint128> {
-    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
-    let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
-    Ok(value)
+    pub fn is_expecting_callback(storage: &dyn Storage) -> StdResult<bool> {
+        let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
+        let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
+        Ok(!value.is_zero())
+    }
+
+    pub fn get_expecting_callbacks(storage: &dyn Storage) -> StdResult<Uint128> {
+        let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
+        let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
+        Ok(value)
+    }
+
+    pub fn add_callback_check<E>(
+        env: &Env,
+        storage: &mut dyn Storage,
+        response: Result<Response<T>, E>,
+        check_message: impl Into<CosmosMsg<T>>,
+    ) -> StdResult<Result<Response<T>, E>> {
+        let check_message_added: Item<u64> = Item::new("__kujira_check_message");
+        let added = check_message_added
+            .may_load(storage)
+            .map(|v| v.unwrap_or_default())?;
+        if added != env.block.height {
+            check_message_added.save(storage, &env.block.height)?;
+            return Ok(response.map(|r| r.add_message(check_message)));
+        }
+        Ok(response)
+    }
 }

@@ -13,8 +13,7 @@ mod utils;
 pub use {
     asset::{Asset, AssetInfo},
     callback::{
-        add_expecting_callback, get_expecting_callbacks, is_expecting_callback,
-        received_expecting_callback, CallbackData, CallbackMsg,
+        CbUtils, CallbackData, CallbackMsg,
     },
     denom::Denom,
     merkle::{Error as MerkleError, Merkle, Proof},
