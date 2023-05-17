@@ -13,8 +13,8 @@ mod utils;
 pub use {
     asset::{Asset, AssetInfo},
     callback::{
-        is_expecting_callback, received_expecting_callback, add_expecting_callback, CallbackData,
-        CallbackMsg,
+        add_expecting_callback, get_expecting_callbacks, is_expecting_callback,
+        received_expecting_callback, CallbackData, CallbackMsg,
     },
     denom::Denom,
     merkle::{Error as MerkleError, Merkle, Proof},

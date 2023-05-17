@@ -107,3 +107,9 @@ pub fn is_expecting_callback(storage: &dyn Storage) -> StdResult<bool> {
     let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
     Ok(!value.is_zero())
 }
+
+pub fn get_expecting_callbacks(storage: &dyn Storage) -> StdResult<Uint128> {
+    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
+    let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
+    Ok(value)
+}
