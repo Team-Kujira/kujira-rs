@@ -82,14 +82,14 @@ impl From<Binary> for CallbackData {
 }
 
 pub fn add_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
-    let semaphore: Item<Uint128> = Item::new("_expecting_callback");
+    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
     let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())? + Uint128::one();
     semaphore.save(storage, &value)?;
     Ok(value)
 }
 
 pub fn received_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
-    let semaphore: Item<Uint128> = Item::new("_expecting_callback");
+    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
     let mut value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
     if value > Uint128::zero() {
         value -= Uint128::one();
@@ -103,7 +103,7 @@ pub fn received_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint1
 }
 
 pub fn is_expecting_callback(storage: &dyn Storage) -> StdResult<bool> {
-    let semaphore: Item<Uint128> = Item::new("_expecting_callback");
+    let semaphore: Item<Uint128> = Item::new("__kujira_expecting_callback");
     let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
     Ok(!value.is_zero())
 }
