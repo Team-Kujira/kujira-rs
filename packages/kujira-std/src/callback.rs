@@ -83,9 +83,7 @@ impl From<Binary> for CallbackData {
     }
 }
 
-pub struct CbUtils<T = KujiraMsg> {
-    _marker: std::marker::PhantomData<T>,
-}
+pub struct CbUtils<T = KujiraMsg>(std::marker::PhantomData<T>);
 
 impl<T> CbUtils<T> {
     pub fn add_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
@@ -121,19 +119,24 @@ impl<T> CbUtils<T> {
         Ok(value)
     }
 
-    pub fn add_callback_check<E>(
+    pub fn add_callback_check<M: Serialize, E>(
         env: &Env,
         storage: &mut dyn Storage,
         response: Result<Response<T>, E>,
-        check_message: impl Into<CosmosMsg<T>>,
+        check_message: M,
     ) -> StdResult<Result<Response<T>, E>> {
         let check_message_added: Item<u64> = Item::new("__kujira_check_message");
         let added = check_message_added
             .may_load(storage)
             .map(|v| v.unwrap_or_default())?;
         if added != env.block.height {
+            let msg = CosmosMsg::Wasm(WasmMsg::Execute {
+                contract_addr: env.contract.address.to_string(),
+                msg: to_binary(&check_message)?,
+                funds: vec![],
+            });
             check_message_added.save(storage, &env.block.height)?;
-            return Ok(response.map(|r| r.add_message(check_message)));
+            return Ok(response.map(|r| r.add_message(msg)));
         }
         Ok(response)
     }
