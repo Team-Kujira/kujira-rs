@@ -13,7 +13,7 @@ mod utils;
 pub use {
     asset::{Asset, AssetInfo},
     callback::{
-        clear_expecting_callback, is_expecting_callback, set_expecting_callback, CallbackData,
+        is_expecting_callback, received_expecting_callback, add_expecting_callback, CallbackData,
         CallbackMsg,
     },
     denom::Denom,

@@ -3,8 +3,10 @@ use cosmwasm_schema::{
     serde::{de::DeserializeOwned, Serialize},
 };
 use cosmwasm_std::{
-    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdResult, Storage, WasmMsg,
+    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdError, StdResult, Storage,
+    Uint128, WasmMsg,
 };
+use cw_storage_plus::Item;
 
 #[cw_serde]
 pub struct CallbackMsg {
@@ -79,17 +81,29 @@ impl From<Binary> for CallbackData {
     }
 }
 
-pub fn set_expecting_callback(storage: &mut dyn Storage) {
-    storage.set("_expecting_callback".as_bytes(), &[true.into()]);
+pub fn add_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
+    let semaphore: Item<Uint128> = Item::new("_expecting_callback");
+    let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())? + Uint128::one();
+    semaphore.save(storage, &value)?;
+    Ok(value)
 }
 
-pub fn clear_expecting_callback(storage: &mut dyn Storage) {
-    storage.remove("_expecting_callback".as_bytes());
+pub fn received_expecting_callback(storage: &mut dyn Storage) -> StdResult<Uint128> {
+    let semaphore: Item<Uint128> = Item::new("_expecting_callback");
+    let mut value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
+    if value > Uint128::zero() {
+        value -= Uint128::one();
+        semaphore.save(storage, &value)?;
+    } else {
+        return Err(StdError::generic_err(
+            "Received callback when not expecting one",
+        ));
+    }
+    Ok(value)
 }
 
-pub fn is_expecting_callback(storage: &dyn Storage) -> bool {
-    !storage
-        .get("_expecting_callback".as_bytes())
-        .unwrap_or_default()
-        .is_empty()
+pub fn is_expecting_callback(storage: &dyn Storage) -> StdResult<bool> {
+    let semaphore: Item<Uint128> = Item::new("_expecting_callback");
+    let value = semaphore.may_load(storage).map(|v| v.unwrap_or_default())?;
+    Ok(!value.is_zero())
 }

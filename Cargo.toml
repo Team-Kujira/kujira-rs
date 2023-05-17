@@ -15,6 +15,7 @@ overflow-checks = true
 [workspace.dependencies]
 cosmwasm-std = "1.2"
 cosmwasm-schema = "1.2"
+cw-storage-plus = "1.0"
 cw-utils = "1.0"
 schemars = "0.8"
 serde = "1.0"
