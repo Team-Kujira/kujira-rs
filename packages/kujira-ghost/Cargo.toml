@@ -1,6 +1,6 @@
 [package]
 name = "kujira-ghost"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces for Kujira GHOST"
@@ -11,4 +11,4 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 cosmwasm-std = { workspace = true, version = "1.2" }
 cw-utils = { workspace = true, version = "1.0" }
 cosmwasm-schema = { workspace = true, version = "1.2" }
-kujira-std = { path = "../kujira-std", version = "0.8.0" }
+kujira-std = { path = "../kujira-std", version = "0.8" }

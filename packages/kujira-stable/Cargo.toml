@@ -1,6 +1,6 @@
 [package]
 name = "kujira-stable"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces for Kujira's USK stablecoin"
@@ -12,5 +12,5 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 [dependencies]
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }
-kujira-std = { path = "../kujira-std", version = "0.8.0" }
-kujira-fin = { path = "../kujira-fin", version = "0.8.0" }
+kujira-std = { path = "../kujira-std", version = "0.8" }
+kujira-fin = { path = "../kujira-fin", version = "0.8" }
