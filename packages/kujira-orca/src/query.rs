@@ -14,7 +14,11 @@ pub enum QueryMsg {
     /// Simulate a liquidation based on the current pool balances. Returns [SimulationResponse]
     Simulate {
         collateral_amount: Uint128,
-        repay_denom: Denom,
+        #[deprecated(
+            note = "Ignored if None, must be equal to bid_denom if Some. Will be removed in later versions."
+        )]
+        #[serde(skip_serializing)]
+        repay_denom: Option<Denom>,
         exchange_rate: Decimal,
     },
 
@@ -22,7 +26,11 @@ pub enum QueryMsg {
     /// based on the current pool balances. Returns [SimulationResponse]
     SimulateReverse {
         repay_amount: Uint128,
-        repay_denom: Denom,
+        #[deprecated(
+            note = "Ignored if None, must be equal to bid_denom if Some. Will be removed in later versions."
+        )]
+        #[serde(skip_serializing)]
+        repay_denom: Option<Denom>,
         exchange_rate: Decimal,
     },
 
@@ -32,7 +40,11 @@ pub enum QueryMsg {
         collateral_amount: Uint128,
         debt_amount: Uint128,
         target_ltv: Decimal,
-        repay_denom: Denom,
+        #[deprecated(
+            note = "Ignored if None, must be equal to bid_denom if Some. Will be removed in later versions."
+        )]
+        #[serde(skip_serializing)]
+        repay_denom: Option<Denom>,
         exchange_rate: Decimal,
     },
 
@@ -52,12 +64,6 @@ pub enum QueryMsg {
     /// Paginate bid pools. Upper limit of 30 per page. Returns [BidPoolsResponse]
     BidPools {
         start_after: Option<u8>,
-        limit: Option<u8>,
-    },
-
-    /// Paginate registered swappers. Upper limit of 30 per page. Returns [SwappersResponse]
-    Swappers {
-        start_after: Option<String>,
         limit: Option<u8>,
     },
 }
@@ -155,17 +161,4 @@ pub struct BidPoolResponse {
 #[cw_serde]
 pub struct BidPoolsResponse {
     pub bid_pools: Vec<BidPoolResponse>,
-}
-
-#[cw_serde]
-pub struct SwappersResponse {
-    pub swappers: Vec<SwapperResponse>,
-}
-
-#[cw_serde]
-pub struct SwapperResponse {
-    /// The repay denom that the swapper swaps the bid_denom into
-    pub repay_denom: Denom,
-    /// The contract address that implements [SwapperQueryMsg] and [SwapperExecuteMsg]
-    pub addr: Addr,
 }

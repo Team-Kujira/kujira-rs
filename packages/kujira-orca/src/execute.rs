@@ -86,7 +86,11 @@ pub enum ExecuteMsg {
         /// however if a compatible Swapper has been
         /// registered with [ExecuteMsg::AddSwapper] then the market
         /// can be repaid in a different denom to that of the bids
-        repay_denom: Denom,
+        #[deprecated(
+            note = "Ignored if None, must be equal to bid_denom if Some. Will be removed in later versions."
+        )]
+        #[serde(skip_serializing)]
+        repay_denom: Option<Denom>,
 
         /// The market must provide an exchange rate between the repay
         /// denom and the collateral denom in the form `repay / collateral`
@@ -97,16 +101,4 @@ pub enum ExecuteMsg {
         /// NB: This is currently pre-release, and not yet available on production contracts
         callback: Option<CallbackData>,
     },
-    /// Register a custom swapper to support different [repay](ExecuteMsg::ExecuteLiquidation::repay_denom)
-    /// and [bid](InstantiateMsg::bid_denom) denoms
-    AddSwapper {
-        /// See [SwapperResponse::repay_denom]
-        denom: Denom,
-
-        /// See [SwapperResponse::addr]
-        address: Addr,
-    },
-
-    /// Remove a previously regsitered swapper
-    RemoveSwapper { denom: Denom },
 }

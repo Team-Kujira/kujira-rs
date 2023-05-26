@@ -99,6 +99,5 @@
 pub mod execute;
 pub mod instantiate;
 pub mod query;
-pub mod swapper;
 
 pub use {execute::*, instantiate::*, query::*};
