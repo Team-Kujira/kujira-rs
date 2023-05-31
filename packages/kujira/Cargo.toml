@@ -9,7 +9,7 @@ homepage = "https://kujira.app"
 repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira"
 
 [dependencies]
-kujira-std = { version = "0.8", path = "../kujira-std" }
+kujira-std = { version = "0.9", path = "../kujira-std" }
 kujira-ghost = { version = "0.8", path = "../kujira-ghost" }
 kujira-fin = { version = "0.8", path = "../kujira-fin" }
 kujira-stable = { version = "0.8", path = "../kujira-stable" }

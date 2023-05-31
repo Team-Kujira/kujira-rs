@@ -1,7 +1,7 @@
 //!    Bindings for message execution on Kujira Core
 
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Coin, CosmosMsg, CustomMsg, Timestamp, Uint128};
+use cosmwasm_std::{Addr, Binary, Coin, CosmosMsg, CustomMsg, Timestamp, Uint128};
 
 use crate::denom::Denom;
 
@@ -9,6 +9,7 @@ use crate::denom::Denom;
 pub enum KujiraMsg {
     Auth(AuthMsg),
     Denom(DenomMsg),
+    Intertx(InterTxMsg),
 }
 
 impl CustomMsg for KujiraMsg {}
@@ -59,4 +60,42 @@ impl From<DenomMsg> for CosmosMsg<KujiraMsg> {
     fn from(msg: DenomMsg) -> Self {
         KujiraMsg::Denom(msg).into()
     }
+}
+
+#[cw_serde]
+/// Type for wrapping any protobuf message
+pub struct ProtobufAny {
+    /// **type_url** describes the type of the serialized message
+    pub type_url: String,
+
+    ///  **value** must be a valid serialized protocol buffer of the above specified type
+    pub value: Binary,
+}
+
+impl ProtobufAny {
+    /// Helper to create new ProtobufAny type:
+    /// * **type_url** describes the type of the serialized message
+    /// * **value** must be a valid serialized protocol buffer of the above specified type
+    pub fn new(type_url: impl Into<String>, value: impl Into<Binary>) -> Self {
+        ProtobufAny {
+            type_url: type_url.into(),
+            value: value.into(),
+        }
+    }
+}
+
+#[cw_serde]
+pub enum InterTxMsg {
+    Register {
+        connection_id: String,
+        account_id: String,
+        version: String,
+    },
+    Submit {
+        connection_id: String,
+        account_id: String,
+        msgs: Vec<ProtobufAny>,
+        memo: String,
+        timeout: u64,
+    },
 }

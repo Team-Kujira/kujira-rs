@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Coin, CustomQuery, Decimal};
+use cosmwasm_std::{Coin, CustomQuery, Decimal, Addr};
 
 use crate::denom::Denom;
 
@@ -8,6 +8,7 @@ use crate::denom::Denom;
 pub enum KujiraQuery {
     Bank(BankQuery),
     Oracle(OracleQuery),
+    Intertx(IntertxQuery),
 }
 
 impl CustomQuery for KujiraQuery {}
@@ -26,6 +27,13 @@ pub enum OracleQuery {
     // ExchangeRates { offer: String },
 }
 
+/// This contains all queries that can be made to the intertx module
+#[cw_serde]
+pub enum IntertxQuery {
+    // AccountAddress will return the address of the interchain account.
+    AccountAddress { owner: Addr, connection_id: String, account_id: String },
+}
+
 /// ExchangeRateResponse is data format returned from OracleRequest::ExchangeRate query
 #[cw_serde]
 pub struct ExchangeRateResponse {
@@ -35,6 +43,12 @@ pub struct ExchangeRateResponse {
 #[cw_serde]
 pub struct SupplyResponse {
     pub amount: Coin,
+}
+
+/// AccountAddressResponse is data format returned from InterTxRequest::AccountAddress query
+#[cw_serde]
+pub struct AccountAddressResponse {
+    pub address: String,
 }
 
 // ExchangeRatesResponse is data format returned from OracleRequest::ExchangeRates query

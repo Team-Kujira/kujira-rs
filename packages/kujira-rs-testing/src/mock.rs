@@ -32,7 +32,7 @@ pub fn mock_app(balances: Vec<(Addr, Vec<Coin>)>) -> CustomApp {
     };
     custom.set_oracle_price(Decimal::from_ratio(1425u128, 100u128), "factory/owner/coll");
     custom.set_oracle_price(Decimal::one(), "factory/contract0/uusk");
-    
+
     BasicAppBuilder::new_custom()
         .with_custom(custom)
         .build(|router, _, storage| {
@@ -149,6 +149,7 @@ impl Module for KujiraModule {
                 }
                 _ => todo!(),
             },
+            KujiraMsg::Intertx(_) => todo!("Mock ICA is currently unimplemented in the mock app."),
         }
     }
 
@@ -198,6 +199,7 @@ impl Module for KujiraModule {
                     rate: *self.oracle_prices.get(&denom).unwrap_or(&Decimal::zero()),
                 })?),
             },
+            KujiraQuery::Intertx(_) => todo!("Mock ICA is currently unimplemented in the mock app."),
         }
     }
 }
