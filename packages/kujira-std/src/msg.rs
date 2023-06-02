@@ -99,3 +99,9 @@ pub enum InterTxMsg {
         timeout: u64,
     },
 }
+
+impl From<InterTxMsg> for CosmosMsg<KujiraMsg> {
+    fn from(msg: InterTxMsg) -> Self {
+        KujiraMsg::Intertx(msg).into()
+    }
+}
