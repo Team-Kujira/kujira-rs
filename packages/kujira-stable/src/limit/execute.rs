@@ -28,9 +28,7 @@ pub enum ExecuteMsg {
     },
 
     /// Executes multiple liquidations.
-    Liquidates {
-        indices: Vec<Uint128>,
-    },
+    Liquidates { indices: Vec<Uint128> },
 
     /// Updates the config of the contract
     UpdateConfig(ConfigUpdate),

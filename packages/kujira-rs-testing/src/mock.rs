@@ -32,7 +32,7 @@ pub fn mock_app(balances: Vec<(Addr, Vec<Coin>)>) -> CustomApp {
     };
     custom.set_oracle_price(Decimal::from_ratio(1425u128, 100u128), "factory/owner/coll");
     custom.set_oracle_price(Decimal::one(), "factory/contract0/uusk");
-    
+
     BasicAppBuilder::new_custom()
         .with_custom(custom)
         .build(|router, _, storage| {
