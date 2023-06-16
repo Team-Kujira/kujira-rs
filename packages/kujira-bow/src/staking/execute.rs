@@ -1,4 +1,4 @@
-use cosmwasm_schema::{cw_serde};
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Coin, Uint128};
 use kujira_std::{Denom, Schedule};
 

@@ -1,5 +1,6 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Binary, Decimal};
+use cosmwasm_std::{Addr, Decimal};
+use kujira_std::CallbackData;
 
 #[cw_serde]
 pub enum ExecuteMsg {
@@ -12,14 +13,11 @@ pub enum ExecuteMsg {
     Run {},
     Deposit {
         max_slippage: Option<Decimal>,
-        /// Optionally add a submsg that is called when the LP tokens are minted, used for auto-stake
-        callback: Option<Callback>,
+        /// Optionally add a return message that is called when the LP tokens are minted
+        callback: Option<CallbackData>,
     },
-    Withdraw {},
-}
-
-#[cw_serde]
-pub struct Callback {
-    pub contract_addr: String,
-    pub msg: Binary,
+    Withdraw {
+        /// Optionally add a return message that is called when the LP tokens are burned
+        callback: Option<CallbackData>,
+    },
 }
