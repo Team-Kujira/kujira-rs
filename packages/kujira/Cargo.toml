@@ -15,3 +15,4 @@ kujira-fin = { version = "0.8", path = "../kujira-fin" }
 kujira-stable = { version = "0.8", path = "../kujira-stable" }
 kujira-orca = { version = "0.8", path = "../kujira-orca" }
 kujira-bow = { version = "0.8", path = "../kujira-bow" }
+kujira-minke = { version = "0.1", path = "../kujira-minke" }

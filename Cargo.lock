@@ -478,6 +478,7 @@ dependencies = [
  "kujira-bow",
  "kujira-fin",
  "kujira-ghost",
+ "kujira-minke",
  "kujira-orca",
  "kujira-stable",
  "kujira-std",
@@ -513,6 +514,10 @@ dependencies = [
  "cw-utils",
  "kujira-std",
 ]
+
+[[package]]
+name = "kujira-minke"
+version = "0.1.0"
 
 [[package]]
 name = "kujira-orca"
