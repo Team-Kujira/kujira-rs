@@ -1,18 +1,12 @@
+use crate::interest::InterestCurveType;
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Decimal};
-use kujira_std::{CallbackData, Denom};
+use cosmwasm_std::{Decimal, Uint128};
 
 pub use crate::basic_vault::{BorrowMsg, DepositMsg, MarketConfigMsg, RepayMsg};
-use crate::common::OracleType;
-
-use crate::interest::InterestCurveType;
+pub use crate::receipt_vault::ConfigUpdate;
 
 #[cw_serde]
 pub enum ExecuteMsg {
-    /// Deposit the borrowable asset into the money market.
-    Deposit(DepositMsg),
-    /// Withdraw the borrowable asset from the money market.
-    Withdraw(WithdrawMsg),
     /// Borrow the borrowable asset from the money market. Only callable by whitelisted market contracts.
     Borrow(BorrowMsg),
     /// Repay a borrow. Only callable by whitelisted market contracts.
@@ -28,20 +22,9 @@ pub enum ExecuteMsg {
 }
 
 #[cw_serde]
-pub struct WithdrawMsg {
-    pub callback: Option<CallbackData>,
-}
-
-#[cw_serde]
-pub struct ConfigUpdate {
-    pub owner: Option<Addr>,
-    pub denom: Option<Denom>,
-    pub oracle: Option<OracleType>,
-    pub decimals: Option<u8>,
-}
-
-#[cw_serde]
 pub struct InterestUpdate {
     /// Min-utilization to curve mapping.
     pub utilization_to_curve: Option<Vec<(Decimal, InterestCurveType)>>,
+    /// Reference amount that corresponds to utilization = 1.0
+    pub full_utilization_amount: Option<Uint128>,
 }

@@ -473,7 +473,7 @@ dependencies = [
 
 [[package]]
 name = "kujira"
-version = "0.8.2"
+version = "0.9.0"
 dependencies = [
  "kujira-bow",
  "kujira-fin",
@@ -506,7 +506,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-ghost"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -525,7 +525,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-rs-testing"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "anyhow",
  "base64 0.20.0",
