@@ -1,11 +1,14 @@
 //!    Custom querier implementation for Kujira's chain core bindings
 
-use cosmwasm_std::{Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
+use cosmwasm_std::{Addr, Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
 
 use crate::{
     denom::Denom,
     price::HumanPrice,
-    query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse},
+    query::{
+        AccountAddressResponse, BankQuery, ExchangeRateResponse, IntertxQuery, KujiraQuery,
+        OracleQuery, SupplyResponse,
+    },
 };
 
 /// This is a helper wrapper to easily use our custom queries
@@ -35,6 +38,23 @@ impl<'a> KujiraQuerier<'a> {
         let query = KujiraQuery::Bank(BankQuery::Supply { denom });
         let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
         self.querier.query(&request)
+    }
+
+    pub fn query_interchain_address(
+        &self,
+        owner: Addr,
+        connection_id: String,
+        account_id: String,
+    ) -> StdResult<String> {
+        let query = KujiraQuery::Intertx(IntertxQuery::AccountAddress {
+            owner,
+            connection_id,
+            account_id,
+        });
+        let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
+        let result: AccountAddressResponse = self.querier.query(&request)?;
+
+        Ok(result.address)
     }
 
     pub fn inner(&self) -> &QuerierWrapper<'a, KujiraQuery> {

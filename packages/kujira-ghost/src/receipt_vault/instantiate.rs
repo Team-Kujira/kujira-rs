@@ -4,16 +4,16 @@ use kujira_std::Denom;
 
 use crate::common::OracleType;
 
+use crate::interest::InterestCurveType;
+
 #[cw_serde]
 pub struct InstantiateMsg {
     pub owner: Addr,
     pub denom: Denom,
     pub oracle: OracleType,
     pub decimals: u8,
-    pub receipt_denom: String,
-    pub debt_token_denom: String,
     pub denom_creation_fee: Uint128,
 
-    /// Interest rate per utilization point
-    pub utilization_to_rate: Vec<(Decimal, Decimal)>,
+    /// Min-utilization to curve mapping.
+    pub utilization_to_curve: Vec<(Decimal, InterestCurveType)>,
 }

@@ -149,6 +149,7 @@ impl Module for KujiraModule {
                 }
                 _ => todo!(),
             },
+            KujiraMsg::Intertx(_) => todo!("Mock ICA is currently unimplemented in the mock app."),
         }
     }
 
@@ -198,6 +199,7 @@ impl Module for KujiraModule {
                     rate: *self.oracle_prices.get(&denom).unwrap_or(&Decimal::zero()),
                 })?),
             },
+            KujiraQuery::Intertx(_) => todo!("Mock ICA is currently unimplemented in the mock app."),
         }
     }
 }
