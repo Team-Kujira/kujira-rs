@@ -26,6 +26,7 @@ pub enum ExecuteMsg {
     SubmitOrder {
         /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
         price: Decimal256,
+        #[serde(skip_serializing_if = "Option::is_none")]
         callback: Option<CallbackData>,
     },
 
@@ -43,6 +44,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the swap.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
+        #[serde(skip_serializing_if = "Option::is_none")]
         callback: Option<CallbackData>,
     },
 
@@ -57,6 +59,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the retraction.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
+        #[serde(skip_serializing_if = "Option::is_none")]
         callback: Option<CallbackData>,
     },
 
@@ -68,6 +71,7 @@ pub enum ExecuteMsg {
         /// An optional callback that FIN will execute with the funds from the retractions.
         /// The callback is executed on the sender's address.
         /// NB: This is currently pre-release, and not yet available on production contracts
+        #[serde(skip_serializing_if = "Option::is_none")]
         callback: Option<CallbackData>,
     },
 
@@ -80,7 +84,8 @@ pub enum ExecuteMsg {
 
         /// An optional callback that FIN will execute with the funds from the withdrawals.
         /// The callback is executed on the sender's address.
-        /// NB: This is currently pre-release, and not yet available on production contracts
+        /// NB: This is currently pre-release, and not yet available on production 
+        #[serde(skip_serializing_if = "Option::is_none")]
         callback: Option<CallbackData>,
     },
 
