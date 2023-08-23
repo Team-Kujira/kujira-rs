@@ -50,6 +50,10 @@ impl KujiraModule {
     pub fn set_oracle_price(&mut self, price: Decimal, denom: &str) {
         self.oracle_prices.insert(denom.to_string(), price);
     }
+
+    fn subdenom_to_full(sender: impl Into<String>, subdenom: impl Into<String>) -> String {
+        format!("factory/{}/{}", sender.into(), subdenom.into())
+    }
 }
 
 impl Module for KujiraModule {
@@ -81,7 +85,8 @@ impl Module for KujiraModule {
             KujiraMsg::Auth(_) => todo!(),
             KujiraMsg::Denom(d) => match d {
                 DenomMsg::Create { subdenom } => {
-                    storage.set(subdenom.as_bytes(), &Uint128::zero().to_be_bytes());
+                    let full = Self::subdenom_to_full(sender, subdenom.to_string());
+                    storage.set(full.as_bytes(), &Uint128::zero().to_be_bytes());
 
                     Ok(AppResponse {
                         events: vec![],
