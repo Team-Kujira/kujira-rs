@@ -130,7 +130,6 @@ impl Module for KujiraModule {
                         .map(|bz| u128::from_be_bytes(bz.try_into().unwrap()))
                         .map(Uint128::from)
                         .unwrap_or_default();
-                    println!("Burning {} of {}", amount, denom);
                     supply -= amount;
                     storage.set(denom.as_bytes(), &supply.to_be_bytes());
 

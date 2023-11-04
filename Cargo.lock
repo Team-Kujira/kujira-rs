@@ -525,7 +525,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-rs-testing"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "anyhow",
  "base64 0.20.0",
