@@ -5,6 +5,8 @@ use kujira_std::{CallbackData, Denom};
 pub use crate::basic_vault::{BorrowMsg, DepositMsg, MarketConfigMsg, RepayMsg};
 use crate::common::OracleType;
 
+use super::InterestCurveType;
+
 #[cw_serde]
 pub enum ExecuteMsg {
     /// Deposit the borrowable asset into the money market.
@@ -40,6 +42,6 @@ pub struct ConfigUpdate {
 
 #[cw_serde]
 pub struct InterestUpdate {
-    /// Interest rate per utilization point
-    pub utilization_to_rate: Option<Vec<(Decimal, Decimal)>>,
+    /// Min-utilization to curve mapping.
+    pub utilization_to_curve: Option<Vec<(Decimal, InterestCurveType)>>,
 }

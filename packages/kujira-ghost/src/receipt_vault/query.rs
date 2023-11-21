@@ -20,6 +20,9 @@ pub enum QueryMsg {
         start_after: Option<Addr>,
         limit: Option<u32>,
     },
+    /// Get the current interest parameters.
+    #[returns(InterestParamsResponse)]
+    InterestParams {},
 }
 
 #[cw_serde]
@@ -43,5 +46,12 @@ pub struct StatusResponse {
     pub debt_share_ratio: Decimal,
 }
 
+#[cw_serde]
+pub struct InterestParamsResponse {
+    pub utilization_to_curve: Vec<(Decimal, InterestCurveType)>,
+}
+
 pub use crate::basic_vault::query::{MarketParamsResponse, MarketsResponse};
 use crate::common::OracleType;
+
+use super::InterestCurveType;

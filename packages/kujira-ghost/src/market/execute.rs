@@ -35,7 +35,11 @@ pub enum CallbackType {
 }
 
 #[cw_serde]
-pub struct DepositMsg {}
+pub struct DepositMsg {
+    /// You can deposit assets on behalf of another address.
+    /// If None, the sender is used.
+    pub position_holder: Option<Addr>,
+}
 
 #[cw_serde]
 pub struct WithdrawMsg {
@@ -49,7 +53,11 @@ pub struct BorrowMsg {
 }
 
 #[cw_serde]
-pub struct RepayMsg {}
+pub struct RepayMsg {
+    /// You can repay a borrow on behalf of another address.
+    /// If None, the sender is used.
+    pub position_holder: Option<Addr>,
+}
 
 #[cw_serde]
 pub struct LiquidateMsg {
