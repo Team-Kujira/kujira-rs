@@ -2,6 +2,10 @@
 name = "kujira-ghost"
 version = "0.8.3"
 edition = "2021"
+authors = ["Kujira Labs"]
+description = "Interfaces for Kujira GHOST"
+license = "Apache-2.0"
+repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-ghost"
 
 [dependencies]
 cosmwasm-std = { workspace = true, version = "1.2" }
