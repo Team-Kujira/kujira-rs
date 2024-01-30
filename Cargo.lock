@@ -625,7 +625,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-orca"
-version = "0.8.2"
+version = "0.8.3"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
