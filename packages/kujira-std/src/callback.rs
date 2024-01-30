@@ -3,7 +3,7 @@ use cosmwasm_schema::{
     serde::{de::DeserializeOwned, Serialize},
 };
 use cosmwasm_std::{
-    from_binary, to_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdResult, WasmMsg,
+    from_json, to_json_binary, Addr, Binary, Coin, CosmosMsg, Empty, StdResult, WasmMsg,
 };
 
 #[cw_serde]
@@ -28,47 +28,47 @@ impl CallbackData {
         funds: impl Into<Vec<Coin>>,
     ) -> StdResult<CosmosMsg<T>> {
         let msg = CallbackMsg {
-            data: to_binary(&data)?,
+            data: to_json_binary(&data)?,
             callback: self.clone(),
         };
         Ok(CosmosMsg::Wasm(WasmMsg::Execute {
             contract_addr: cb_addr.to_string(),
-            msg: to_binary(&ReceiverExecuteMsg::Callback(msg))?,
+            msg: to_json_binary(&ReceiverExecuteMsg::Callback(msg))?,
             funds: funds.into(),
         }))
     }
 
-    pub fn into_binary(self) -> Binary {
+    pub fn into_json_binary(self) -> Binary {
         self.0
     }
 }
 
 impl CallbackMsg {
     pub fn new<D: Serialize>(data: D, callback: CallbackData) -> StdResult<Self> {
-        let data = to_binary(&data)?;
+        let data = to_json_binary(&data)?;
         Ok(Self { data, callback })
     }
 
     pub fn new_without_data(callback: CallbackData) -> Self {
         Self {
-            data: to_binary(&Empty {}).unwrap(),
+            data: to_json_binary(&Empty {}).unwrap(),
             callback,
         }
     }
 
     pub fn deserialize<D: DeserializeOwned, CB: DeserializeOwned>(self) -> StdResult<(D, CB)> {
-        let data = from_binary(&self.data)?;
-        let callback = from_binary(&self.callback.into_binary())?;
+        let data = from_json(&self.data)?;
+        let callback = from_json(self.callback.into_json_binary())?;
         Ok((data, callback))
     }
 
     pub fn deserialize_data<D: DeserializeOwned>(&self) -> StdResult<D> {
-        let data = from_binary(&self.data)?;
+        let data = from_json(&self.data)?;
         Ok(data)
     }
 
     pub fn deserialize_callback<CB: DeserializeOwned>(&self) -> StdResult<CB> {
-        let callback = from_binary(&self.callback.clone().into_binary())?;
+        let callback = from_json(self.callback.clone().into_json_binary())?;
         Ok(callback)
     }
 }

@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{to_binary, Coin, CosmosMsg, WasmMsg};
+use cosmwasm_std::{to_json_binary, Coin, CosmosMsg, WasmMsg};
 use kujira::{CallbackData, CallbackMsg, KujiraMsg};
 use serde::Serialize;
 
@@ -16,14 +16,14 @@ pub fn assert_callback(
     msg: CosmosMsg<KujiraMsg>,
 ) {
     let callback = CallbackExecute::Callback(CallbackMsg {
-        data: to_binary(&data).unwrap(),
+        data: to_json_binary(&data).unwrap(),
         callback,
     });
     assert_eq!(
         msg,
         CosmosMsg::Wasm(WasmMsg::Execute {
             contract_addr: callback_addr,
-            msg: to_binary(&callback).unwrap(),
+            msg: to_json_binary(&callback).unwrap(),
             funds: funds.into(),
         })
     );
