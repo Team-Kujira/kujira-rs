@@ -81,7 +81,7 @@
 //!   // ..
 //!   let msg = CosmosMsg::Wasm(WasmMsg::Execute {
 //!     contract: config.liquidation_contract,
-//!     msg: to_binary(&kujira::orca::ExecuteMsg::ExecuteLiquidation {
+//!     msg: to_json_binary(&kujira::orca::ExecuteMsg::ExecuteLiquidation {
 //!       exchange_rate,
 //!       repay_denom: Denom::Cw20("terra1ajt556dpzvjwl0kl5tzku3fc3p3knkg9mkv8jl"),
 //!     }),

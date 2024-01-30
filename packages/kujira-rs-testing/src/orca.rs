@@ -2,7 +2,7 @@
 use cosmwasm_std::entry_point;
 
 use cosmwasm_std::{
-    attr, coins, to_binary, BankMsg, Binary, CosmosMsg, Decimal, Deps, DepsMut, Empty, Env,
+    attr, coins, to_json_binary, BankMsg, Binary, CosmosMsg, Decimal, Deps, DepsMut, Empty, Env,
     Fraction, MessageInfo, Response, StdError, StdResult, Uint128,
 };
 use cw_storage_plus::Item;
@@ -101,7 +101,7 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
                 repay_amount,
             };
 
-            to_binary(&res)
+            to_json_binary(&res)
         }
 
         QueryMsg::SimulateReverse {
@@ -128,7 +128,7 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
                 repay_amount,
             };
 
-            to_binary(&res)
+            to_json_binary(&res)
         }
 
         QueryMsg::SimulateWithTarget {
@@ -205,7 +205,7 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
                 collateral_amount,
                 repay_amount,
             };
-            Ok(to_binary(&res)?)
+            Ok(to_json_binary(&res)?)
         }
         _ => unimplemented!(),
     }

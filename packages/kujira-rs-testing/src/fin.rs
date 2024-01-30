@@ -4,8 +4,8 @@ use std::convert::TryFrom;
 use cosmwasm_std::entry_point;
 
 use cosmwasm_std::{
-    coins, to_binary, Addr, BankMsg, Binary, CosmosMsg, Decimal256, Deps, DepsMut, Env, Fraction,
-    MessageInfo, Response, StdError, StdResult, Uint128, Uint256, WasmMsg,
+    coins, to_json_binary, Addr, BankMsg, Binary, CosmosMsg, Decimal256, Deps, DepsMut, Env,
+    Fraction, MessageInfo, Response, StdError, StdResult, Uint128, Uint256, WasmMsg,
 };
 use cw20::Denom;
 use cw_storage_plus::{Item, Map};
@@ -119,7 +119,7 @@ pub fn execute(
 
             match callback {
                 Some(cb) => Ok(Response::default()
-                    .add_message(cb.to_message(&sender, &NewOrderData { idx }, vec![])?)
+                    .add_message(cb.to_message(&sender, NewOrderData { idx }, vec![])?)
                     .add_attribute("order_idx", idx)
                     .add_attribute("action", "fin-submit-order")),
                 None => Ok(Response::default()
@@ -253,7 +253,7 @@ pub fn query(deps: Deps<KujiraQuery>, env: Env, msg: QueryMsg) -> StdResult<Bina
                 created_at: env.block.time,
                 original_offer_amount: order.amount.into(),
             };
-            Ok(to_binary(&res)?)
+            Ok(to_json_binary(&res)?)
         }
         _ => Ok(Binary::default()),
     }
