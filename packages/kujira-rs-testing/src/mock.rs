@@ -2,9 +2,8 @@ use std::{collections::HashMap, convert::TryInto};
 
 use anyhow::Result as AnyResult;
 use cosmwasm_std::{
-    attr,
-    testing::{MockApi, MockStorage},
-    to_json_binary, Addr, BankMsg, Coin, CosmosMsg, Decimal, Empty, Event, Uint128,
+    attr, testing::MockStorage, to_json_binary, Addr, BankMsg, Coin, CosmosMsg, Decimal, Empty,
+    Event, Uint128,
 };
 
 use cw_multi_test::{
@@ -16,9 +15,11 @@ use kujira::{
     BankQuery, DenomMsg, ExchangeRateResponse, KujiraMsg, KujiraQuery, OracleQuery, SupplyResponse,
 };
 
+use crate::{address::MockAddressGenerator, api::MockApiBech32};
+
 pub type CustomApp = App<
     BankKeeper,
-    MockApi,
+    MockApiBech32,
     MockStorage,
     KujiraModule,
     WasmKeeper<KujiraMsg, KujiraQuery>,
@@ -35,6 +36,8 @@ pub fn mock_app(balances: Vec<(Addr, Vec<Coin>)>) -> CustomApp {
 
     BasicAppBuilder::new_custom()
         .with_custom(custom)
+        .with_api(MockApiBech32::new("kujira"))
+        .with_wasm(WasmKeeper::default().with_address_generator(MockAddressGenerator))
         .build(|router, _, storage| {
             for (addr, coins) in balances {
                 router.bank.init_balance(storage, &addr, coins).unwrap();
