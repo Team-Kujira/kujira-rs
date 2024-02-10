@@ -1,7 +1,7 @@
 use std::cmp::{max, min};
 
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Decimal, Fraction, Timestamp, Uint128};
+use cosmwasm_std::{Decimal, Decimal256, Fraction, Timestamp, Uint128, Uint256};
 
 #[cw_serde]
 pub struct Schedule {
@@ -41,21 +41,24 @@ impl Schedule {
                 if end <= start {
                     return Uint128::zero();
                 }
-                let c = Decimal::from_ratio(self.amount * Uint128::from(2u128), total_duration);
-                let div = Decimal::from_ratio(total_duration * total_duration, self.amount);
+                let c = Decimal256::from_ratio(
+                    Uint256::from(self.amount) * Uint256::from(2u128),
+                    total_duration,
+                );
+                let div = Decimal256::from_ratio(total_duration * total_duration, self.amount);
 
-                let b = Uint128::from(end - self.start.seconds());
-                let a = Uint128::from(start - self.start.seconds());
-
+                let b = Uint256::from(end - self.start.seconds());
+                let a = Uint256::from(start - self.start.seconds());
                 let b = c * b
-                    - Decimal::from_ratio(b * b * div.denominator(), div.numerator())
-                        * Uint128::one();
+                    - Decimal256::from_ratio(b * b * div.denominator(), div.numerator())
+                        * Uint256::one();
 
                 let a = c * a
-                    - Decimal::from_ratio(a * a * div.denominator(), div.numerator())
-                        * Uint128::one();
+                    - Decimal256::from_ratio(a * a * div.denominator(), div.numerator())
+                        * Uint256::one();
 
-                b.checked_sub(a).unwrap_or_default()
+                let diff = b.checked_sub(a).unwrap_or_default();
+                diff.try_into().unwrap()
             }
         }
     }
@@ -184,6 +187,21 @@ mod tests {
                 &Timestamp::from_seconds(1671785290)
             ),
             Uint128::zero()
+        );
+    }
+
+    #[test]
+    fn decimals() {
+        let s = Schedule {
+            start: Timestamp::from_seconds(1703083387),
+            end: Timestamp::from_seconds(1710974700),
+            amount: Uint128::from(65_000_000_000_000_000_000_000u128),
+            release: Release::Decay,
+        };
+
+        s.released(
+            &Timestamp::from_seconds(1703083387),
+            &Timestamp::from_seconds(1710974700),
         );
     }
 }
