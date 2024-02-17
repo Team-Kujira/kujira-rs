@@ -549,6 +549,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "kujira-pilot"
+version = "0.8.4"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw20",
+ "kujira-orca",
+ "kujira-std",
+]
+
+[[package]]
 name = "kujira-rs-testing"
 version = "1.4.0"
 dependencies = [
