@@ -31,6 +31,7 @@ pub struct SaleResponse {
     pub idx: Uint128,
     pub title: String,
     pub description: String,
+    pub url: String,
     pub price: Decimal,
     pub owner: Addr,
     pub beneficiary: Addr,
