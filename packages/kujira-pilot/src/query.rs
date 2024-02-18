@@ -39,6 +39,9 @@ pub struct SaleResponse {
     pub closes: Timestamp,
     pub executed: Option<Timestamp>,
     pub retracted: Option<Timestamp>,
+    pub bid_amount: Option<Uint128>,
+    pub liquidation_fee: Option<Uint128>,
+    pub repay_amount: Option<Uint128>,
     pub orca_address: Addr,
     pub orca_config: kujira_orca::ConfigResponse,
 }
