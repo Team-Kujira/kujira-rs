@@ -1,5 +1,7 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
-use cosmwasm_std::{Addr, Coin, Decimal, Timestamp, Uint128};
+use cosmwasm_std::{Addr, Coin, Decimal, Uint128};
+
+use crate::Status;
 
 #[cw_serde]
 #[derive(QueryResponses)]
@@ -31,14 +33,12 @@ pub struct SaleResponse {
     pub idx: Uint128,
     pub title: String,
     pub description: String,
+    pub url: String,
     pub price: Decimal,
     pub owner: Addr,
     pub beneficiary: Addr,
     pub amount: Coin,
-    pub opens: Timestamp,
-    pub closes: Timestamp,
-    pub executed: Option<Timestamp>,
-    pub retracted: Option<Timestamp>,
+    pub status: Status,
     pub orca_address: Addr,
     pub orca_config: kujira_orca::ConfigResponse,
 }

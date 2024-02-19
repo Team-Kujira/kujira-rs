@@ -62,3 +62,17 @@ pub struct CreateOrca {
     /// The amount of time in seconds that a bid must wait until it can be activated
     pub waiting_period: u64,
 }
+
+#[cw_serde]
+pub enum Status {
+    /// The sale is live and can be executed
+    Live { closes_at: Timestamp },
+    /// The sale has been retracted
+    Retracted(Timestamp),
+    /// The sale has been executed
+    Executed {
+        at: Timestamp,
+        raise_total: Uint128,
+        raise_fee: Uint128,
+    },
+}
