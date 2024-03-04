@@ -1,6 +1,6 @@
 use std::{collections::HashMap, convert::TryInto};
 
-use anyhow::Result as AnyResult;
+use anyhow::{Error, Result as AnyResult};
 use cosmwasm_std::{
     attr, testing::MockStorage, to_json_binary, Addr, BankMsg, Coin, CosmosMsg, Decimal, Empty,
     Event, Uint128,
@@ -11,8 +11,10 @@ use cw_multi_test::{
     Module, StakeKeeper, SudoMsg, WasmKeeper,
 };
 
+use cw_storage_plus::Map;
 use kujira::{
-    BankQuery, DenomMsg, ExchangeRateResponse, KujiraMsg, KujiraQuery, OracleQuery, SupplyResponse,
+    BankQuery, DenomAdminResponse, DenomMsg, DenomQuery, ExchangeRateResponse, FullDenomResponse,
+    KujiraMsg, KujiraQuery, OracleQuery, SupplyResponse,
 };
 
 use crate::{address::MockAddressGenerator, api::MockApiBech32};
@@ -59,6 +61,8 @@ impl KujiraModule {
     }
 }
 
+static DENOM_ADMINS: Map<String, Addr> = Map::new("denom_admins");
+
 impl Module for KujiraModule {
     type ExecT = KujiraMsg;
 
@@ -88,8 +92,9 @@ impl Module for KujiraModule {
             KujiraMsg::Auth(_) => todo!(),
             KujiraMsg::Denom(d) => match d {
                 DenomMsg::Create { subdenom } => {
-                    let full = Self::subdenom_to_full(sender, subdenom.to_string());
+                    let full = Self::subdenom_to_full(sender.clone(), subdenom.to_string());
                     storage.set(full.as_bytes(), &Uint128::zero().to_be_bytes());
+                    DENOM_ADMINS.save(storage, full, &sender)?;
 
                     Ok(AppResponse {
                         events: vec![],
@@ -101,6 +106,11 @@ impl Module for KujiraModule {
                     denom,
                     recipient,
                 } => {
+                    let admin = DENOM_ADMINS.load(storage, denom.to_string())?;
+                    if admin != sender {
+                        return Err(Error::msg("Unauthorized"));
+                    }
+
                     let mut supply = storage
                         .get(denom.as_bytes())
                         .map(|bz| u128::from_be_bytes(bz.try_into().unwrap()))
@@ -154,7 +164,18 @@ impl Module for KujiraModule {
                         data: None,
                     })
                 }
-                _ => todo!(),
+                DenomMsg::ChangeAdmin { denom, address } => {
+                    let admin = DENOM_ADMINS.load(storage, denom.to_string())?;
+                    if admin != sender {
+                        return Err(Error::msg("Unauthorized"));
+                    }
+                    DENOM_ADMINS.save(storage, denom.to_string(), &address)?;
+
+                    Ok(AppResponse {
+                        events: vec![],
+                        data: None,
+                    })
+                }
             },
         }
     }
@@ -203,6 +224,17 @@ impl Module for KujiraModule {
             KujiraQuery::Oracle(o) => match o {
                 OracleQuery::ExchangeRate { denom } => Ok(to_json_binary(&ExchangeRateResponse {
                     rate: *self.oracle_prices.get(&denom).unwrap_or(&Decimal::zero()),
+                })?),
+            },
+            KujiraQuery::Denom(msg) => match msg {
+                DenomQuery::FullDenom {
+                    creator_addr,
+                    subdenom,
+                } => Ok(to_json_binary(&FullDenomResponse {
+                    denom: format!("factory/{}/{}", creator_addr, subdenom).into(),
+                })?),
+                DenomQuery::DenomAdmin { subdenom } => Ok(to_json_binary(&DenomAdminResponse {
+                    admin: DENOM_ADMINS.load(storage, subdenom.to_string())?,
                 })?),
             },
         }

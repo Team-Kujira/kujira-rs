@@ -19,7 +19,10 @@ pub use {
     precision::{Precise, Precision},
     price::{HumanPrice, NormalizedPrice},
     querier::KujiraQuerier,
-    query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse},
+    query::{
+        BankQuery, DenomAdminResponse, DenomQuery, ExchangeRateResponse, FullDenomResponse,
+        KujiraQuery, OracleQuery, SupplyResponse,
+    },
     schedule::{Release, Schedule},
     utils::{amount, fee_address},
 };
