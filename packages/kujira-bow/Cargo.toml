@@ -12,4 +12,4 @@ cosmwasm-schema = { workspace = true }
 cosmwasm-std = { workspace = true }
 thiserror = "1"
 kujira-std = { path = "../kujira-std", version = "0.8" }
-kujira-fin = { path = "../kujira-fin", version = "0.8" }
+kujira-fin = { path = "../kujira-fin", version = "0.9" }
