@@ -73,11 +73,11 @@ pub enum Liquidates {
 pub struct ConfigUpdate {
     pub owner: Option<Addr>,
     pub oracle_denom: Option<String>,
-    pub max_liquidation_ratio: Option<Decimal>,
+    pub max_ratio: Option<Decimal>,
     pub mint_fee: Option<Decimal>,
     pub interest_rate: Option<Decimal>,
     pub max_debt: Option<Uint128>,
     pub liquidation_threshold: Option<Uint128>,
-    pub partial_liquidation_target: Option<Decimal>,
+    pub liquidation_ratio: Option<Decimal>,
     pub orca_address: Option<Addr>,
 }

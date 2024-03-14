@@ -26,13 +26,13 @@ pub struct ConfigResponse {
     pub stable_denom_admin: Addr,
     pub collateral_denom: Denom,
     pub oracle_denom: String,
-    pub max_liquidation_ratio: Decimal,
+    pub max_ratio: Decimal,
     pub mint_fee: Decimal,
     pub interest_rate: Decimal,
     pub orca_address: Addr,
     pub max_debt: Uint128,
     pub liquidation_threshold: Uint128,
-    pub partial_liquidation_target: Decimal,
+    pub liquidation_ratio: Decimal,
     pub fee_address: Addr,
 }
 
@@ -56,7 +56,7 @@ pub struct PositionResponse {
     /// since the previous withdrawal or liquidation (as these actions both collect interest payments)
     pub interest_amount: Uint128,
 
-    /// The price at which the LTV of this loan will exceed [InstantiateMsg::max_liquidation_ratio], and must be liquidated.
+    /// The price at which the LTV of this loan will exceed [InstantiateMsg::max_ratio], and must be liquidated.
     pub liquidation_price: Option<Decimal>,
 }
 

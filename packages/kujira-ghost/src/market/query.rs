@@ -27,7 +27,6 @@ pub struct ConfigResponse {
     pub full_liquidation_threshold: Uint128,
     pub partial_liquidation_target: Decimal,
     pub borrow_fee: Decimal,
-    pub fee_address: Addr,
 }
 
 #[cw_serde]

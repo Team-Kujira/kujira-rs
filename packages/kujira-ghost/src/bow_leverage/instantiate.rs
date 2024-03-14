@@ -14,7 +14,6 @@ pub struct InstantiateMsg {
     pub full_liquidation_threshold: Uint128,
     pub partial_liq_fraction: Decimal,
     pub borrow_fee: Decimal,
-    pub fee_address: Addr,
 }
 
 #[cw_serde]

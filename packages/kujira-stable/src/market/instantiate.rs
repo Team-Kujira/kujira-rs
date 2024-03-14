@@ -25,7 +25,7 @@ pub struct InstantiateMsg {
     pub oracle_denom: String,
 
     /// The maximum LTV ratio that a loan can have before it needs liqudiating
-    pub max_liquidation_ratio: Decimal,
+    pub max_ratio: Decimal,
 
     /// The amount charged when stable is minted
     pub mint_fee: Decimal,
@@ -45,8 +45,7 @@ pub struct InstantiateMsg {
 
     /// The percentage of collateral that is liquidated when the amount of debt on
     /// a position is above [InstantiateMsg::liquidation_threshold]
-    pub partial_liquidation_target: Decimal,
-
+    pub liquidation_ratio: Decimal,
     /// The destination address for all fees collected
     pub fee_address: Addr,
 }
