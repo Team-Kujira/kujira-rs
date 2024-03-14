@@ -33,6 +33,7 @@ pub struct ConfigResponse {
     pub max_debt: Uint128,
     pub liquidation_threshold: Uint128,
     pub partial_liquidation_target: Decimal,
+    pub fee_address: Addr,
 }
 
 #[cw_serde]

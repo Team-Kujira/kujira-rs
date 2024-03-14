@@ -54,6 +54,9 @@ pub struct ConfigResponse {
 
     /// See [InstantiateMsg::fee_maker]
     pub fee_maker: Decimal256,
+
+    /// See [InstantiateMsg::fee_address]
+    pub fee_address: Addr,
 }
 
 #[cw_serde]

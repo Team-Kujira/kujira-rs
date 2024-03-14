@@ -28,4 +28,7 @@ pub struct InstantiateMsg {
 
     /// The fee charged on withdrawals from filled limit orders
     pub fee_maker: Decimal256,
+
+    /// The destination address for fees collected
+    pub fee_address: Addr,
 }

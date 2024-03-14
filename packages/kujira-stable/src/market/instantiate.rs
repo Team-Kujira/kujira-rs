@@ -46,4 +46,7 @@ pub struct InstantiateMsg {
     /// The percentage of collateral that is liquidated when the amount of debt on
     /// a position is above [InstantiateMsg::liquidation_threshold]
     pub partial_liquidation_target: Decimal,
+
+    /// The destination address for all fees collected
+    pub fee_address: Addr,
 }
