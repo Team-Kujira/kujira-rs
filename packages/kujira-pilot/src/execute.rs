@@ -74,5 +74,6 @@ pub enum Status {
         at: Timestamp,
         raise_total: Uint128,
         raise_fee: Uint128,
+        raise_amount: Uint128,
     },
 }
