@@ -1,15 +1,22 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Coin, Decimal, Timestamp, Uint128};
-use kujira_std::Denom;
+use kujira_std::{CallbackMsg, Denom};
 
 #[cw_serde]
 pub enum ExecuteMsg {
     /// Creates a new pilot sale
-    Create { sale: CreateSale, orca: CreateOrca },
+    Create {
+        sale: CreateSale,
+        orca: CreateOrca,
+    },
     /// Executes a pilot sale
-    Execute { idx: Uint128 },
+    Execute {
+        idx: Uint128,
+    },
     /// Retracts a pilot sale
-    Retract { idx: Uint128 },
+    Retract {
+        idx: Uint128,
+    },
     Orca {
         sale: Uint128,
         msg: kujira_orca::ExecuteMsg,
@@ -22,7 +29,11 @@ pub enum ExecuteMsg {
         deposit: Option<Coin>,
     },
     /// Updates the sale description
-    UpdateSaleDescription { idx: Uint128, description: String },
+    UpdateSaleDescription {
+        idx: Uint128,
+        description: String,
+    },
+    Callback(CallbackMsg),
 }
 
 #[cw_serde]
@@ -74,5 +85,11 @@ pub enum Status {
         at: Timestamp,
         raise_total: Uint128,
         raise_fee: Uint128,
+        raise_amount: Uint128,
     },
+}
+
+#[cw_serde]
+pub enum CallbackType {
+    LiquidationCallback { idx: Uint128 },
 }
