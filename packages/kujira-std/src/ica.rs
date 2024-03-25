@@ -12,7 +12,7 @@ pub struct IcaRegisterCallbackData {
     pub connection_id: String,
     pub account_id: String,
     pub callback: Option<Binary>,
-    pub result: IcaResult,
+    pub result: IcaRegisterResult,
 }
 
 #[cw_serde]
@@ -21,12 +21,19 @@ pub struct IcaTxCallbackData {
     pub account_id: String,
     pub sequence: u64,
     pub callback: Option<Binary>,
-    pub result: IcaResult,
+    pub result: IcaTxResult,
 }
 
 #[cw_serde]
-pub enum IcaResult {
+pub enum IcaRegisterResult {
     Success { data: IcaOpenVersion },
+    Error { error: String },
+    Timeout {},
+}
+
+#[cw_serde]
+pub enum IcaTxResult {
+    Success { data: Binary },
     Error { error: String },
     Timeout {},
 }
