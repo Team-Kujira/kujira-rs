@@ -3,6 +3,7 @@ use std::fmt::Display;
 
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{coin, coins, Addr, BankMsg, Coin, CosmosMsg, QuerierWrapper, StdResult};
+use cw_storage_plus::PrimaryKey;
 
 use crate::query::KujiraQuery;
 
