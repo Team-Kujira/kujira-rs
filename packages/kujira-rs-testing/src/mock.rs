@@ -237,6 +237,7 @@ impl Module for KujiraModule {
                     admin: DENOM_ADMINS.load(storage, subdenom.to_string())?,
                 })?),
             },
+            KujiraQuery::Ica(_) => todo!("ICA queries not implemented in mock"),
         }
     }
 }

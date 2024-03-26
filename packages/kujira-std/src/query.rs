@@ -9,6 +9,7 @@ pub enum KujiraQuery {
     Bank(BankQuery),
     Denom(DenomQuery),
     Oracle(OracleQuery),
+    Ica(IcaQuery),
 }
 
 impl CustomQuery for KujiraQuery {}
@@ -40,6 +41,17 @@ pub enum OracleQuery {
     // ExchangeRates { offer: String },
 }
 
+/// This contains all queries that can be made to the cw-ica module
+#[cw_serde]
+pub enum IcaQuery {
+    // AccountAddress will return the address of the interchain account.
+    AccountAddress {
+        owner: Addr,
+        connection_id: String,
+        account_id: String,
+    },
+}
+
 /// ExchangeRateResponse is data format returned from OracleRequest::ExchangeRate query
 #[cw_serde]
 pub struct ExchangeRateResponse {
@@ -61,8 +73,8 @@ pub struct DenomAdminResponse {
     pub admin: Addr,
 }
 
-// ExchangeRatesResponse is data format returned from OracleRequest::ExchangeRates query
-// #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-// pub struct ExchangeRatesResponse {
-//     pub rates: Vec<ExchangeRateResponse>,
-// }
+/// AccountAddressResponse is data format returned from CwIcaRequest::AccountAddress query
+#[cw_serde]
+pub struct AccountAddressResponse {
+    pub address: String,
+}
