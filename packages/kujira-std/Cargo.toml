@@ -1,6 +1,6 @@
 [package]
 name = "kujira-std"
-version = "0.8.6"
+version = "1.0.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Standard Library and Utilities for Smart Contracts on Kujira"
