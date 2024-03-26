@@ -1,6 +1,6 @@
 [package]
 name = "kujira-rs-testing"
-version = "1.5.0"
+version = "1.6.0"
 authors = ["Kujira Labs"]
 edition = "2018"
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -19,7 +19,7 @@ serde = { workspace = true, default-features = false, features = ["derive"] }
 cw-multi-test = { version = "0.18", features = ["cosmwasm_1_2"] }
 cw-storage-plus = "1.1"
 anyhow = { workspace = true }
-kujira = { version = "0.9", path = "../kujira" }
+kujira = { path = "../kujira" }
 serde_json = { workspace = true }
 base64 = "0.20.0"
 hex = { workspace = true }

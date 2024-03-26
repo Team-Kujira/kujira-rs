@@ -89,7 +89,7 @@ impl Module for KujiraModule {
         QueryC: cosmwasm_std::CustomQuery + serde::de::DeserializeOwned + 'static,
     {
         match msg {
-            KujiraMsg::Auth(_) => todo!(),
+            KujiraMsg::Auth(_) | KujiraMsg::Batch(_) | KujiraMsg::Ica(_) => todo!(),
             KujiraMsg::Denom(d) => match d {
                 DenomMsg::Create { subdenom } => {
                     let full = Self::subdenom_to_full(sender.clone(), subdenom.to_string());
@@ -237,6 +237,7 @@ impl Module for KujiraModule {
                     admin: DENOM_ADMINS.load(storage, subdenom.to_string())?,
                 })?),
             },
+            KujiraQuery::Ica(_) => todo!("ICA queries not implemented in mock"),
         }
     }
 }

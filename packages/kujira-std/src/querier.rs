@@ -1,11 +1,14 @@
 //!    Custom querier implementation for Kujira's chain core bindings
 
-use cosmwasm_std::{Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
+use cosmwasm_std::{Addr, Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
 
 use crate::{
     denom::Denom,
     price::HumanPrice,
-    query::{BankQuery, ExchangeRateResponse, KujiraQuery, OracleQuery, SupplyResponse},
+    query::{
+        AccountAddressResponse, BankQuery, ExchangeRateResponse, IcaQuery, KujiraQuery,
+        OracleQuery, SupplyResponse,
+    },
 };
 
 /// This is a helper wrapper to easily use our custom queries
@@ -41,16 +44,22 @@ impl<'a> KujiraQuerier<'a> {
         self.querier
     }
 
-    // pub fn query_exchange_rates<T: Into<String>>(
-    //     &self,
-    //     offer: T,
-    // ) -> StdResult<Vec<ExchangeRateResponse>> {
-    //     let request = OracleQuery::ExchangeRates {
-    //         offer: offer.into(),
-    //     };
-    //     let res: ExchangeRatesResponse = self.querier.custom_query(&request.into())?;
-    //     Ok(res.rates)
-    // }
+    pub fn query_interchain_address(
+        &self,
+        owner: Addr,
+        connection_id: String,
+        account_id: String,
+    ) -> StdResult<AccountAddressResponse> {
+        let query = KujiraQuery::Ica(IcaQuery::AccountAddress {
+            owner,
+            connection_id,
+            account_id,
+        });
+        let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
+        let result: AccountAddressResponse = self.querier.query(&request)?;
+
+        Ok(result)
+    }
 }
 
 impl<'a> From<&'a QuerierWrapper<'a, KujiraQuery>> for KujiraQuerier<'a> {

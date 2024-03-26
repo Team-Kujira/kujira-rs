@@ -1,6 +1,7 @@
 mod asset;
 mod callback;
 mod denom;
+mod ica;
 mod merkle;
 mod msg;
 mod precision;

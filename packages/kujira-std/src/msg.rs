@@ -3,12 +3,14 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Coin, CosmosMsg, CustomMsg, Timestamp, Uint128};
 
-use crate::denom::Denom;
+use crate::{denom::Denom, ica::IcaMsg};
 
 #[cw_serde]
 pub enum KujiraMsg {
     Auth(AuthMsg),
+    Batch(BatchMsg),
     Denom(DenomMsg),
+    Ica(IcaMsg),
 }
 
 impl CustomMsg for KujiraMsg {}
@@ -33,6 +35,11 @@ impl From<AuthMsg> for CosmosMsg<KujiraMsg> {
     fn from(msg: AuthMsg) -> Self {
         KujiraMsg::Auth(msg).into()
     }
+}
+
+#[cw_serde]
+pub enum BatchMsg {
+    WithdrawAllDelegatorRewards {},
 }
 
 #[cw_serde]
