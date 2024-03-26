@@ -1,6 +1,6 @@
 [package]
 name = "kujira-pilot"
-version = "0.8.6"
+version = "1.0.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces for Kujira PILOT"
@@ -11,5 +11,5 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }
 cw20 = { workspace = true }
-kujira-std = { path = "../kujira-std", version = "0.8" }
-kujira-orca = { path = "../kujira-orca", version = "0.8" }
+kujira-std = { path = "../kujira-std", version = "1.0.0" }
+kujira-orca = { path = "../kujira-orca", version = "1.0.0" }
