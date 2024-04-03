@@ -1,5 +1,9 @@
-use cosmwasm_schema::{cw_serde, serde::Serializer};
-use cosmwasm_std::Binary;
+use cosmwasm_schema::{
+    cw_serde,
+    schemars::JsonSchema,
+    serde::{Deserialize, Serialize, Serializer},
+};
+use cosmwasm_std::{to_json_string, Binary};
 
 #[cw_serde]
 pub enum IcaSudoMsg {
@@ -56,10 +60,16 @@ pub enum IcaMsg {
     },
 }
 
-#[cw_serde]
+#[derive(Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[allow(clippy::derive_partial_eq_without_eq)] // Allow users of `#[cw_serde]` to not implement Eq without clippy complaining
+#[serde(
+    deny_unknown_fields,
+    rename_all = "snake_case",
+    crate = "::cosmwasm_schema::serde"
+)]
+#[schemars(crate = "::cosmwasm_schema::schemars")]
 #[serde(untagged)]
 pub enum IcaRegisterVersion {
-    #[serde(serialize_with = "empty_string")]
     Default,
     Ics27(Ics27MetadataInit),
     Ics29(Ics29MetadataInit),
@@ -71,11 +81,27 @@ impl Default for IcaRegisterVersion {
     }
 }
 
-fn empty_string<S>(serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    serializer.serialize_str("")
+impl Serialize for IcaRegisterVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            IcaRegisterVersion::Default => serializer.serialize_str(""),
+            IcaRegisterVersion::Ics27(data) => {
+                // Serialize the data to a string wrapping a JSON object
+                let serialized_data =
+                    to_json_string(&data).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
+                serializer.serialize_str(&serialized_data)
+            }
+            IcaRegisterVersion::Ics29(data) => {
+                // Serialize the data to a string wrapping a JSON object
+                let serialized_data =
+                    to_json_string(&data).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
+                serializer.serialize_str(&serialized_data)
+            }
+        }
+    }
 }
 
 #[cw_serde]
