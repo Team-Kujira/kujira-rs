@@ -1,5 +1,8 @@
-use cosmwasm_schema::{cw_serde, serde::Serializer};
-use cosmwasm_std::{to_json_string, Binary};
+use cosmwasm_schema::{
+    cw_serde,
+    serde::{Deserialize, Deserializer, Serializer},
+};
+use cosmwasm_std::{from_json, to_json_string, Binary};
 
 #[cw_serde]
 pub enum IcaSudoMsg {
@@ -137,12 +140,91 @@ impl Ics29MetadataInit {
     }
 }
 
-#[cw_serde]
-#[serde(untagged)]
+#[derive(
+    ::cosmwasm_schema::serde::Serialize,
+    // ::cosmwasm_schema::serde::Deserialize,
+    ::std::clone::Clone,
+    ::std::fmt::Debug,
+    ::std::cmp::PartialEq,
+    ::cosmwasm_schema::schemars::JsonSchema,
+)]
+#[allow(clippy::derive_partial_eq_without_eq)] // Allow users of `#[cw_serde]` to not implement Eq without clippy complaining
+#[serde(
+    untagged,
+    deny_unknown_fields,
+    rename_all = "snake_case",
+    crate = "::cosmwasm_schema::serde"
+)]
+#[schemars(crate = "::cosmwasm_schema::schemars")]
 pub enum IcaOpenVersion {
     Ics27(Ics27MetadataOpen),
     Ics29(Ics29MetadataOpen),
 }
+
+impl<'de> Deserialize<'de> for IcaOpenVersion {
+    fn deserialize<D>(deserializer: D) -> Result<IcaOpenVersion, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct IcaOpenVersionVisitor;
+        impl<'de> cosmwasm_schema::serde::de::Visitor<'de> for IcaOpenVersionVisitor {
+            type Value = IcaOpenVersion;
+
+            fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+                formatter.write_str("a string containing json data")
+            }
+
+            fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+            where
+                E: cosmwasm_schema::serde::de::Error,
+            {
+                #[derive(cosmwasm_schema::serde::Deserialize)]
+                #[serde(
+                    untagged,
+                    rename_all = "snake_case",
+                    crate = "::cosmwasm_schema::serde"
+                )]
+                enum DeserOpenVersion {
+                    Ics27 {
+                        #[allow(dead_code)]
+                        version: String,
+                    },
+                    Ics29 {
+                        fee_version: String,
+                        app_version: String,
+                    },
+                }
+                let data = Binary::from_base64(v).map_err(E::custom)?;
+                let r#type: DeserOpenVersion = from_json(data).map_err(E::custom)?;
+                match r#type {
+                    DeserOpenVersion::Ics27 { .. } => {
+                        let data = Binary::from_base64(v).map_err(E::custom)?;
+                        Ok(IcaOpenVersion::Ics27(
+                            from_json::<Ics27MetadataOpen>(data).map_err(E::custom)?,
+                        ))
+                    }
+                    DeserOpenVersion::Ics29 {
+                        fee_version,
+                        app_version,
+                    } => {
+                        // app version is json-escaped Ics27MetadataOpen
+                        serde_json_wasm::from_str(&app_version)
+                            .map_err(E::custom)
+                            .map(|app_version| {
+                                IcaOpenVersion::Ics29(Ics29MetadataOpen {
+                                    fee_version,
+                                    app_version,
+                                })
+                            })
+                    }
+                }
+            }
+        }
+
+        deserializer.deserialize_any(IcaOpenVersionVisitor)
+    }
+}
+
 #[cw_serde]
 pub struct Ics27MetadataOpen {
     version: String,
@@ -178,5 +260,30 @@ impl ProtobufAny {
             type_url: type_url.into(),
             value: value.into(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::IcaOpenVersion;
+
+    #[test]
+    fn test_deserialize_callback_data() {
+        let data = 
+            "{\"data\":\"eyJ2ZXJzaW9uIjoiaWNzMjctMSIsImNvbnRyb2xsZXJfY29ubmVjdGlvbl9pZCI6ImNvbm5lY3Rpb24tMCIsImhvc3RfY29ubmVjdGlvbl9pZCI6ImNvbm5lY3Rpb24tMCIsImFkZHJlc3MiOiJjb3Ntb3MxbDhkY2xubmxjc2twanBuMmtwczBjYWw2ZWpuZzdyNGR5cGV0NnIyeGZkdHJjNjBjeWg2cXh2eXdjYyIsImVuY29kaW5nIjoicHJvdG8zIiwidHhfdHlwZSI6InNka19tdWx0aV9tc2cifQ==\"}";
+
+        let as_json: serde_json::Value = serde_json::from_slice(data.as_bytes()).unwrap();
+
+        let data: Result<IcaOpenVersion,_> = serde_json::from_value(as_json.get("data").unwrap().clone());
+        assert!(data.is_ok());
+        assert!(matches!(data.unwrap(), IcaOpenVersion::Ics27(_)));
+
+        let data = "{\"data\":\"eyJmZWVfdmVyc2lvbiI6ImljczI5LTEiLCAiYXBwX3ZlcnNpb24iOiJ7XCJ2ZXJzaW9uXCI6XCJpY3MyNy0xXCIsXCJjb250cm9sbGVyX2Nvbm5lY3Rpb25faWRcIjpcImNvbm5lY3Rpb24tMFwiLFwiaG9zdF9jb25uZWN0aW9uX2lkXCI6XCJjb25uZWN0aW9uLTBcIixcImFkZHJlc3NcIjpcImNvc21vczFsOGRjbG5ubGNza3BqcG4ya3BzMGNhbDZlam5nN3I0ZHlwZXQ2cjJ4ZmR0cmM2MGN5aDZxeHZ5d2NjXCIsXCJlbmNvZGluZ1wiOlwicHJvdG8zXCIsXCJ0eF90eXBlXCI6XCJzZGtfbXVsdGlfbXNnXCJ9In0=\"}";
+
+        let as_json: serde_json::Value = serde_json::from_slice(data.as_bytes()).unwrap();
+
+        let data: Result<IcaOpenVersion,_> = serde_json::from_value(as_json.get("data").unwrap().clone());
+        assert!(data.is_ok());
+        assert!(matches!(data.unwrap(), IcaOpenVersion::Ics29(_)));
     }
 }
