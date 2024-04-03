@@ -1,8 +1,4 @@
-use cosmwasm_schema::{
-    cw_serde,
-    schemars::JsonSchema,
-    serde::{Deserialize, Serialize, Serializer},
-};
+use cosmwasm_schema::{cw_serde, serde::Serializer};
 use cosmwasm_std::{to_json_string, Binary};
 
 #[cw_serde]
@@ -65,7 +61,9 @@ pub enum IcaMsg {
 pub enum IcaRegisterVersion {
     #[serde(serialize_with = "serialize_empty_string")]
     Default,
+    #[serde(serialize_with = "serialize_ics27")]
     Ics27(Ics27MetadataInit),
+    #[serde(serialize_with = "serialize_ics29")]
     Ics29(Ics29MetadataInit),
 }
 
@@ -82,14 +80,21 @@ where
     serializer.serialize_str("")
 }
 
-#[derive(Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[serde(
-    deny_unknown_fields,
-    rename_all = "snake_case",
-    crate = "::cosmwasm_schema::serde"
-)]
-#[schemars(crate = "::cosmwasm_schema::schemars")]
+fn serialize_ics27<S>(metadata: &Ics27MetadataInit, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    serializer.serialize_str(&to_json_string(metadata).unwrap())
+}
+
+fn serialize_ics29<S>(metadata: &Ics29MetadataInit, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    serializer.serialize_str(&to_json_string(metadata).unwrap())
+}
+
+#[cw_serde]
 pub struct Ics27MetadataInit {
     version: String,
     controller_connection_id: String,
@@ -110,27 +115,10 @@ impl Ics27MetadataInit {
     }
 }
 
-impl Serialize for Ics27MetadataInit {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let serialized_data =
-            to_json_string(&self).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
-        serializer.serialize_str(&serialized_data)
-    }
-}
-
-#[derive(Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[serde(
-    deny_unknown_fields,
-    rename_all = "snake_case",
-    crate = "::cosmwasm_schema::serde"
-)]
-#[schemars(crate = "::cosmwasm_schema::schemars")]
+#[cw_serde]
 pub struct Ics29MetadataInit {
     fee_version: String,
+    #[serde(serialize_with = "serialize_ics27")]
     app_version: Ics27MetadataInit,
 }
 
@@ -140,17 +128,6 @@ impl From<Ics27MetadataInit> for Ics29MetadataInit {
             fee_version: "ics29-1".to_string(),
             app_version,
         }
-    }
-}
-
-impl Serialize for Ics29MetadataInit {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let serialized_data =
-            to_json_string(&self).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
-        serializer.serialize_str(&serialized_data)
     }
 }
 
