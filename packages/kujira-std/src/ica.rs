@@ -60,16 +60,10 @@ pub enum IcaMsg {
     },
 }
 
-#[derive(Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[allow(clippy::derive_partial_eq_without_eq)] // Allow users of `#[cw_serde]` to not implement Eq without clippy complaining
-#[serde(
-    deny_unknown_fields,
-    rename_all = "snake_case",
-    crate = "::cosmwasm_schema::serde"
-)]
-#[schemars(crate = "::cosmwasm_schema::schemars")]
+#[cw_serde]
 #[serde(untagged)]
 pub enum IcaRegisterVersion {
+    #[serde(serialize_with = "serialize_empty_string")]
     Default,
     Ics27(Ics27MetadataInit),
     Ics29(Ics29MetadataInit),
@@ -81,37 +75,21 @@ impl Default for IcaRegisterVersion {
     }
 }
 
-impl Serialize for IcaRegisterVersion {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        match self {
-            IcaRegisterVersion::Default => serializer.serialize_str(""),
-            IcaRegisterVersion::Ics27(data) => {
-                // Serialize the data to a string wrapping a JSON object
-                let serialized_data =
-                    to_json_string(&data).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
-                serializer.serialize_str(&serialized_data)
-            }
-            IcaRegisterVersion::Ics29(data) => {
-                // Serialize the data to a string wrapping a JSON object
-                let serialized_data =
-                    to_json_string(&data).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
-                serializer.serialize_str(&serialized_data)
-            }
-        }
-    }
+fn serialize_empty_string<S>(serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    serializer.serialize_str("")
 }
 
-#[cw_serde]
-#[serde(untagged)]
-pub enum IcaOpenVersion {
-    Ics27(Ics27MetadataOpen),
-    Ics29(Ics29MetadataOpen),
-}
-
-#[cw_serde]
+#[derive(Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[serde(
+    deny_unknown_fields,
+    rename_all = "snake_case",
+    crate = "::cosmwasm_schema::serde"
+)]
+#[schemars(crate = "::cosmwasm_schema::schemars")]
 pub struct Ics27MetadataInit {
     version: String,
     controller_connection_id: String,
@@ -132,17 +110,25 @@ impl Ics27MetadataInit {
     }
 }
 
-#[cw_serde]
-pub struct Ics27MetadataOpen {
-    version: String,
-    controller_connection_id: String,
-    host_connection_id: String,
-    address: String,
-    encoding: String,
-    tx_type: String,
+impl Serialize for Ics27MetadataInit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let serialized_data =
+            to_json_string(&self).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
+        serializer.serialize_str(&serialized_data)
+    }
 }
 
-#[cw_serde]
+#[derive(Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[serde(
+    deny_unknown_fields,
+    rename_all = "snake_case",
+    crate = "::cosmwasm_schema::serde"
+)]
+#[schemars(crate = "::cosmwasm_schema::schemars")]
 pub struct Ics29MetadataInit {
     fee_version: String,
     app_version: Ics27MetadataInit,
@@ -157,10 +143,37 @@ impl From<Ics27MetadataInit> for Ics29MetadataInit {
     }
 }
 
+impl Serialize for Ics29MetadataInit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let serialized_data =
+            to_json_string(&self).map_err(cosmwasm_schema::serde::ser::Error::custom)?;
+        serializer.serialize_str(&serialized_data)
+    }
+}
+
 impl Ics29MetadataInit {
     pub fn new(controller_connection_id: String, host_connection_id: String) -> Self {
         Ics27MetadataInit::new(controller_connection_id, host_connection_id).into()
     }
+}
+
+#[cw_serde]
+#[serde(untagged)]
+pub enum IcaOpenVersion {
+    Ics27(Ics27MetadataOpen),
+    Ics29(Ics29MetadataOpen),
+}
+#[cw_serde]
+pub struct Ics27MetadataOpen {
+    version: String,
+    controller_connection_id: String,
+    host_connection_id: String,
+    address: String,
+    encoding: String,
+    tx_type: String,
 }
 
 #[cw_serde]
