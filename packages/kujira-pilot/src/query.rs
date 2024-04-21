@@ -24,8 +24,11 @@ pub struct ConfigResponse {
     pub owner: Addr,
     pub deposit: Coin,
     pub orca_code_id: u64,
+    pub orca_admin: Option<Addr>,
+    pub orca_owner: Option<Addr>,
     pub sale_fee: Decimal,
     pub withdrawal_fee: Decimal,
+    pub fee_address: Addr,
 }
 
 #[cw_serde]

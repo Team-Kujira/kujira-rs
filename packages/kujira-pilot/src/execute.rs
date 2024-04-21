@@ -24,9 +24,12 @@ pub enum ExecuteMsg {
     UpdateConfig {
         owner: Option<Addr>,
         orca_code_id: Option<u64>,
+        orca_admin: Option<Addr>,
+        orca_owner: Option<Addr>,
         sale_fee: Option<Decimal>,
         withdrawal_fee: Option<Decimal>,
         deposit: Option<Coin>,
+        fee_address: Option<Addr>,
     },
     /// Updates the sale description
     UpdateSaleDescription {
