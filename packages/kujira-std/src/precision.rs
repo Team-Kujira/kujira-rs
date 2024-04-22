@@ -34,17 +34,21 @@ impl Precise for Decimal {
     fn round(&self, p: &Precision) -> Self {
         match p {
             Precision::SignificantFigures(sf) => {
+                // early return for zero significant figures
+                if sf == &0 {
+                    return Self::zero();
+                }
                 let int = self.numerator();
-                let len = int.to_string().as_str().bytes().len() as u32;
-                let decimals: u32 = len - *sf as u32;
-                let pow = Uint128::from(10u128).pow(decimals);
-                let truncated = Self::from_ratio(int, pow) * Uint128::from(1u128);
-                Self::from_ratio(truncated * pow, self.denominator())
+                let figures = int.to_string().len() as u32;
+                let pow = Uint128::new(10u128).pow(figures - *sf as u32);
+                let significant_part = int / pow; // integer division truncates
+                let truncated = significant_part * pow;
+                Self::new(truncated)
             }
             Precision::DecimalPlaces(dp) => {
                 let pow = Uint128::from(10u128).pow(18 - *dp as u32);
-                let x = Self::from_ratio(self.numerator(), self.denominator() * pow);
-                Self::from_ratio(x.numerator() * pow, x.denominator())
+                let significant_part = self.numerator() / pow; // integer division truncates
+                Self::new(significant_part * pow)
             }
         }
     }
@@ -54,17 +58,21 @@ impl Precise for Decimal256 {
     fn round(&self, p: &Precision) -> Self {
         match p {
             Precision::SignificantFigures(sf) => {
+                // early return for zero significant figures
+                if sf == &0 {
+                    return Self::zero();
+                }
                 let int = self.numerator();
-                let len = int.to_string().as_str().bytes().len() as u32;
-                let decimals: u32 = len - *sf as u32;
-                let pow = Uint256::from(10u128).pow(decimals);
-                let truncated = Self::from_ratio(int, pow) * Uint256::from(1u128);
-                Self::from_ratio(truncated * pow, self.denominator())
+                let figures = int.to_string().len() as u32;
+                let pow = Uint256::from(10u128).pow(figures - *sf as u32);
+                let significant_part = int / pow; // integer division truncates
+                let truncated = significant_part * pow;
+                Self::new(truncated)
             }
             Precision::DecimalPlaces(dp) => {
                 let pow = Uint256::from(10u128).pow(18 - *dp as u32);
-                let x = Self::from_ratio(self.numerator(), self.denominator() * pow);
-                Self::from_ratio(x.numerator() * pow, x.denominator())
+                let significant_part = self.numerator() / pow; // integer division truncates
+                Self::new(significant_part * pow)
             }
         }
     }
