@@ -8,7 +8,7 @@ license = "Apache-2.0"
 repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-ghost"
 
 [dependencies]
-cosmwasm-std = { workspace = true }
+cosmwasm-std = { workspace = true, default-features = false }
 cw-utils = { workspace = true }
 cosmwasm-schema = { workspace = true }
 kujira-fin = { path = "../kujira-fin", version = "1.1.0" }

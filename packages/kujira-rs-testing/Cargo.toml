@@ -11,7 +11,9 @@ repository = "https://github.com/Team-Kujira/kujira-rs"
 [features]
 
 [dependencies]
-cosmwasm-std = { workspace = true, features = ["cosmwasm_1_2"] }
+cosmwasm-std = { workspace = true, default-features = false, features = [
+    "cosmwasm_1_2",
+] }
 cosmwasm-schema = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, default-features = false, features = ["derive"] }
