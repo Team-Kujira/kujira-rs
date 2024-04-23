@@ -129,7 +129,6 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_significant_figures_round_panic() {
-        // not sure if this is intended behavior, but it's what the old code did
         let p = Precision::SignificantFigures(18 + 4);
         _ = Decimal::from_str("123.456").unwrap().round(&p);
     }
