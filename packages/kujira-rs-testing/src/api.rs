@@ -24,7 +24,7 @@ impl Api for MockApiBech32 {
     fn addr_validate(&self, input: &str) -> StdResult<Addr> {
         let canonical = self.addr_canonicalize(input)?;
         let normalized = self.addr_humanize(&canonical)?;
-        if input != normalized {
+        if input != normalized.to_string() {
             Err(StdError::generic_err(
                 "Invalid input: address not normalized",
             ))

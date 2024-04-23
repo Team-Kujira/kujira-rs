@@ -32,7 +32,8 @@ impl Schedule {
                 }
                 let duration = end - start;
 
-                Decimal::from_ratio(duration, total_duration) * self.amount
+                self.amount
+                    .mul_floor(Decimal::from_ratio(duration, total_duration))
             }
             Release::Decay => {
                 let total_duration = self.end.seconds() - self.start.seconds();
@@ -49,13 +50,17 @@ impl Schedule {
 
                 let b = Uint256::from(end - self.start.seconds());
                 let a = Uint256::from(start - self.start.seconds());
-                let b = c * b
-                    - Decimal256::from_ratio(b * b * div.denominator(), div.numerator())
-                        * Uint256::one();
+                let b = b.mul_floor(c)
+                    - Uint256::one().mul_floor(Decimal256::from_ratio(
+                        b * b * div.denominator(),
+                        div.numerator(),
+                    ));
 
-                let a = c * a
-                    - Decimal256::from_ratio(a * a * div.denominator(), div.numerator())
-                        * Uint256::one();
+                let a = a.mul_floor(c)
+                    - Uint256::one().mul_floor(Decimal256::from_ratio(
+                        a * a * div.denominator(),
+                        div.numerator(),
+                    ));
 
                 let diff = b.checked_sub(a).unwrap_or_default();
                 diff.try_into().unwrap()

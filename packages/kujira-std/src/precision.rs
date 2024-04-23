@@ -38,7 +38,7 @@ impl Precise for Decimal {
                 let len = int.to_string().as_str().bytes().len() as u32;
                 let decimals: u32 = len - *sf as u32;
                 let pow = Uint128::from(10u128).pow(decimals);
-                let truncated = Self::from_ratio(int, pow) * Uint128::from(1u128);
+                let truncated = Uint128::one().mul_floor(Self::from_ratio(int, pow));
                 Self::from_ratio(truncated * pow, self.denominator())
             }
             Precision::DecimalPlaces(dp) => {
@@ -58,7 +58,7 @@ impl Precise for Decimal256 {
                 let len = int.to_string().as_str().bytes().len() as u32;
                 let decimals: u32 = len - *sf as u32;
                 let pow = Uint256::from(10u128).pow(decimals);
-                let truncated = Self::from_ratio(int, pow) * Uint256::from(1u128);
+                let truncated = Uint256::one().mul_floor(Self::from_ratio(int, pow));
                 Self::from_ratio(truncated * pow, self.denominator())
             }
             Precision::DecimalPlaces(dp) => {

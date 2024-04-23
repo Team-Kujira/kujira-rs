@@ -83,7 +83,7 @@ pub fn execute(
                 _ => return Err(StdError::generic_err("Invalid Denom")),
             };
 
-            let return_amount: Uint128 = Uint128::try_from(amount * price)?;
+            let return_amount: Uint128 = Uint128::try_from(amount.mul_floor(price))?;
 
             let message = match callback {
                 Some(cb) => CosmosMsg::Wasm(WasmMsg::Execute {
@@ -214,7 +214,7 @@ pub fn execute(
                 COLLATERAL => order.price,
                 _ => return Err(StdError::generic_err("Invalid Denom")),
             };
-            let return_amount: Uint128 = Uint128::try_from(Uint256::from(amount) * price)?;
+            let return_amount: Uint128 = Uint128::try_from(Uint256::from(amount).mul_floor(price))?;
             order.amount = order.amount.checked_sub(amount)?;
             order.filled += return_amount;
             ORDERS.save(deps.storage, idx.u128(), &order)?;

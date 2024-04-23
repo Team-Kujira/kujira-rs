@@ -1,6 +1,6 @@
 [package]
 name = "kujira"
-version = "1.0.2"
+version = "1.1.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -9,9 +9,9 @@ homepage = "https://kujira.app"
 repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira"
 
 [dependencies]
-kujira-std = { version = "1.0", path = "../kujira-std" }
-kujira-ghost = { version = "1.0.1", path = "../kujira-ghost" }
-kujira-fin = { version = "1.0.0", path = "../kujira-fin" }
-kujira-stable = { version = "1.0.0", path = "../kujira-stable" }
-kujira-orca = { version = "1.0.0", path = "../kujira-orca" }
-kujira-bow = { version = "1.0.0", path = "../kujira-bow" }
+kujira-std = { version = "1.1", path = "../kujira-std" }
+kujira-ghost = { version = "1.1.0", path = "../kujira-ghost" }
+kujira-fin = { version = "1.1.0", path = "../kujira-fin" }
+kujira-stable = { version = "1.1.0", path = "../kujira-stable" }
+kujira-orca = { version = "1.1.0", path = "../kujira-orca" }
+kujira-bow = { version = "1.1.0", path = "../kujira-bow" }

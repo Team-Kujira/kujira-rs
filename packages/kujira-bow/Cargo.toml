@@ -1,6 +1,6 @@
 [package]
 name = "kujira-bow"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces for Kujira's BOW"
@@ -11,5 +11,5 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 cosmwasm-schema = { workspace = true }
 cosmwasm-std = { workspace = true }
 thiserror = "1"
-kujira-std = { path = "../kujira-std", version = "1.0.0" }
-kujira-fin = { path = "../kujira-fin", version = "1.0.0" }
+kujira-std = { path = "../kujira-std", version = "1.1.0" }
+kujira-fin = { path = "../kujira-fin", version = "1.1.0" }

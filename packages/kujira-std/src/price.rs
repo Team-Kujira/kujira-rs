@@ -138,7 +138,7 @@ impl Mul<Uint128> for NormalizedPrice {
     type Output = Uint128;
 
     fn mul(self, rhs: Uint128) -> Self::Output {
-        self.0 * rhs
+        rhs.mul_floor(self.0)
     }
 }
 
@@ -146,13 +146,13 @@ impl Mul<NormalizedPrice> for Uint128 {
     type Output = Uint128;
 
     fn mul(self, rhs: NormalizedPrice) -> Self::Output {
-        rhs.0 * self
+        self.mul_floor(rhs.0)
     }
 }
 
 impl MulAssign<NormalizedPrice> for Uint128 {
     fn mul_assign(&mut self, rhs: NormalizedPrice) {
-        *self = *self * rhs.0
+        *self = self.mul_floor(rhs.0)
     }
 }
 
@@ -160,7 +160,7 @@ impl Div<Uint128> for NormalizedPrice {
     type Output = Option<Uint128>;
 
     fn div(self, rhs: Uint128) -> Self::Output {
-        self.0.inv().map(|inv| inv * rhs)
+        self.0.inv().map(|inv| rhs.mul_floor(inv))
     }
 }
 
@@ -168,7 +168,7 @@ impl Div<NormalizedPrice> for Uint128 {
     type Output = Option<Uint128>;
 
     fn div(self, rhs: NormalizedPrice) -> Self::Output {
-        rhs.0.inv().map(|inv| inv * self)
+        rhs.0.inv().map(|inv| self.mul_floor(inv))
     }
 }
 #[cfg(test)]
