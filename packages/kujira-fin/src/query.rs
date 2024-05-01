@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Decimal256, Timestamp, Uint128, Uint256};
+use cosmwasm_std::{Addr, Decimal256, SignedDecimal256, Timestamp, Uint128, Uint256};
 use cw20::Denom;
 use kujira_std::{Asset, Precision};
 
@@ -8,6 +8,9 @@ use kujira_std::{Asset, Precision};
 pub enum QueryMsg {
     /// Current config. Returns [ConfigResponse]
     Config {},
+
+    /// Queries current oracle config
+    Oracles {},
 
     /// Simulate an market swap based on the current order book. Returns [terraswap::pair::SimulationResponse]
     Simulation { offer_asset: Asset },
@@ -60,7 +63,13 @@ pub struct ConfigResponse {
 }
 
 #[cw_serde]
-pub struct OrderResponse {
+pub struct OraclesReponse {
+    /// See [ExecuteMsg::SetOracles]
+    pub oracles: Option<(String, String)>,
+}
+
+#[cw_serde]
+pub struct OrderResponsePrice {
     /// A unnique ID for the order
     pub idx: Uint128,
 
@@ -84,6 +93,40 @@ pub struct OrderResponse {
 
     /// Offer amount at time of creation
     pub original_offer_amount: Uint256,
+}
+
+#[cw_serde]
+pub struct OrderResponseOracle {
+    /// A unnique ID for the order
+    pub idx: Uint128,
+
+    /// The address used to place the order
+    pub owner: Addr,
+
+    /// THe quote price of this order
+    pub delta: SignedDecimal256,
+
+    /// The denom offered
+    pub offer_denom: Denom,
+
+    /// The remaining order amount
+    pub offer_amount: Uint256,
+
+    /// Amount of filled order awaiting withdrawal
+    pub filled_amount: Uint256,
+
+    /// Timestamp of original creation
+    pub created_at: Timestamp,
+
+    /// Offer amount at time of creation
+    pub original_offer_amount: Uint256,
+}
+
+#[cw_serde]
+#[serde(untagged)]
+pub enum OrderResponse {
+    Price(OrderResponsePrice),
+    Oracle(OrderResponseOracle),
 }
 
 #[cw_serde]
