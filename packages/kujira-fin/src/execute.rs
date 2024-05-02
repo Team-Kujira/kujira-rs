@@ -110,8 +110,8 @@ pub struct SubmitOrderPrice {
 
 #[cw_serde]
 pub struct SubmitOrderOracle {
-    /// The delta from the current Oracle price
-    pub delta: SignedDecimal256,
+    /// The basis point delta from the current Oracle price
+    pub delta: i8,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback: Option<CallbackData>,
 }

@@ -70,7 +70,7 @@ pub struct OraclesReponse {
 
 #[cw_serde]
 pub struct OrderResponsePrice {
-    /// A unnique ID for the order
+    /// A unique ID for the order
     pub idx: Uint128,
 
     /// The address used to place the order
@@ -97,14 +97,17 @@ pub struct OrderResponsePrice {
 
 #[cw_serde]
 pub struct OrderResponseOracle {
-    /// A unnique ID for the order
+    /// A unique ID for the order
     pub idx: Uint128,
 
     /// The address used to place the order
     pub owner: Addr,
 
-    /// THe quote price of this order
-    pub delta: SignedDecimal256,
+    /// The delta in basis points from the current oracle price
+    pub delta: i8,
+
+    /// The price of the order based on current oracle values
+    pub price: Decimal256,
 
     /// The denom offered
     pub offer_denom: Denom,
