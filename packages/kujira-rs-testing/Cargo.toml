@@ -1,6 +1,6 @@
 [package]
 name = "kujira-rs-testing"
-version = "1.6.0"
+version = "1.7.0"
 authors = ["Kujira Labs"]
 edition = "2018"
 description = "Interfaces and utilities for Kujira cosmwasm contracts"
@@ -9,17 +9,18 @@ homepage = "https://kujira.app"
 repository = "https://github.com/Team-Kujira/kujira-rs"
 
 [features]
-backtraces = ["cosmwasm-std/backtraces"]
 
 [dependencies]
-cosmwasm-std = { workspace = true, features = ["cosmwasm_1_2"] }
+cosmwasm-std = { workspace = true, default-features = false, features = [
+    "cosmwasm_1_2",
+] }
 cosmwasm-schema = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, default-features = false, features = ["derive"] }
-cw-multi-test = { version = "0.18", features = ["cosmwasm_1_2"] }
-cw-storage-plus = "1.1"
+cw-multi-test = { version = "2.0", default-features = false }
+cw-storage-plus = { workspace = true }
 anyhow = { workspace = true }
-kujira = { path = "../kujira", version = "1.0.1" }
+kujira = { path = "../kujira", version = "1.1" }
 serde_json = { workspace = true }
 base64 = "0.20.0"
 hex = { workspace = true }

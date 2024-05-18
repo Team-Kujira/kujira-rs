@@ -1,6 +1,6 @@
 [package]
 name = "kujira-pilot"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces for Kujira PILOT"
@@ -8,8 +8,8 @@ license = "Apache-2.0"
 repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-pilot"
 
 [dependencies]
-cosmwasm-std = { workspace = true }
+cosmwasm-std = { workspace = true, default-features = false }
 cosmwasm-schema = { workspace = true }
 cw20 = { workspace = true }
-kujira-std = { path = "../kujira-std", version = "1.0.0" }
-kujira-orca = { path = "../kujira-orca", version = "1.0.0" }
+kujira-std = { path = "../kujira-std", version = "1.1.0" }
+kujira-orca = { path = "../kujira-orca", version = "1.1.0" }

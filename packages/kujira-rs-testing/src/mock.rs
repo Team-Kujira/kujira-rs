@@ -85,6 +85,7 @@ impl Module for KujiraModule {
             + PartialEq
             + schemars::JsonSchema
             + serde::de::DeserializeOwned
+            + cosmwasm_std::CustomMsg
             + 'static,
         QueryC: cosmwasm_std::CustomQuery + serde::de::DeserializeOwned + 'static,
     {

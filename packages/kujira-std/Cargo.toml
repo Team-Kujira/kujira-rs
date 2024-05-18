@@ -1,6 +1,6 @@
 [package]
 name = "kujira-std"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Standard Library and Utilities for Smart Contracts on Kujira"
@@ -10,7 +10,7 @@ repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kuji
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cosmwasm-std = { workspace = true }
+cosmwasm-std = { workspace = true, default-features = false }
 cosmwasm-schema = { workspace = true }
 cw-storage-plus = { workspace = true }
 hex = { workspace = true }

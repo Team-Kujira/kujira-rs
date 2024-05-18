@@ -46,8 +46,8 @@ pub fn execute(
             let collateral_amount = amount(&COLLATERAL.into(), info.funds)?;
 
             let net_premium = Decimal::from_ratio(95u128, 100u128);
-            let repay_amount = collateral_amount * exchange_rate * net_premium;
-            let fee_amount = repay_amount * LIQUIDATION_FEE.load(deps.storage)?;
+            let repay_amount = collateral_amount.mul_floor(exchange_rate * net_premium);
+            let fee_amount = repay_amount.mul_floor(LIQUIDATION_FEE.load(deps.storage)?);
             let repay_amount = repay_amount - fee_amount;
             let repay_denom = REPAY_DENOM.load(deps.storage)?;
 
@@ -93,8 +93,8 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
             ..
         } => {
             let net_premium = Decimal::from_ratio(95u128, 100u128);
-            let repay_amount = collateral_amount * exchange_rate * net_premium;
-            let fee_amount = repay_amount * LIQUIDATION_FEE.load(deps.storage)?;
+            let repay_amount = collateral_amount.mul_floor(exchange_rate * net_premium);
+            let fee_amount = repay_amount.mul_floor(LIQUIDATION_FEE.load(deps.storage)?);
             let repay_amount = repay_amount - fee_amount;
             let res = SimulationResponse {
                 collateral_amount,
@@ -109,19 +109,18 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
             exchange_rate,
             ..
         } => {
-            let repay_amount = Decimal::from_ratio(
+            let repay_amount = repay_amount.mul_floor(Decimal::from_ratio(
                 LIQUIDATION_FEE.load(deps.storage)?.denominator(),
                 Decimal::one().numerator() - LIQUIDATION_FEE.load(deps.storage)?.numerator(),
-            ) * repay_amount;
+            ));
 
             let collateral_value =
-                repay_amount * Decimal::from_ratio(100u128, 95u128) + Uint128::from(1u128);
+                repay_amount.mul_floor(Decimal::from_ratio(100u128, 95u128)) + Uint128::from(1u128);
 
-            let collateral_amount = Decimal::from_ratio(
+            let collateral_amount = Uint128::one().mul_floor(Decimal::from_ratio(
                 collateral_value * exchange_rate.denominator(),
                 exchange_rate.numerator(),
-            ) * Uint128::from(1u128)
-                + Uint128::from(1u128);
+            )) + Uint128::from(1u128);
 
             let res = SimulationResponse {
                 collateral_amount,
@@ -138,7 +137,8 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
             exchange_rate,
             ..
         } => {
-            let current_ltv = Decimal::from_ratio(debt_amount, collateral_amount * exchange_rate);
+            let current_ltv =
+                Decimal::from_ratio(debt_amount, collateral_amount.mul_floor(exchange_rate));
             if current_ltv <= target_ltv {
                 return Err(StdError::generic_err(format!(
                     "Current LTV is already lower than target LTV ({} <= {})",
@@ -154,7 +154,7 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
 
             let premium_price = Decimal::from_ratio(95u128, 100u128) * exchange_rate;
 
-            let cur_collateral_value = remaining_collateral * premium_price;
+            let cur_collateral_value = remaining_collateral.mul_floor(premium_price);
             if cur_collateral_value.lt(&remaining_debt) {
                 return Err(StdError::generic_err(format!(
                     "Insufficient funds to cover debt ({} < {})",
@@ -188,18 +188,21 @@ pub fn query(deps: Deps<KujiraQuery>, _env: Env, msg: QueryMsg) -> StdResult<Bin
 
             let liquidate_amount = numerator.mul_ceil(denominator.inv().unwrap());
             remaining_collateral -= liquidate_amount;
-            remaining_debt -= liquidate_amount * premium_price;
+            remaining_debt -= liquidate_amount.mul_floor(premium_price);
             if remaining_collateral.is_zero() {
                 return Err(StdError::generic_err("Insufficient funds to cover debt"));
             }
-            let new_ltv = Decimal::from_ratio(remaining_debt, remaining_collateral * exchange_rate);
+            let new_ltv = Decimal::from_ratio(
+                remaining_debt,
+                remaining_collateral.mul_floor(exchange_rate),
+            );
             if new_ltv.abs_diff(target_ltv) > Decimal::percent(2) {
                 return Err(StdError::generic_err("Cannot liquidate to target LTV"));
             }
 
             let repay_amount = debt_amount - remaining_debt;
             let collateral_amount = collateral_amount - remaining_collateral;
-            let fee_amount = repay_amount * LIQUIDATION_FEE.load(deps.storage)?;
+            let fee_amount = repay_amount.mul_floor(LIQUIDATION_FEE.load(deps.storage)?);
             let repay_amount = repay_amount - fee_amount;
             let res = SimulationResponse {
                 collateral_amount,

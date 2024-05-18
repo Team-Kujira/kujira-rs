@@ -1,6 +1,6 @@
 [package]
 name = "kujira-ghost"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2021"
 authors = ["Kujira Labs"]
 description = "Interfaces for Kujira GHOST"
@@ -8,8 +8,8 @@ license = "Apache-2.0"
 repository = "https://github.com/Team-Kujira/kujira-rs/tree/master/packages/kujira-ghost"
 
 [dependencies]
-cosmwasm-std = { workspace = true }
+cosmwasm-std = { workspace = true, default-features = false }
 cw-utils = { workspace = true }
 cosmwasm-schema = { workspace = true }
-kujira-fin = { path = "../kujira-fin", version = "1.0.0" }
-kujira-std = { path = "../kujira-std", version = "1.0.0" }
+kujira-fin = { path = "../kujira-fin", version = "1.1.0" }
+kujira-std = { path = "../kujira-std", version = "1.1.0" }
