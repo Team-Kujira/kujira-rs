@@ -29,10 +29,11 @@ pub type CustomApp = App<
     DistributionKeeper,
 >;
 
-pub fn mock_app(balances: Vec<(Addr, Vec<Coin>)>) -> CustomApp {
-    let mut custom = KujiraModule {
-        oracle_prices: HashMap::new(),
-    };
+pub fn mock_app(
+    balances: Vec<(Addr, Vec<Coin>)>,
+    oracle_prices: HashMap<String, Decimal>,
+) -> CustomApp {
+    let mut custom = KujiraModule { oracle_prices };
     custom.set_oracle_price(Decimal::from_ratio(1425u128, 100u128), "factory/owner/coll");
     custom.set_oracle_price(Decimal::one(), "factory/contract0/uusk");
 

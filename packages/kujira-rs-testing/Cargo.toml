@@ -17,7 +17,7 @@ cosmwasm-std = { workspace = true, default-features = false, features = [
 cosmwasm-schema = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, default-features = false, features = ["derive"] }
-cw-multi-test = { version = "2.0", default-features = false }
+cw-multi-test = { version = "2.0" }
 cw-storage-plus = { workspace = true }
 anyhow = { workspace = true }
 kujira = { path = "../kujira", version = "1.1" }
