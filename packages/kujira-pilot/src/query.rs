@@ -29,6 +29,8 @@ pub struct ConfigResponse {
     pub sale_fee: Decimal,
     pub withdrawal_fee: Decimal,
     pub fee_address: Addr,
+    pub stable_address: Addr,
+    pub stable_factor: Decimal,
 }
 
 #[cw_serde]

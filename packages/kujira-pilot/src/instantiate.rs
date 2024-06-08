@@ -21,4 +21,10 @@ pub struct InstantiateMsg {
 
     /// The address that receives the fees
     pub fee_address: Addr,
+
+    /// The reference BOW Stable pool that defines the max size of raises
+    pub stable_address: Addr,
+
+    /// The max multiple of the BOW Stable pool deposits for a max sale value
+    pub stable_factor: Decimal,
 }
