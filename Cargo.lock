@@ -218,8 +218,7 @@ dependencies = [
 [[package]]
 name = "cw-multi-test"
 version = "2.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e403ad6ec62c8bcbcb75f7f4940712d0142b6103310da2a9375252b942358caa"
+source = "git+https://github.com/cosmwasm/cw-multi-test#364fd51fbad7d73752926078beb91242d193e92b"
 dependencies = [
  "anyhow",
  "bech32 0.11.0",
@@ -478,7 +477,7 @@ dependencies = [
 
 [[package]]
 name = "kujira"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "kujira-bow",
  "kujira-fin",
@@ -490,7 +489,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-bow"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -501,7 +500,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-fin"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -511,7 +510,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-ghost"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -522,7 +521,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-orca"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -531,7 +530,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-pilot"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -562,7 +561,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-stable"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -572,7 +571,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-std"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
