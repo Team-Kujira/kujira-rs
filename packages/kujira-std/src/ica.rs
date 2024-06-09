@@ -99,11 +99,11 @@ where
 
 #[cw_serde]
 pub struct Ics27MetadataInit {
-    version: String,
-    controller_connection_id: String,
-    host_connection_id: String,
-    encoding: String,
-    tx_type: String,
+    pub version: String,
+    pub controller_connection_id: String,
+    pub host_connection_id: String,
+    pub encoding: String,
+    pub tx_type: String,
 }
 
 impl Ics27MetadataInit {
@@ -120,9 +120,9 @@ impl Ics27MetadataInit {
 
 #[cw_serde]
 pub struct Ics29MetadataInit {
-    fee_version: String,
+    pub fee_version: String,
     #[serde(serialize_with = "serialize_ics27")]
-    app_version: Ics27MetadataInit,
+    pub app_version: Ics27MetadataInit,
 }
 
 impl From<Ics27MetadataInit> for Ics29MetadataInit {
@@ -227,18 +227,18 @@ impl<'de> Deserialize<'de> for IcaOpenVersion {
 
 #[cw_serde]
 pub struct Ics27MetadataOpen {
-    version: String,
-    controller_connection_id: String,
-    host_connection_id: String,
-    address: String,
-    encoding: String,
-    tx_type: String,
+    pub version: String,
+    pub controller_connection_id: String,
+    pub host_connection_id: String,
+    pub address: String,
+    pub encoding: String,
+    pub tx_type: String,
 }
 
 #[cw_serde]
 pub struct Ics29MetadataOpen {
-    fee_version: String,
-    app_version: Ics27MetadataOpen,
+    pub fee_version: String,
+    pub app_version: Ics27MetadataOpen,
 }
 
 #[cw_serde]
