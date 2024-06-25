@@ -477,7 +477,7 @@ dependencies = [
 
 [[package]]
 name = "kujira"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "kujira-bow",
  "kujira-fin",
@@ -489,7 +489,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-bow"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -500,7 +500,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-fin"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -510,7 +510,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-ghost"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -521,7 +521,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-orca"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -530,7 +530,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-pilot"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -561,7 +561,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-stable"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
@@ -571,7 +571,7 @@ dependencies = [
 
 [[package]]
 name = "kujira-std"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std",
