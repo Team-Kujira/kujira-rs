@@ -20,7 +20,7 @@ serde = { workspace = true, default-features = false, features = ["derive"] }
 cw-multi-test = { git = "https://github.com/cosmwasm/cw-multi-test", default-features = false }
 cw-storage-plus = { workspace = true }
 anyhow = { workspace = true }
-kujira = { path = "../kujira", version = "1.1" }
+kujira = { path = "../kujira", version = "1.3" }
 serde_json = { workspace = true }
 base64 = "0.20.0"
 hex = { workspace = true }
