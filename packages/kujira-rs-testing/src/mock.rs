@@ -239,6 +239,7 @@ impl Module for KujiraModule {
                 })?),
             },
             KujiraQuery::Ica(_) => todo!("ICA queries not implemented in mock"),
+            KujiraQuery::Ibc(_) => todo!("IBC-Verify queries not implemented in mock"),
         }
     }
 }

@@ -1,13 +1,13 @@
 //!    Custom querier implementation for Kujira's chain core bindings
 
-use cosmwasm_std::{Addr, Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
+use cosmwasm_std::{Addr, Binary, Deps, DepsMut, QuerierWrapper, QueryRequest, StdResult};
 
 use crate::{
     denom::Denom,
     price::HumanPrice,
     query::{
-        AccountAddressResponse, BankQuery, ExchangeRateResponse, IcaQuery, KujiraQuery,
-        OracleQuery, SupplyResponse,
+        AccountAddressResponse, BankQuery, ExchangeRateResponse, IbcVerifyQuery, IbcVerifyResponse,
+        IcaQuery, KujiraQuery, OracleQuery, SupplyResponse,
     },
 };
 
@@ -59,6 +59,52 @@ impl<'a> KujiraQuerier<'a> {
         let result: AccountAddressResponse = self.querier.query(&request)?;
 
         Ok(result)
+    }
+
+    // Query for the membership verification
+    #[allow(clippy::too_many_arguments)]
+    pub fn query_verify_membership(
+        &self,
+        connection: String,
+        revision_number: u64,
+        revision_height: u64,
+        proof: Binary,
+        value: Binary,
+        path_prefix: String,
+        path_key: Binary,
+    ) -> StdResult<IbcVerifyResponse> {
+        let query = KujiraQuery::Ibc(IbcVerifyQuery::VerifyMembership {
+            connection,
+            revision_number,
+            revision_height,
+            proof,
+            value,
+            path_prefix,
+            path_key,
+        });
+        let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
+        self.querier.query(&request)
+    }
+    // Query for the non-membership verification
+    pub fn query_verify_non_membership(
+        &self,
+        connection: String,
+        revision_number: u64,
+        revision_height: u64,
+        proof: Binary,
+        path_prefix: String,
+        path_key: Binary,
+    ) -> StdResult<IbcVerifyResponse> {
+        let query = KujiraQuery::Ibc(IbcVerifyQuery::VerifyNonMembership {
+            connection,
+            revision_number,
+            revision_height,
+            proof,
+            path_prefix,
+            path_key,
+        });
+        let request: QueryRequest<KujiraQuery> = KujiraQuery::into(query);
+        self.querier.query(&request)
     }
 }
 
