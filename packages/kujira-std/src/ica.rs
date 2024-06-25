@@ -2,12 +2,14 @@ use cosmwasm_schema::{
     cw_serde,
     serde::{Deserialize, Deserializer, Serializer},
 };
-use cosmwasm_std::{from_json, to_json_string, Binary};
+use cosmwasm_std::{from_json, to_json_string, Binary, Coin, IbcTimeout};
 
 #[cw_serde]
 pub enum IcaSudoMsg {
     IcaRegisterCallback(IcaRegisterCallbackData),
     IcaTxCallback(IcaTxCallbackData),
+    TransferCallback(TransferCallbackData),
+    TransferReceipt(TransferReceiptData),
 }
 
 #[cw_serde]
@@ -56,6 +58,13 @@ pub enum IcaMsg {
         memo: String,
         timeout: u64,
         callback: Option<Binary>,
+    },
+    Transfer {
+        channel_id: String,
+        to_address: String,
+        amount: Coin,
+        timeout: IbcTimeout,
+        callback: Binary,
     },
 }
 
@@ -261,6 +270,30 @@ impl ProtobufAny {
             value: value.into(),
         }
     }
+}
+
+#[cw_serde]
+pub struct TransferCallbackData {
+    pub port: String,
+    pub channel: String,
+    pub sequence: u64,
+    pub receiver: String,
+    pub denom: String,
+    pub amount: String,
+    pub memo: String,
+    pub result: IcaTxResult,
+    pub callback: Binary,
+}
+
+#[cw_serde]
+pub struct TransferReceiptData {
+    pub port: String,
+    pub channel: String,
+    pub sequence: u64,
+    pub sender: String,
+    pub denom: String,
+    pub amount: String,
+    pub memo: String,
 }
 
 #[cfg(test)]
