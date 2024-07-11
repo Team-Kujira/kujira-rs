@@ -17,7 +17,11 @@ cosmwasm-std = { workspace = true, default-features = false, features = [
 cosmwasm-schema = { workspace = true }
 schemars = { workspace = true }
 serde = { workspace = true, default-features = false, features = ["derive"] }
-cw-multi-test = { git = "https://github.com/cosmwasm/cw-multi-test", default-features = false }
+cw-multi-test = { workspace = true, default-features = false, features = [
+    "staking",
+    "stargate",
+    "cosmwasm_1_4",
+] }
 cw-storage-plus = { workspace = true }
 anyhow = { workspace = true }
 kujira = { path = "../kujira", version = "1.3" }
