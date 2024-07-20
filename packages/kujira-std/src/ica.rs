@@ -302,12 +302,13 @@ mod tests {
 
     #[test]
     fn test_deserialize_callback_data() {
-        let data = 
+        let data =
             "{\"data\":\"eyJ2ZXJzaW9uIjoiaWNzMjctMSIsImNvbnRyb2xsZXJfY29ubmVjdGlvbl9pZCI6ImNvbm5lY3Rpb24tMCIsImhvc3RfY29ubmVjdGlvbl9pZCI6ImNvbm5lY3Rpb24tMCIsImFkZHJlc3MiOiJjb3Ntb3MxbDhkY2xubmxjc2twanBuMmtwczBjYWw2ZWpuZzdyNGR5cGV0NnIyeGZkdHJjNjBjeWg2cXh2eXdjYyIsImVuY29kaW5nIjoicHJvdG8zIiwidHhfdHlwZSI6InNka19tdWx0aV9tc2cifQ==\"}";
 
         let as_json: serde_json::Value = serde_json::from_slice(data.as_bytes()).unwrap();
 
-        let data: Result<IcaOpenVersion,_> = serde_json::from_value(as_json.get("data").unwrap().clone());
+        let data: Result<IcaOpenVersion, _> =
+            serde_json::from_value(as_json.get("data").unwrap().clone());
         assert!(data.is_ok());
         assert!(matches!(data.unwrap(), IcaOpenVersion::Ics27(_)));
 
@@ -315,7 +316,8 @@ mod tests {
 
         let as_json: serde_json::Value = serde_json::from_slice(data.as_bytes()).unwrap();
 
-        let data: Result<IcaOpenVersion,_> = serde_json::from_value(as_json.get("data").unwrap().clone());
+        let data: Result<IcaOpenVersion, _> =
+            serde_json::from_value(as_json.get("data").unwrap().clone());
         assert!(data.is_ok());
         assert!(matches!(data.unwrap(), IcaOpenVersion::Ics29(_)));
     }

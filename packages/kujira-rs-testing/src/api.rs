@@ -1,4 +1,4 @@
-use bech32::{decode, encode, FromBase32, ToBase32, Variant};
+use bech32::{encode, primitives::decode::CheckedHrpstring, Bech32, Hrp};
 use cosmwasm_std::{
     testing::MockApi, Addr, Api, CanonicalAddr, RecoverPubkeyError, StdError, StdResult,
     VerificationError,
@@ -34,26 +34,20 @@ impl Api for MockApiBech32 {
     }
 
     fn addr_canonicalize(&self, input: &str) -> StdResult<CanonicalAddr> {
-        if let Ok((prefix, decoded, Variant::Bech32)) = decode(input) {
-            if prefix == self.prefix {
-                if let Ok(bytes) = Vec::<u8>::from_base32(&decoded) {
-                    return Ok(bytes.into());
-                }
+        if let Ok(decoded) = CheckedHrpstring::new::<Bech32>(input) {
+            if decoded.hrp().as_str() == self.prefix {
+                return Ok(decoded.byte_iter().collect::<Vec<u8>>().into());
             }
         }
         Err(StdError::generic_err("Invalid input"))
     }
 
     fn addr_humanize(&self, canonical: &CanonicalAddr) -> StdResult<Addr> {
-        if let Ok(encoded) = encode(
-            self.prefix,
-            canonical.as_slice().to_base32(),
-            Variant::Bech32,
-        ) {
-            Ok(Addr::unchecked(encoded))
-        } else {
-            Err(StdError::generic_err("Invalid canonical address"))
-        }
+        bech32::encode::<Bech32>(Hrp::parse_unchecked(self.prefix), canonical.as_slice())
+            .map_or_else(
+                |_| Err(StdError::generic_err("Invalid canonical address")),
+                |encoded| Ok(Addr::unchecked(encoded)),
+            )
     }
 
     fn secp256k1_verify(
@@ -103,7 +97,7 @@ impl Api for MockApiBech32 {
 impl MockApiBech32 {
     pub fn addr_make(&self, input: &str) -> Addr {
         let digest = Sha256::digest(input).to_vec();
-        match encode(self.prefix, digest.to_base32(), Variant::Bech32) {
+        match encode::<Bech32>(Hrp::parse_unchecked(self.prefix), digest.as_slice()) {
             Ok(address) => Addr::unchecked(address),
             Err(reason) => panic!("Generating address failed with reason: {}", reason),
         }

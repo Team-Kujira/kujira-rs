@@ -1,5 +1,6 @@
 use std::{fs::File, io::BufReader};
 
+use base64::{prelude::BASE64_STANDARD, Engine};
 use cosmwasm_std::{
     testing::{MockApi, MockQuerier, MockStorage},
     CustomQuery, OwnedDeps, Storage,
@@ -37,7 +38,7 @@ pub fn mock_state<C: CustomQuery + DeserializeOwned>(
 
     for m in u.models {
         let k = hex::decode(&m.key).unwrap();
-        let v = base64::decode(&m.value).unwrap();
+        let v = BASE64_STANDARD.decode(&m.value).unwrap();
 
         deps.storage.set(&k, &v)
     }
