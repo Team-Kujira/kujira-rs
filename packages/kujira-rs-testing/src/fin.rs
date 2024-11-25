@@ -10,7 +10,10 @@ use cosmwasm_std::{
 use cw20::Denom;
 use cw_storage_plus::{Item, Map};
 use kujira::{
-    fin::{ExecuteMsg, InstantiateMsg, NewOrderData, OrderResponse, QueryMsg},
+    fin::{
+        ExecuteMsg, InstantiateMsg, NewOrderData, OrderResponse, OrderResponsePrice, QueryMsg,
+        SubmitOrder, SubmitOrderPrice,
+    },
     KujiraMsg, KujiraQuery,
 };
 use schemars::JsonSchema;
@@ -101,7 +104,10 @@ pub fn execute(
                 .add_message(message)
                 .add_attribute("action", "fin-swap"))
         }
-        MockExecuteMsg::FIN(ExecuteMsg::SubmitOrder { price, callback }) => {
+        MockExecuteMsg::FIN(ExecuteMsg::SubmitOrder(SubmitOrder::Price(SubmitOrderPrice {
+            price,
+            callback,
+        }))) => {
             let idx = CUR_ORDER_IDX.load(deps.storage)?;
             CUR_ORDER_IDX.save(deps.storage, &(idx + Uint128::from(1u128)))?;
             let coin = info.funds[0].clone();
@@ -243,7 +249,7 @@ pub fn query(deps: Deps<KujiraQuery>, env: Env, msg: QueryMsg) -> StdResult<Bina
     match msg {
         QueryMsg::Order { order_idx } => {
             let order = ORDERS.load(deps.storage, order_idx.u128())?;
-            let res = OrderResponse {
+            let res = OrderResponsePrice {
                 idx: order_idx,
                 owner: order.owner,
                 quote_price: order.price,

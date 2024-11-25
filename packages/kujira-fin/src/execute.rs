@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Coin, Decimal256, Uint128, Uint256};
+use cosmwasm_std::{Addr, Coin, Decimal256, SignedDecimal256, Uint128, Uint256};
 use cw20::Denom;
 use kujira_std::{CallbackData, Precision};
 
@@ -22,13 +22,10 @@ pub enum ExecuteMsg {
         fee_maker: Option<Decimal256>,
     },
 
+    SetOracles(Option<(String, String)>),
+
     /// Called by an end-user to place a order
-    SubmitOrder {
-        /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
-        price: Decimal256,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        callback: Option<CallbackData>,
-    },
+    SubmitOrder(SubmitOrder),
 
     /// Executes a market trade based on current order book.
     /// Matches Terraswap, Astroport etc interfaces to be compatible with
@@ -90,7 +87,33 @@ pub enum ExecuteMsg {
     },
 
     /// Clears dead state that was not tidied prior to 1.0.6
-    Prune { denom: Denom, limit: Option<u32> },
+    Prune {
+        denom: Denom,
+        limit: Option<u32>,
+    },
+}
+
+#[cw_serde]
+#[serde(untagged)]
+pub enum SubmitOrder {
+    Price(SubmitOrderPrice),
+    Oracle(SubmitOrderOracle),
+}
+
+#[cw_serde]
+pub struct SubmitOrderPrice {
+    /// The price of the order in terms of the quote denom. See [InstantiateMsg::denoms]
+    pub price: Decimal256,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback: Option<CallbackData>,
+}
+
+#[cw_serde]
+pub struct SubmitOrderOracle {
+    /// The basis point delta from the current Oracle price
+    pub delta: i8,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub callback: Option<CallbackData>,
 }
 
 #[cw_serde]
